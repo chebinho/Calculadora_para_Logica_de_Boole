@@ -1,6 +1,6 @@
 var valor = []
 
-function Ler_Botao(Botao){
+function Ler_Botao(Botao,Tamanho){
 
     let test = document.getElementById(Botao)
 
@@ -12,7 +12,22 @@ function Ler_Botao(Botao){
         test.setAttribute("value", "V")
     }
 
-    document.getElementById("Resultado").innerHTML = "";
-    document.getElementById("Resultado").innerHTML = valor[Botao] + " " + Botao;
+    Resultado(Botao)
+    Calculo(Botao,Tamanho)
+}
 
+function Calculo(Botao,Tamanho){
+
+    
+
+    Resultado(Botao ,Tamanho)
+}
+
+function Resultado(Botao,Tamanho){
+
+    document.getElementById("Valores").innerHTML = ""
+    document.getElementById("Resultado").innerHTML = "";
+    document.getElementById("Resultado").innerHTML = valor[Botao] + " " + Botao + " " + valor.length;
+    document.getElementById("Valores").innerHTML = Tamanho
+    
 }
