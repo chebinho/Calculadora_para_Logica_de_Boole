@@ -1,6 +1,16 @@
 var valor = []
 
-function Ler_Botao(Botao,Tamanho){
+function Ler_fomulario(){
+
+    let Numero_Entradas = document.getElementById("Numero_Entradas").value
+    let Numero_Saidas = document.getElementById("Numero_Saidas").value
+
+    document.getElementById("Valores").innerHTML = ""
+    document.getElementById("Valores").innerHTML = "Numero_Entradas = " + Numero_Entradas + " " + "Numero_Saidas = "+Numero_Saidas
+
+}
+
+function Ler_Botao(Botao){
 
     let test = document.getElementById(Botao)
 
@@ -13,21 +23,19 @@ function Ler_Botao(Botao,Tamanho){
     }
 
     Resultado(Botao)
-    Calculo(Botao,Tamanho)
+    Calculo(Botao)
 }
 
-function Calculo(Botao,Tamanho){
+function Calculo(Botao){
 
-    
+    Numero_Entradas
 
-    Resultado(Botao ,Tamanho)
+    Resultado(Botao)
 }
 
-function Resultado(Botao,Tamanho){
+function Resultado(Botao){
 
-    document.getElementById("Valores").innerHTML = ""
     document.getElementById("Resultado").innerHTML = "";
     document.getElementById("Resultado").innerHTML = valor[Botao] + " " + Botao + " " + valor.length;
-    document.getElementById("Valores").innerHTML = Tamanho
     
 }

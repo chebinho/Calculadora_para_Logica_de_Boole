@@ -13,9 +13,10 @@
 
     <form>
         <label>Quantas entradas de informação</label><br>
-        <input type="number" min="2" max="5"><br>
+        <input id="Numero_Entradas" type="number" min="2"><br>
         <label>Quantas saidas de informação</label><br>
-        <input type="number" min="1" max="5"><br>
+        <input id="Numero_Saidas" type="number" min="1"><br>
+        <input type="button" value="Salvar" onclick="Ler_fomulario()">
     </form>
 
     <h2>Tabela</h2>
@@ -30,25 +31,25 @@
             <td>V</td>
             <td>V</td>
             <td>=</td>
-            <td><input id="0" type="button" value="F" onclick="Ler_Botao(0,0)"></td>
+            <td><input id="0" type="button" value="F" onclick="Ler_Botao(0)"></td>
         </tr>
         <tr>
             <td>F</td>
             <td>V</td>
             <td>=</td>
-            <td><input id="1" type="button" value="F" onclick="Ler_Botao(1,0)"></td>
+            <td><input id="1" type="button" value="F" onclick="Ler_Botao(1)"></td>
         </tr>
         <tr>
             <td>V</td>
             <td>F</td>
             <td>=</td>
-            <td><input id="2" type="button" value="F" onclick="Ler_Botao(2,0)"></td>
+            <td><input id="2" type="button" value="F" onclick="Ler_Botao(2)"></td>
         </tr>
         <tr>
             <td>F</td>
             <td>F</td>
             <td>=</td>
-            <td><input id="3" type="button" value="F" onclick="Ler_Botao(3,0)"></td>
+            <td><input id="3" type="button" value="F" onclick="Ler_Botao(3)"></td>
         </tr>
     </table>
 
