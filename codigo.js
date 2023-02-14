@@ -40,10 +40,10 @@ function Calculo(Botao,Tamanho){
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = "funciona";
 
-    Resultado(Botao,Tamanho)
+    Resultado(Botao)
 }
 
-function Resultado(Botao,Tamanho){
+function Resultado(Botao){
 
     document.getElementById("Info_Botao").innerHTML = "";
     document.getElementById("Info_Botao").innerHTML = Solusao[Botao] + " " + Botao + " " + Solusao.length;
