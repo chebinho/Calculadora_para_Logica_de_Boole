@@ -1,4 +1,4 @@
-var valor = []
+var Solusao = [[],[]]
 
 function Ler_fomulario(){
 
@@ -17,32 +17,35 @@ function Ler_fomulario(){
 
 }
 
-function Ler_Botao(Botao){
+function Ler_Botao(Botao,Tamanho){
 
-    let test = document.getElementById(Botao)
+    let id_botao = document.getElementById(""+Botao+Tamanho)
 
-    if(valor[Botao] == true){
-        valor[Botao] = false
-        test.setAttribute("value", "F")
+    if(Solusao[[Botao],[Tamanho]] == true){
+        Solusao[[Botao],[Tamanho]] = false
+        id_botao.setAttribute("value", "F")
     }else{
-        valor[Botao] = true
-        test.setAttribute("value", "V")
+        Solusao[[Botao],[Tamanho]] = true
+        id_botao.setAttribute("value", "V")
     }
 
-    Resultado(Botao)
-    Calculo(Botao)
+    Calculo(Botao,Tamanho)
 }
 
-function Calculo(Botao){
+function Calculo(Botao,Tamanho){
 
-    Numero_Entradas
 
-    Resultado(Botao)
+
+
+    document.getElementById("Resultado_Bruto").innerHTML = "";
+    document.getElementById("Resultado_Bruto").innerHTML = "funciona";
+
+    Resultado(Botao,Tamanho)
 }
 
-function Resultado(Botao){
+function Resultado(Botao,Tamanho){
 
-    document.getElementById("Resultado").innerHTML = "";
-    document.getElementById("Resultado").innerHTML = valor[Botao] + " " + Botao + " " + valor.length;
+    document.getElementById("Info_Botao").innerHTML = "";
+    document.getElementById("Info_Botao").innerHTML = Solusao[[Botao],[Tamanho]] + " " + Botao + " " + Solusao.length;
     
 }
