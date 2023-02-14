@@ -1,4 +1,4 @@
-var Solusao = [[],[]]
+var Solusao = []
 
 function Ler_fomulario(){
 
@@ -21,11 +21,11 @@ function Ler_Botao(Botao,Tamanho){
 
     let id_botao = document.getElementById(""+Botao+Tamanho)
 
-    if(Solusao[[Tamanho],[Botao]] == true){
-        Solusao[[Tamanho],[Botao]] = false
+    if(Solusao[Botao] == true){
+        Solusao[Botao] = false
         id_botao.setAttribute("value", "F")
     }else{
-        Solusao[[Tamanho],[Botao]] = true
+        Solusao[Botao] = true
         id_botao.setAttribute("value", "V")
     }
 
@@ -46,6 +46,6 @@ function Calculo(Botao,Tamanho){
 function Resultado(Botao,Tamanho){
 
     document.getElementById("Info_Botao").innerHTML = "";
-    document.getElementById("Info_Botao").innerHTML = Solusao[[Tamanho],[Botao]] + " " + Botao + " " + Solusao.length;
+    document.getElementById("Info_Botao").innerHTML = Solusao[Botao] + " " + Botao + " " + Solusao.length;
     
 }
