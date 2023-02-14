@@ -5,6 +5,13 @@ function Ler_fomulario(){
     let Numero_Entradas = document.getElementById("Numero_Entradas").value
     let Numero_Saidas = document.getElementById("Numero_Saidas").value
 
+    if(Numero_Entradas < 2){
+        Numero_Entradas = 2
+    }
+    if(Numero_Saidas < 1){
+        Numero_Saidas = 1
+    }
+
     document.getElementById("Valores").innerHTML = ""
     document.getElementById("Valores").innerHTML = "Numero_Entradas = " + Numero_Entradas + " " + "Numero_Saidas = "+Numero_Saidas
 
