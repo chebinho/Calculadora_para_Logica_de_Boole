@@ -1,4 +1,4 @@
-var Solusao = []
+var Solusao = [[]]
 
 function Ler_fomulario(){
 
@@ -21,11 +21,11 @@ function Ler_Botao(Botao,Tamanho){
 
     let id_botao = document.getElementById(""+Botao+Tamanho)
 
-    if(Solusao[Botao] == true){
-        Solusao[Botao] = false
+    if(Solusao[[Botao,Tamanho]] == true){
+        Solusao[[Botao,Tamanho]] = false
         id_botao.setAttribute("value", "F")
     }else{
-        Solusao[Botao] = true
+        Solusao[[Botao,Tamanho]] = true
         id_botao.setAttribute("value", "V")
     }
 
@@ -40,12 +40,19 @@ function Calculo(Botao,Tamanho){
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = "funciona";
 
-    Resultado(Botao)
+    Resultado(Botao,Tamanho)
 }
 
-function Resultado(Botao){
+function Resultado(Botao,Tamanho){
 
-    document.getElementById("Info_Botao").innerHTML = "";
-    document.getElementById("Info_Botao").innerHTML = Solusao[Botao] + " " + Botao + " " + Solusao.length;
+    document.getElementById("Info_Botao0").innerHTML = "";
+    document.getElementById("Info_Botao1").innerHTML = "";
+    document.getElementById("Info_Botao2").innerHTML = "";
+    document.getElementById("Info_Botao3").innerHTML = "";
+
+    document.getElementById("Info_Botao0").innerHTML = Solusao[[0,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
+    document.getElementById("Info_Botao1").innerHTML = Solusao[[1,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
+    document.getElementById("Info_Botao2").innerHTML = Solusao[[2,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
+    document.getElementById("Info_Botao3").innerHTML = Solusao[[3,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
     
 }
