@@ -12,9 +12,22 @@ function Ler_fomulario(){
         Numero_Saidas = 1
     }
 
+    Criar_Tabela(Numero_Entradas,Numero_Saidas)
+
     document.getElementById("Valores").innerHTML = ""
     document.getElementById("Valores").innerHTML = "Numero_Entradas = " + Numero_Entradas + " " + "Numero_Saidas = "+Numero_Saidas
 
+}
+function Criar_Tabela(Entradas,Saidas){
+
+    for(e=0;e<Saidas;e++){
+        for(i=0;i<(Entradas-1)*4;i++){
+        
+            Solusao[[i,e]] = false
+            
+        }
+    }
+    Resultado(0,0)
 }
 
 function Ler_Botao(Botao,Tamanho){
