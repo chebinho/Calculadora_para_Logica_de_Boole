@@ -1,6 +1,7 @@
 var Solusao = [[]]
 var contar = []
 
+
 function Ler_fomulario(){
 
     let Numero_Entradas = document.getElementById("Numero_Entradas").value
@@ -21,7 +22,15 @@ function Ler_fomulario(){
 }
 
 function Criar_Tabela(Entradas,Saidas){
+    
+    // limpa a tabela antes de criar a nova
+    var container = document.querySelector("#Tabela");
+    var p = document.querySelector("#Tabela table");
+    if(p != null){
+        container.removeChild(p);
+    }
 
+    // limpa as variaveis 
     for(e=0;e<Saidas;e++){
         for(i=0;i<(Entradas-1)*4;i++){
         
@@ -31,6 +40,8 @@ function Criar_Tabela(Entradas,Saidas){
     }
 
     let tabela = document.getElementById("Tabela")
+    let table = document.createElement("table")
+    table.setAttribute("id", "remover")
 
     let tr = document.createElement("tr")
     let td = document.createElement("td")
@@ -39,7 +50,8 @@ function Criar_Tabela(Entradas,Saidas){
 
     td.appendChild(texto)
     tr.appendChild(td)
-    tabela.appendChild(tr)
+    table.appendChild(tr)
+    tabela.appendChild(table)
 
     console.log(tabela)
 
@@ -66,6 +78,12 @@ function Calculo(Botao,Tamanho){
 
 
 
+
+
+
+
+
+
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = "funciona";
 
@@ -84,20 +102,4 @@ function Resultado(Botao,Tamanho){
     document.getElementById("Info_Botao2").innerHTML = Solusao[[2,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
     document.getElementById("Info_Botao3").innerHTML = Solusao[[3,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
     
-}
-
-function Test_Contador(){
-    
-    if(contar[0] == 1){
-
-        contar[0] = 0
-
-    }else{
-
-        contar[0] = 1
-        
-    }
-
-    console.log(contar)
-
 }
