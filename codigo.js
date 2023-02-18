@@ -1,4 +1,5 @@
 var Solusao = [[]]
+var contar = []
 
 function Ler_fomulario(){
 
@@ -18,6 +19,7 @@ function Ler_fomulario(){
     document.getElementById("Valores").innerHTML = "Numero_Entradas = " + Numero_Entradas + " " + "Numero_Saidas = "+Numero_Saidas
 
 }
+
 function Criar_Tabela(Entradas,Saidas){
 
     for(e=0;e<Saidas;e++){
@@ -27,6 +29,20 @@ function Criar_Tabela(Entradas,Saidas){
             
         }
     }
+
+    let tabela = document.getElementById("Tabela")
+
+    let tr = document.createElement("tr")
+    let td = document.createElement("td")
+
+    let texto = document.createTextNode("funciona por favor")
+
+    td.appendChild(texto)
+    tr.appendChild(td)
+    tabela.appendChild(tr)
+
+    console.log(tabela)
+
     Resultado(0,0)
 }
 
@@ -68,4 +84,20 @@ function Resultado(Botao,Tamanho){
     document.getElementById("Info_Botao2").innerHTML = Solusao[[2,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
     document.getElementById("Info_Botao3").innerHTML = Solusao[[3,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
     
+}
+
+function Test_Contador(){
+    
+    if(contar[0] == 1){
+
+        contar[0] = 0
+
+    }else{
+
+        contar[0] = 1
+        
+    }
+
+    console.log(contar)
+
 }
