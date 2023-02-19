@@ -1,6 +1,4 @@
 var Solusao = [[]]
-var contar = []
-
 
 function Ler_fomulario(){
 
@@ -30,11 +28,18 @@ function Criar_Tabela(Entradas,Saidas){
         container.removeChild(p);
     }
 
-    // limpa as variaveis 
-    for(e=0;e<Saidas;e++){
-        for(i=0;i<(Entradas-1)*4;i++){
+    let input = [[]]
+
+    // limpa as variaveis e cria botão
+    for(c=0;c<Saidas;c++){
+        for(l=0;l<(Entradas-1)*4;l++){
         
-            Solusao[[i,e]] = false
+            Solusao[[l,c]] = false
+            input[[l,c]] = document.createElement("input")
+            input[[l,c]].setAttribute("type","button")
+            input[[l,c]].setAttribute("value","F")
+            input[[l,c]].setAttribute("id",""+l+c)
+            input[[l,c]].setAttribute("onclick","Ler_Botao("+l+","+c+")")
             
         }
     }
@@ -46,11 +51,18 @@ function Criar_Tabela(Entradas,Saidas){
     let tr = document.createElement("tr")
     let td = document.createElement("td")
 
-    let texto = document.createTextNode("funciona por favor")
+    let td2 = document.createElement("td")
+    let tr2 = document.createElement("tr")
 
-    td.appendChild(texto)
+    td.appendChild(input[[0,0]])
+    td2.appendChild(input[[1,0]])
+
     tr.appendChild(td)
+    tr2.appendChild(td2)
+    
     table.appendChild(tr)
+    table.appendChild(tr2)
+
     tabela.appendChild(table)
 
     console.log(tabela)
