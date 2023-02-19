@@ -28,37 +28,38 @@ function Criar_Tabela(Entradas,Saidas){
         container.removeChild(p);
     }
 
+    // Cria a tabela principal
+    let tabela = document.getElementById("Tabela")
+    let table = document.createElement("table")
+    table.setAttribute("id", "remover")
+
     let input = [[]]
+    let td = [[]]
 
     // limpa as variaveis e cria botão
     for(c=0;c<Saidas;c++){
         for(l=0;l<(Entradas-1)*4;l++){
         
             Solusao[[l,c]] = false
+
             input[[l,c]] = document.createElement("input")
-            input[[l,c]].setAttribute("type","button")
-            input[[l,c]].setAttribute("value","F")
+            input[[l,c]].type="button"
+            input[[l,c]].value="F"
             input[[l,c]].setAttribute("id",""+l+c)
             input[[l,c]].setAttribute("onclick","Ler_Botao("+l+","+c+")")
+
+            td[[l,c]] = document.createElement("td")
+            td[[l,c]].appendChild(input[[l,c]])
             
         }
     }
 
-    let tabela = document.getElementById("Tabela")
-    let table = document.createElement("table")
-    table.setAttribute("id", "remover")
 
     let tr = document.createElement("tr")
-    let td = document.createElement("td")
-
-    let td2 = document.createElement("td")
     let tr2 = document.createElement("tr")
 
-    td.appendChild(input[[0,0]])
-    td2.appendChild(input[[1,0]])
-
-    tr.appendChild(td)
-    tr2.appendChild(td2)
+    tr.appendChild(td[[0,0]])
+    tr2.appendChild(td[[1,0]])
     
     table.appendChild(tr)
     table.appendChild(tr2)
@@ -87,7 +88,7 @@ function Ler_Botao(Botao,Tamanho){
 
 function Calculo(Botao,Tamanho){
 
-
+    //Solusao[[Botao,Tamanho]]
 
 
 
