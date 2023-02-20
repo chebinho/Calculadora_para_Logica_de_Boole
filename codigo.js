@@ -1,9 +1,11 @@
 var Solusao = [[]]
+var Numero_Entradas
+var Numero_Saidas
 
 function Ler_fomulario(){
 
-    let Numero_Entradas = document.getElementById("Numero_Entradas").value
-    let Numero_Saidas = document.getElementById("Numero_Saidas").value
+    Numero_Entradas = document.getElementById("Numero_Entradas").value
+    Numero_Saidas = document.getElementById("Numero_Saidas").value
 
     if(Numero_Entradas < 2){
         Numero_Entradas = 2
@@ -20,6 +22,8 @@ function Ler_fomulario(){
 }
 
 function Criar_Tabela(Entradas,Saidas){
+
+    let Linhas = 2
     
     // limpa a tabela antes de criar a nova
     var container = document.querySelector("#Tabela");
@@ -35,10 +39,18 @@ function Criar_Tabela(Entradas,Saidas){
 
     let input = [[]]
     let td = [[]]
+    let tr = []
+
+    for(a=0;a<(Entradas-1);a++){
+        Linhas = Linhas*2
+    }
 
     // limpa as variaveis e cria botão
     for(c=0;c<Saidas;c++){
-        for(l=0;l<(Entradas-1)*4;l++){
+
+        tr[c] = document.createElement("tr")
+
+        for(l=0;l<Linhas;l++){
         
             Solusao[[l,c]] = false
 
@@ -50,20 +62,15 @@ function Criar_Tabela(Entradas,Saidas){
 
             td[[l,c]] = document.createElement("td")
             td[[l,c]].appendChild(input[[l,c]])
+
+            tr[c].appendChild(td[[l,c]])
             
         }
+            
+        table.appendChild(tr[c])
+
     }
-
-
-    let tr = document.createElement("tr")
-    let tr2 = document.createElement("tr")
-
-    tr.appendChild(td[[0,0]])
-    tr2.appendChild(td[[1,0]])
-    
-    table.appendChild(tr)
-    table.appendChild(tr2)
-
+ 
     tabela.appendChild(table)
 
     console.log(tabela)
@@ -88,7 +95,6 @@ function Ler_Botao(Botao,Tamanho){
 
 function Calculo(Botao,Tamanho){
 
-    //Solusao[[Botao,Tamanho]]
 
 
 
