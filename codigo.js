@@ -47,9 +47,6 @@ function Criar_Tabela(Entradas,Saidas){
 
     // limpa as variaveis e cria botão
     for(c=0;c<Saidas;c++){
-
-        tr[c] = document.createElement("tr")
-
         for(l=0;l<Linhas;l++){
         
             Solusao[[l,c]] = false
@@ -63,13 +60,23 @@ function Criar_Tabela(Entradas,Saidas){
             td[[l,c]] = document.createElement("td")
             td[[l,c]].appendChild(input[[l,c]])
 
+        }
+    }
+
+    for(c=0;c<Saidas;c++){
+
+        tr[c] = document.createElement("tr")  
+
+        for(l=0;l<Linhas;l++){
+
             tr[c].appendChild(td[[l,c]])
             
         }
-            
+
         table.appendChild(tr[c])
 
     }
+
  
     tabela.appendChild(table)
 
