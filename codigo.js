@@ -63,20 +63,13 @@ function Criar_Tabela(Entradas,Saidas){
         }
     }
 
-    for(c=0;c<Saidas;c++){
-
-        tr[c] = document.createElement("tr")  
-
-        for(l=0;l<Linhas;l++){
-
-            tr[c].appendChild(td[[l,c]])
-            
+    for(l=0;l<Linhas;l++){
+        tr[l] = document.createElement("tr")  
+        for(c=0;c<Saidas;c++){
+            tr[l].appendChild(td[[l,c]])
         }
-
-        table.appendChild(tr[c])
-
+        table.appendChild(tr[l])
     }
-
  
     tabela.appendChild(table)
 
