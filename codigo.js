@@ -37,6 +37,8 @@ function Criar_Tabela(Entradas,Saidas){
     let table = document.createElement("table")
     table.setAttribute("id", "remover")
 
+    let titulo_elementos = []
+    let titulo_linha 
     let input = [[]]
     let td = [[]]
     let tr = []
@@ -44,6 +46,9 @@ function Criar_Tabela(Entradas,Saidas){
     for(a=0;a<(Entradas-1);a++){
         Linhas = Linhas*2
     }
+    
+
+    titulo_linha = document.createElement("td")
 
     // limpa as variaveis e cria botão
     for(c=0;c<Saidas;c++){
@@ -62,7 +67,10 @@ function Criar_Tabela(Entradas,Saidas){
 
         }
     }
-
+    tr[0] = document.createElement("tr")
+    tr[0].appendChild(titulo_linha)
+    table.appendChild(tr[0])
+    // adiciona os botões nas colunas
     for(l=0;l<Linhas;l++){
         tr[l] = document.createElement("tr")  
         for(c=0;c<Saidas;c++){
@@ -70,12 +78,12 @@ function Criar_Tabela(Entradas,Saidas){
         }
         table.appendChild(tr[l])
     }
+    
  
     tabela.appendChild(table)
 
     console.log(tabela)
 
-    Resultado(0,0)
 }
 
 function Ler_Botao(Botao,Tamanho){
@@ -89,7 +97,7 @@ function Ler_Botao(Botao,Tamanho){
         Solusao[[Botao,Tamanho]] = true
         id_botao.setAttribute("value", "V")
     }
-
+    console.log(Solusao[[Botao,Tamanho]] + " " + Botao+"/"+Tamanho)
     Calculo(Botao,Tamanho)
 }
 
@@ -105,20 +113,14 @@ function Calculo(Botao,Tamanho){
 
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = "funciona";
-
-    Resultado(Botao,Tamanho)
 }
 
-function Resultado(Botao,Tamanho){
+function tests(){
 
-    document.getElementById("Info_Botao0").innerHTML = "";
-    document.getElementById("Info_Botao1").innerHTML = "";
-    document.getElementById("Info_Botao2").innerHTML = "";
-    document.getElementById("Info_Botao3").innerHTML = "";
+    let letras
+    for(l=65;l<90;l++){
+        letras = String.fromCharCode(l)
+        console.log(letras)
+    }
 
-    document.getElementById("Info_Botao0").innerHTML = Solusao[[0,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
-    document.getElementById("Info_Botao1").innerHTML = Solusao[[1,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
-    document.getElementById("Info_Botao2").innerHTML = Solusao[[2,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
-    document.getElementById("Info_Botao3").innerHTML = Solusao[[3,Tamanho]] + " " + Botao + Tamanho + " " + Solusao.length;
-    
 }
