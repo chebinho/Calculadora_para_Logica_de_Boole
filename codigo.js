@@ -47,32 +47,27 @@ function Criar_Tabela(Entradas,Saidas){
         Linhas = Linhas*2
     }
 
-    console.log(Entradas)
-    console.log(Saidas)
-    for(l=64+Number(Entradas);l>64;l--){
-        for(c=0;c<Entradas;c++){
-            titulo_elementos[c] = document.createTextNode(String.fromCharCode(l))
-            console.log(l)
-        }
+    console.log(Entradas+" Entradas")
+    console.log(Saidas+" Saidas")
+
+    for(l=65;l<(65+Number(Entradas));l++){
+        titulo_elementos[l-65] = document.createTextNode(String.fromCharCode(l))
+        console.log(l)  
     }
     titulo_elementos[Entradas] = document.createTextNode("")
-
-    
-    for(c=Entradas+1;c<10;c++){
+    console.log("-------")
+    for(c=Entradas+1;c<=(Number(Entradas)+Number(Saidas)+1);c++){
         titulo_elementos[c] = document.createTextNode("S"+Number(c-2))
         console.log(c)
     }
     
     tr[0] = document.createElement("tr")
-    for(c=0;c<(Number(Entradas)+Number(Saidas)+2);c++){
-
-        
+    for(c=0;c<(Number(Entradas)+Number(Saidas)+1);c++){       
 
         titulo_linha[c] = document.createElement("td")
         titulo_linha[c].appendChild(titulo_elementos[c])
 
         tr[0].appendChild(titulo_linha[c])
-
 
     }
     table.appendChild(tr[0])
