@@ -16,9 +16,6 @@ function Ler_fomulario(){
 
     Criar_Tabela(Numero_Entradas,Numero_Saidas)
 
-    document.getElementById("Valores").innerHTML = ""
-    document.getElementById("Valores").innerHTML = "Numero_Entradas = " + Numero_Entradas + " " + "Numero_Saidas = "+Numero_Saidas
-
 }
 
 function Criar_Tabela(Entradas,Saidas){
@@ -47,28 +44,22 @@ function Criar_Tabela(Entradas,Saidas){
         Linhas = Linhas*2
     }
 
-    console.log(Entradas+" Entradas")
-    console.log(Saidas+" Saidas")
-
+    // Cria o titulo
     for(l=65;l<(65+Number(Entradas));l++){
-        titulo_elementos[l-65] = document.createTextNode(String.fromCharCode(l))
-        console.log(l)  
+        titulo_elementos[l-65] = document.createTextNode(String.fromCharCode(l)) 
     }
+
     titulo_elementos[Entradas] = document.createTextNode("")
-    console.log("-------")
-    for(c=Entradas+1;c<=(Number(Entradas)+Number(Saidas)+1);c++){
+    
+    for(c=Number(Entradas)+1;c<=(Number(Entradas)+Number(Saidas));c++){
         titulo_elementos[c] = document.createTextNode("S"+Number(c-2))
-        console.log(c)
     }
     
     tr[0] = document.createElement("tr")
     for(c=0;c<(Number(Entradas)+Number(Saidas)+1);c++){       
-
         titulo_linha[c] = document.createElement("td")
         titulo_linha[c].appendChild(titulo_elementos[c])
-
         tr[0].appendChild(titulo_linha[c])
-
     }
     table.appendChild(tr[0])
 
