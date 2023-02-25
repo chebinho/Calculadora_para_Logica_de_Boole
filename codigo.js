@@ -69,13 +69,19 @@ function Criar_Tabela(Entradas,Saidas){
 
     // Criar o V F da tabela
 
-    for(c=0;c<Number(Entradas)+1;c++){
+    for(c=0;c<Entradas;c++){
         for(l=0;l<Linhas;l++){
             VF[[l,c]] = document.createTextNode("")
 
             VF_td[[l,c]] = document.createElement("td")
             VF_td[[l,c]].appendChild(VF[[l,c]])
         }
+    }
+    for(l=0;l<Linhas;l++){
+        VF[[l,c]] = document.createTextNode("=")
+
+        VF_td[[l,c]] = document.createElement("td")
+        VF_td[[l,c]].appendChild(VF[[l,c]])
     }
 
     // limpa as variaveis e cria botão
