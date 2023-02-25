@@ -36,6 +36,9 @@ function Criar_Tabela(Entradas,Saidas){
 
     let titulo_elementos = []
     let titulo_linha = []
+
+    let VF = [[]]
+
     let input = [[]]
     let td = [[]]
     let tr = []
@@ -50,7 +53,7 @@ function Criar_Tabela(Entradas,Saidas){
     }
 
     titulo_elementos[Entradas] = document.createTextNode("")
-    
+
     for(c=Number(Entradas)+1;c<=(Number(Entradas)+Number(Saidas));c++){
         titulo_elementos[c] = document.createTextNode("S"+Number(c-2))
     }
@@ -80,6 +83,7 @@ function Criar_Tabela(Entradas,Saidas){
 
         }
     }
+
     // adiciona os botões nas colunas
     for(l=1;l<(Linhas+1);l++){
         tr[l] = document.createElement("tr")  
@@ -125,9 +129,5 @@ function Calculo(Botao,Tamanho){
 }
 
 function tests(){
-
-    for(l=65;l<90;l++){
-        console.log(String.fromCharCode(l))
-    }
 
 }
