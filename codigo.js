@@ -38,6 +38,7 @@ function Criar_Tabela(Entradas,Saidas){
     let titulo_linha = []
 
     let VF = [[]]
+    let VF_td = [[]]
 
     let input = [[]]
     let td = [[]]
@@ -55,7 +56,7 @@ function Criar_Tabela(Entradas,Saidas){
     titulo_elementos[Entradas] = document.createTextNode("")
 
     for(c=Number(Entradas)+1;c<=(Number(Entradas)+Number(Saidas));c++){
-        titulo_elementos[c] = document.createTextNode("S"+Number(c-2))
+        titulo_elementos[c] = document.createTextNode("S"+Number(c-Entradas))
     }
     
     tr[0] = document.createElement("tr")
@@ -65,6 +66,17 @@ function Criar_Tabela(Entradas,Saidas){
         tr[0].appendChild(titulo_linha[c])
     }
     table.appendChild(tr[0])
+
+    // Criar o V F da tabela
+
+    for(c=0;c<Number(Entradas)+1;c++){
+        for(l=0;l<Linhas;l++){
+            VF[[l,c]] = document.createTextNode("")
+
+            VF_td[[l,c]] = document.createElement("td")
+            VF_td[[l,c]].appendChild(VF[[l,c]])
+        }
+    }
 
     // limpa as variaveis e cria botão
     for(c=0;c<Saidas;c++){
@@ -86,7 +98,10 @@ function Criar_Tabela(Entradas,Saidas){
 
     // adiciona os botões nas colunas
     for(l=1;l<(Linhas+1);l++){
-        tr[l] = document.createElement("tr")  
+        tr[l] = document.createElement("tr")
+        for(c=0;c<Number(Entradas)+1;c++){
+            tr[l].appendChild(VF_td[[(l-1),c]])
+        }
         for(c=0;c<Saidas;c++){
             tr[l].appendChild(td[[(l-1),c]])
         }
@@ -94,10 +109,10 @@ function Criar_Tabela(Entradas,Saidas){
     }
     
     tabela.appendChild(table)
-
     console.log(tabela)
 
 }
+Criar_Tabela(2,1)
 
 function Ler_Botao(Botao,Tamanho){
 
@@ -115,10 +130,6 @@ function Ler_Botao(Botao,Tamanho){
 }
 
 function Calculo(Botao,Tamanho){
-
-
-
-
 
 
 
