@@ -2,6 +2,8 @@ var Solusao = [[]]
 var Numero_Entradas
 var Numero_Saidas
 
+let test = 0
+
 function Ler_fomulario(){
 
     Numero_Entradas = document.getElementById("Numero_Entradas").value
@@ -68,10 +70,34 @@ function Criar_Tabela(Entradas,Saidas){
     table.appendChild(tr[0])
 
     // Criar o V F da tabela
+    let conta_coluna = 0
+    let conta_linha = 0
 
+    for(c=1;c<=(Linhas/2);c=c*2){
+        console.log(conta_coluna + " ---------------")
+        for(l=0;l<(Linhas/c);l++){
+            if(test == 1){
+                test = 0
+                for(a=0;a<c;a++){
+                    VF[[conta_linha,conta_coluna]] = document.createTextNode("F")
+                    conta_linha = conta_linha+1
+                    console.log(test)
+                }
+            }else{
+                test = 1
+                for(a=0;a<c;a++){
+                    VF[[conta_linha,conta_coluna]] = document.createTextNode("V")
+                    conta_linha = conta_linha+1
+                    console.log(test)
+                }
+            }
+        }
+        conta_coluna = conta_coluna + 1
+        conta_linha = 0
+    }
+    console.log(VF[[3,1]])
     for(c=0;c<Entradas;c++){
         for(l=0;l<Linhas;l++){
-            VF[[l,c]] = document.createTextNode("")
 
             VF_td[[l,c]] = document.createElement("td")
             VF_td[[l,c]].appendChild(VF[[l,c]])
@@ -146,5 +172,8 @@ function Calculo(Botao,Tamanho){
 }
 
 function tests(){
+
+    
+    
 
 }
