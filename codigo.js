@@ -1,6 +1,6 @@
 var Solusao = [[]]
-var Numero_Entradas
-var Numero_Saidas
+var Numero_Entradas = 2
+var Numero_Saidas = 1
 
 let test = 0
 
@@ -154,11 +154,11 @@ function Ler_Botao(Botao,Tamanho){
         id_botao.setAttribute("value", "V")
     }
     console.log(Solusao[[Botao,Tamanho]] + " " + Botao+"/"+Tamanho)
-    Calculo(Botao,Tamanho)
 }
 
-function Calculo(Botao,Tamanho){
-
+function Calculo(){
+    console.log(Numero_Entradas)
+    console.log(Numero_Saidas)
 
 
 
