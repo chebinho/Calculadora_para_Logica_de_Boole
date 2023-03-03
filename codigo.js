@@ -1,4 +1,7 @@
 var Solusao = [[]]
+var Binario = [[]]
+var Codigo = []
+
 var Numero_Entradas = 2
 var Numero_Saidas = 1
 
@@ -75,12 +78,14 @@ function Criar_Tabela(Entradas,Saidas){
                 test = 0
                 for(a=0;a<c;a++){
                     VF[[conta_linha,conta_coluna]] = document.createTextNode("F")
+                    Binario[[conta_linha,conta_coluna]] = "F"
                     conta_linha = conta_linha+1
                 }
             }else{
                 test = 1
                 for(a=0;a<c;a++){
                     VF[[conta_linha,conta_coluna]] = document.createTextNode("V")
+                    Binario[[conta_linha,conta_coluna]] = "V"
                     conta_linha = conta_linha+1
                 }
             }
@@ -131,7 +136,7 @@ function Criar_Tabela(Entradas,Saidas){
         }
         table.appendChild(tr[l])
     }
-    
+
     tabela.appendChild(table)
     console.log(tabela)
 
@@ -155,7 +160,6 @@ function Ler_Botao(Botao,Tamanho){
 function Calculo(){
 
     let Linhas = 2**Number(Numero_Entradas)
-    let Codigo = []
 
     for(c=0;c<Numero_Saidas;c++){
         Codigo[c] = ""
@@ -164,18 +168,27 @@ function Calculo(){
             if(Solusao[[l,c]] == true){
                 for(a=65;a<(65+Number(Numero_Entradas));a++){
                     
-                    Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                    if(Binario[[l,(a-65)]] == "F"){
+                        Codigo[c] = `${Codigo[c]}\"`
+                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                        Codigo[c] = Codigo[c] + "+"
+                    }else{
+                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                        Codigo[c] = Codigo[c] + "+"
+                    }
+                    
                 }
+                Codigo[c] = Codigo[c].slice(0,-1)
                 Codigo[c] = Codigo[c] + "."
             }
 
         }
         Codigo[c] = Codigo[c].slice(0,-1)
-        console.log("Solução"+c+" "+ Codigo[c])
+        console.log("Solução "+c+" "+ Codigo[c])
     }
 
     document.getElementById("Resultado_Bruto").innerHTML = "";
-    document.getElementById("Resultado_Bruto").innerHTML = "funciona";
+    document.getElementById("Resultado_Bruto").innerHTML = Codigo[0]
 }
 
 function tests(){
