@@ -171,15 +171,15 @@ function Calculo(){
                     if(Binario[[l,(a-65)]] == "F"){
                         Codigo[c] = `${Codigo[c]}\"`
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
-                        Codigo[c] = Codigo[c] + "+"
+                        Codigo[c] = Codigo[c] + "."
                     }else{
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
-                        Codigo[c] = Codigo[c] + "+"
+                        Codigo[c] = Codigo[c] + "."
                     }
                     
                 }
                 Codigo[c] = Codigo[c].slice(0,-1)
-                Codigo[c] = Codigo[c] + "."
+                Codigo[c] = Codigo[c] + "+"
             }
 
         }
