@@ -22,7 +22,7 @@ function Ler_fomulario(){
 
 function Criar_Tabela(Entradas,Saidas){
 
-    let Linhas = 2
+    let Linhas = 2**Number(Entradas)
     
     // limpa a tabela antes de criar a nova
     var container = document.querySelector("#Tabela");
@@ -45,10 +45,6 @@ function Criar_Tabela(Entradas,Saidas){
     let input = [[]]
     let td = [[]]
     let tr = []
-
-    for(a=0;a<(Entradas-1);a++){
-        Linhas = Linhas*2
-    }
 
     // Cria o titulo
     for(l=65;l<(65+Number(Entradas));l++){
@@ -157,19 +153,31 @@ function Ler_Botao(Botao,Tamanho){
 }
 
 function Calculo(){
-    console.log(Numero_Entradas)
-    console.log(Numero_Saidas)
 
+    let Linhas = 2**Number(Numero_Entradas)
+    let Codigo = []
 
+    for(c=0;c<Numero_Saidas;c++){
+        Codigo[c] = ""
+        for(l=0;l<Linhas;l++){
+            
+            if(Solusao[[l,c]] == true){
+                for(a=65;a<(65+Number(Numero_Entradas));a++){
+                    
+                    Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                }
+                Codigo[c] = Codigo[c] + "."
+            }
 
+        }
+        Codigo[c] = Codigo[c].slice(0,-1)
+        console.log("Solução"+c+" "+ Codigo[c])
+    }
 
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = "funciona";
 }
 
 function tests(){
-
-    
-    
 
 }
