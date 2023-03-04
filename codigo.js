@@ -184,7 +184,7 @@ function Calculo(){
 
         }
         Codigo[c] = Codigo[c].slice(0,-1)
-        console.log("Solução "+c+" "+ Codigo[c])
+        console.log("Solução "+Number(c+1)+" "+ Codigo[c])
     }
 
     document.getElementById("Resultado_Bruto").innerHTML = "";
