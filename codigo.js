@@ -125,7 +125,7 @@ function Criar_Tabela(Entradas,Saidas){
         }
     }
 
-    // adiciona os botões nas colunas
+    // adiciona as linhas nas colunas
     for(l=1;l<(Linhas+1);l++){
         tr[l] = document.createElement("tr")
         for(c=0;c<Number(Entradas)+1;c++){
