@@ -169,8 +169,8 @@ function Calculo(){
                 for(a=65;a<(65+Number(Numero_Entradas));a++){
                     
                     if(Binario[[l,(a-65)]] == "F"){
-                        Codigo[c] = `${Codigo[c]}\"`
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                        Codigo[c] = `${Codigo[c]}\"`
                         Codigo[c] = Codigo[c] + "."
                     }else{
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
@@ -186,9 +186,33 @@ function Calculo(){
         Codigo[c] = Codigo[c].slice(0,-1)
         console.log("Solução "+Number(c+1)+" "+ Codigo[c])
     }
+    console.log("------------")
+    for(c=0;c<Numero_Saidas;c++){
+        Codigo[c] = Simplificar(Codigo[c])
+    }
 
     document.getElementById("Resultado_Bruto").innerHTML = "";
     document.getElementById("Resultado_Bruto").innerHTML = Codigo[0]
+}
+
+function Simplificar(Bruto){
+
+    let Resumido = Bruto
+    let cont = 65
+
+    let adi_1 = /A+0/ // = A
+    let adi_2 = /A+1/ // = 1
+
+    while(cont == 0){
+        if(adi_1 == true){
+
+        }else{
+            cont=1
+        }
+    }
+
+    console.log(Resumido)
+    return Resumido
 }
 
 function tests(){
