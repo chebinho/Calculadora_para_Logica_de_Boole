@@ -200,8 +200,8 @@ function Simplificar(Bruto){
     let Resumido = Bruto
     let cont = 65
 
-    let adi_1 = /A+0/ // = A
-    let adi_2 = /A+1/ // = 1
+    let adi_1 = /A\+0/ // = A
+    let adi_2 = /A\+1/ // = 1
 
     while(cont == 0){
         if(adi_1 == true){
