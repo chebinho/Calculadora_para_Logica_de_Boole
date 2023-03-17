@@ -5,8 +5,6 @@ var Codigo = []
 var Numero_Entradas = 2
 var Numero_Saidas = 1
 
-let test = 0
-
 function Ler_fomulario(){
 
     Numero_Entradas = document.getElementById("Numero_Entradas").value
@@ -71,6 +69,8 @@ function Criar_Tabela(Entradas,Saidas){
     // Criar o V F da tabela
     let conta_coluna = 0
     let conta_linha = 0
+
+    let test = 0
 
     for(c=1;c<=(Linhas/2);c=c*2){
         for(l=0;l<(Linhas/c);l++){
@@ -199,22 +199,80 @@ function Simplificar(Bruto){
 
     let Resumido = Bruto
     let cont = 65
-
-    let adi_1 = /A\+0/ // = A
-    let adi_2 = /A\+1/ // = 1
+    let exe = 0
 
     while(cont == 0){
-        if(adi_1 == true){
+        exe = exe +1
+        if(true == false){
 
         }else{
             cont=1
         }
     }
 
+    console.log(exe)
     console.log(Resumido)
     return Resumido
 }
 
 function tests(){
 
+    // * 0 ou n
+    // + 1 ou n
+    // ? 0 ou 1
+
+    let Resumido = 'A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A.B".C".D+A.B.C".D+A.B".C.D+A.B.C.D'
+    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C'
+
+    let adi_1 = /[A-Z]\+0/g // = A + 0 = A
+    let adi_2 = /[A-Z]\+1/g // = A + 1 = 1
+    let adi_3 = /([A-Z])\+\1/g // = A + A = A
+    let adi_4A = /([A-Z])"\+\1/g // = A + Ā = 1
+    let adi_4B = /([A-Z])\+\1"/g // = Ā + A = 1
+
+    let mult_1 = /[A-Z]\.0/g // = A . 0 = 0
+    let mult_2 = /[A-Z]\.1/g // = A . 1 = A
+    let mult_3 = /([A-Z])\.\1/g //  A . A = A
+    let mult_4A = /([A-Z])"\.\1/g // A . Ā = 0
+    let mult_4B = /([A-Z])\.\1"/g // A . Ā = 0
+
+    let comu_adi = 0 // A + B = B + A
+    let comu_mult = 0 // A . B = B . A
+
+    let asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
+    let asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
+
+    let distri_adi = 0 // A+(B.C) = (A+B) . (A+C)
+    let distri_mult = 0 // A.(B+C) = A.B + A.C
+    //
+    let abisor_adi = 0 // A + (A.B) = A
+    let abisor_mult = 0 // A . (A+B) = A
+
+    let outra_adi = 0 // A + Ā.B = A + B
+    let outra_mult = 0 // (A+B).(A+C) = A + B.C
+
+    let morgan_adi = 0 // (A.B)’ = A' + B'
+    let morgan_mult = 0 // (A+B)’ = A' . B'
+
+    let morgan_adi_n = 0 // (A.B ... n)’ = A' + B' ... n'
+    let morgan_mult_n = 0 // (A+B ... n)’ = A' . B' ... n'
+
+    console.log(test)
+    console.log(test.match(adi_4A))
+
+    /*
+    let exe = 0
+
+    while(cont == 0){
+        exe = exe +1
+        if(true != null){
+
+        }else{
+            cont=1
+        }
+    }
+
+    console.log(exe)
+    console.log(Resumido)
+    */
 }
