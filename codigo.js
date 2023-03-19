@@ -222,31 +222,26 @@ function tests(){
     // ? 0 ou 1
 
     let Resumido = 'A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A.B".C".D+A.B.C".D+A.B".C.D+A.B.C.D'
-    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C'
+    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C "G.G G".G A+(A.C).V+(V.V)'
 
     let adi_1 = /[A-Z]\+0/g // = A + 0 = A
     let adi_2 = /[A-Z]\+1/g // = A + 1 = 1
     let adi_3 = /([A-Z])\+\1/g // = A + A = A
-    let adi_4A = /([A-Z])"\+\1/g // = A + Ā = 1
-    let adi_4B = /([A-Z])\+\1"/g // = Ā + A = 1
+    let adi_4 = /(([A-Z])"\+\2)|(([A-Z])\+\4")/g // = A + Ā = 1
 
     let mult_1 = /[A-Z]\.0/g // = A . 0 = 0
     let mult_2 = /[A-Z]\.1/g // = A . 1 = A
     let mult_3 = /([A-Z])\.\1/g //  A . A = A
-    let mult_4A = /([A-Z])"\.\1/g // A . Ā = 0
-    let mult_4B = /([A-Z])\.\1"/g // A . Ā = 0
-
-    let comu_adi = 0 // A + B = B + A
-    let comu_mult = 0 // A . B = B . A
-
+    let mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . Ā = 0
+    //
+    let abisor_adi = /([A-Z])\+\((\1\.[^$1])\)/g // A + (A.B) = A
+    let abisor_mult = 0 // A . (A+B) = A
+    //
     let asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
     let asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
 
     let distri_adi = 0 // A+(B.C) = (A+B) . (A+C)
-    let distri_mult = 0 // A.(B+C) = A.B + A.C
-    //
-    let abisor_adi = 0 // A + (A.B) = A
-    let abisor_mult = 0 // A . (A+B) = A
+    let distri_mult = 0 // A.(B+C) = A.B + A.C 
 
     let outra_adi = 0 // A + Ā.B = A + B
     let outra_mult = 0 // (A+B).(A+C) = A + B.C
@@ -256,9 +251,12 @@ function tests(){
 
     let morgan_adi_n = 0 // (A.B ... n)’ = A' + B' ... n'
     let morgan_mult_n = 0 // (A+B ... n)’ = A' . B' ... n'
+    //
+    let comu_adi = 0 // A + B = B + A
+    let comu_mult = 0 // A . B = B . A
 
     console.log(test)
-    console.log(test.match(adi_4A))
+    console.log(test.match(abisor_adi))
 
     /*
     let exe = 0
