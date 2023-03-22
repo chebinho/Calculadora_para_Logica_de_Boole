@@ -258,19 +258,20 @@ function tests(){
     console.log(test)
     console.log(test.match(abisor_adi))
 
-    /*
+    
     let exe = 0
+    let cont = 0
 
-    while(cont == 0){
+    while(cont == 5){
         exe = exe +1
-        if(true != null){
+        if((Resumido.match(abisor_adi)) != null){
 
         }else{
-            cont=1
+            cont = cont+1
         }
     }
 
     console.log(exe)
     console.log(Resumido)
-    */
+
 }
