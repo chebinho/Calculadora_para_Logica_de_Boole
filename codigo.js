@@ -222,38 +222,38 @@ function tests(){
     // ? 0 ou 1
 
     let Resumido = 'A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A.B".C".D+A.B.C".D+A.B".C.D+A.B.C.D'
-    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C "G.G G".G A+(A.C).V+(V.V)'
+    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C "G.G G".G A+(A.C) V+(V.V) S+(C.S)'
 
-    let adi_1 = /[A-Z]\+0/g // = A + 0 = A
-    let adi_2 = /[A-Z]\+1/g // = A + 1 = 1
-    let adi_3 = /([A-Z])\+\1/g // = A + A = A
-    let adi_4 = /(([A-Z])"\+\2)|(([A-Z])\+\4")/g // = A + Ā = 1
+    const adi_1 = /[A-Z]\+0/g // = A + 0 = A
+    const adi_2 = /[A-Z]\+1/g // = A + 1 = 1
+    const adi_3 = /([A-Z])\+\1/g // = A + A = A
+    const adi_4 = /(([A-Z])"\+\2)|(([A-Z])\+\4")/g // = A + Ā = 1
 
-    let mult_1 = /[A-Z]\.0/g // = A . 0 = 0
-    let mult_2 = /[A-Z]\.1/g // = A . 1 = A
-    let mult_3 = /([A-Z])\.\1/g //  A . A = A
-    let mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . Ā = 0
+    const mult_1 = /[A-Z]\.0/g // = A . 0 = 0
+    const mult_2 = /[A-Z]\.1/g // = A . 1 = A
+    const mult_3 = /([A-Z])\.\1/g //  A . A = A
+    const mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . Ā = 0
     //
-    let abisor_adi = /([A-Z])\+\((\1\.[^$1])\)/g // A + (A.B) = A
-    let abisor_mult = 0 // A . (A+B) = A
+    const abisor_adi = /([A-Z])\+\((\1\.([A-Z](?<!\1)))\)/g // A + (A.B) = A
+    const abisor_mult = /([A-Z])\.\((\1\+([A-Z](?<!\1)))\)/g // A . (A+B) = A
     //
-    let asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
-    let asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
+    const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
+    const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
 
-    let distri_adi = 0 // A+(B.C) = (A+B) . (A+C)
-    let distri_mult = 0 // A.(B+C) = A.B + A.C 
+    const distri_adi = 0 // A+(B.C) = (A+B) . (A+C)
+    const distri_mult = 0 // A.(B+C) = A.B + A.C 
 
-    let outra_adi = 0 // A + Ā.B = A + B
-    let outra_mult = 0 // (A+B).(A+C) = A + B.C
+    const outra_adi = 0 // A + Ā.B = A + B
+    const outra_mult = 0 // (A+B).(A+C) = A + B.C
 
-    let morgan_adi = 0 // (A.B)’ = A' + B'
-    let morgan_mult = 0 // (A+B)’ = A' . B'
+    const morgan_adi = 0 // (A.B)’ = A' + B'
+    const morgan_mult = 0 // (A+B)’ = A' . B'
 
-    let morgan_adi_n = 0 // (A.B ... n)’ = A' + B' ... n'
-    let morgan_mult_n = 0 // (A+B ... n)’ = A' . B' ... n'
+    const morgan_adi_n = 0 // (A.B ... n)’ = A' + B' ... n'
+    const morgan_mult_n = 0 // (A+B ... n)’ = A' . B' ... n'
     //
-    let comu_adi = 0 // A + B = B + A
-    let comu_mult = 0 // A . B = B . A
+    const comu_adi = 0 // A + B = B + A
+    const comu_mult = 0 // A . B = B . A
 
     console.log(test)
     console.log(test.match(abisor_adi))
