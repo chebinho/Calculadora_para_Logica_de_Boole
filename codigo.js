@@ -169,8 +169,8 @@ function Calculo(){
                 for(a=65;a<(65+Number(Numero_Entradas));a++){
                     
                     if(Binario[[l,(a-65)]] == "F"){
-                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
                         Codigo[c] = `${Codigo[c]}\"`
+                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
                         Codigo[c] = Codigo[c] + "."
                     }else{
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
@@ -222,12 +222,12 @@ function tests(){
     // ? 0 ou 1
 
     let Resumido = 'A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A.B".C".D+A.B.C".D+A.B".C.D+A.B.C.D'
-    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C "G.G G".G A+(A.C) V+(V.V) S+(C.S)'
+    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C 0+C "G.G G".G A+(A.C) V+(V.V) S+(C.S)'
 
-    const adi_1 = /[A-Z]\+0/g // = A + 0 = A
-    const adi_2 = /[A-Z]\+1/g // = A + 1 = 1
-    const adi_3 = /([A-Z])\+\1/g // = A + A = A
-    const adi_4 = /(([A-Z])"\+\2)|(([A-Z])\+\4")/g // = A + Ā = 1
+    const adi_1 = /(([A-Z])\+(0|\2))|(0\+([A-Z]))/g // = A+0=A ou A+A=A ou 0+A=A !$2$5
+    //const adi_2 = /[A-Z]\+1/g // = A + 1 = 1
+    //const adi_3 = /([A-Z])\+\1/g // = A + A = A
+    const adi_4 = /(([A-Z])\+(1|"\2))|((1|"[A-Z])\+([A-Z]))|(1\+1)/g // = A+"A=1 ou A+1=1 ou 1+1=1 !1
 
     const mult_1 = /[A-Z]\.0/g // = A . 0 = 0
     const mult_2 = /[A-Z]\.1/g // = A . 1 = A
@@ -237,28 +237,25 @@ function tests(){
     const abisor_adi = /([A-Z])\+\((\1\.([A-Z](?<!\1)))\)/g // A + (A.B) = A
     const abisor_mult = /([A-Z])\.\((\1\+([A-Z](?<!\1)))\)/g // A . (A+B) = A
     //
-    const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
-    const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
+    const distri_adi = /([A-Z])\+\(([A-Z](?<!\1))\.([A-Z](?<!\1|\2))\)/g // A+(B.C) = (A+B) . (A+C)
+    const distri_mult = /([A-Z])\.\(([A-Z](?<!\1))\+([A-Z](?<!\1|\2))\)/ // A.(B+C) = A.B + A.C 
 
-    const distri_adi = 0 // A+(B.C) = (A+B) . (A+C)
-    const distri_mult = 0 // A.(B+C) = A.B + A.C 
-
-    const outra_adi = 0 // A + Ā.B = A + B
-    const outra_mult = 0 // (A+B).(A+C) = A + B.C
+    const outra_adi = /([A-Z])\+\"\1\.([A-Z](?<!\1))/g // A + Ā.B = A + B
+    const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A + B.C
 
     const morgan_adi = 0 // (A.B)’ = A' + B'
     const morgan_mult = 0 // (A+B)’ = A' . B'
-
-    const morgan_adi_n = 0 // (A.B ... n)’ = A' + B' ... n'
-    const morgan_mult_n = 0 // (A+B ... n)’ = A' . B' ... n'
     //
     const comu_adi = 0 // A + B = B + A
     const comu_mult = 0 // A . B = B . A
 
-    console.log(test)
-    console.log(test.match(abisor_adi))
+    const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
+    const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
 
-    
+    console.log(test)
+    console.log(test.match(adi_1))
+
+    /*
     let exe = 0
     let cont = 0
 
@@ -273,5 +270,5 @@ function tests(){
 
     console.log(exe)
     console.log(Resumido)
-
+    */
 }
