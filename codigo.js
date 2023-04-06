@@ -195,24 +195,10 @@ function Calculo(){
     document.getElementById("Resultado_Bruto").innerHTML = Codigo[0]
 }
 
-function Simplificar(Bruto){
+function Simplificar(Resumido){
 
-    let Resumido = Bruto
-    let cont = 65
-    let exe = 0
+//subistituir pelo teste
 
-    while(cont == 0){
-        exe = exe +1
-        if(true == false){
-
-        }else{
-            cont=1
-        }
-    }
-
-    console.log(exe)
-    console.log(Resumido)
-    return Resumido
 }
 
 function tests(){
@@ -220,25 +206,22 @@ function tests(){
     // * 0 ou n
     // + 1 ou n
     // ? 0 ou 1
+    // (A)(?!") = não pode ter " no final
 
-    let Resumido = 'A".B".C+A.B".C+A".B.C+A.B.C' // = C
-    let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C 0+C "G.G G".G A+(A.C) V+(V.V) S+(C.S)'
+    let Resumido = '(A+B).(A+C)' // = A + B.C
 
-    const adi_1 = /(([A-Z])\+(0|\2))|(0\+([A-Z]))/g // = A+0=A ou A+A=A ou 0+A=A !$2$5
-    //const adi_2 = /[A-Z]\+1/g // = A + 1 = 1
-    //const adi_3 = /([A-Z])\+\1/g // = A + A = A
-    const adi_4 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|(1(\+|\.)1)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
+    const adi_1 = /((([A-Z])\+(0|\3))(?!"))|((0\+([A-Z]))(?!"))/g // = A+0=A ou A+A=A ou 0+A=A !$3$7
+    const adi_2 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|(1(\+|\.)1)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
 
-    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)/g // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 !0
+    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)/g 
+    // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 !0
     const mult_2 = /((([A-Z])\.(1|\3))(?!"))|(1\.([A-Z]))/g // = A.1 ou A.A ou 1.A !$3$6
-    //const mult_3 = /([A-Z])\.\1/g //  A . A = A
-    //const mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . A" = 0
     //
     const abisor_adi = /([A-Z])\+\((\1\.([A-Z](?<!\1)))\)/g // A + (A.B) = A
     const abisor_mult = /([A-Z])\.\((\1\+([A-Z](?<!\1)))\)/g // A . (A+B) = A
     //
-    const distri_adi = /([A-Z])\+\(([A-Z](?<!\1))\.([A-Z](?<!\1|\2))\)/g // A+(B.C) = (A+B) . (A+C)
-    const distri_mult = /([A-Z])\.\(([A-Z](?<!\1))\+([A-Z](?<!\1|\2))\)/ // A.(B+C) = A.B + A.C 
+    const distri_adi = /([A-Z])\+\(([A-Z](?<!\1))\.([A-Z](?<!\1|\2))\)/g // A+(B.C) = (A+B).(A+C) !($1+$2).($1+$3)
+    const distri_mult = /([A-Z])\.\(([A-Z](?<!\1))\+([A-Z](?<!\1|\2))\)/ // A.(B+C) = A.B+A.C !$1.$2+$1.$3
 
     const outra_adi = /([A-Z])\+\"\1\.([A-Z](?<!\1))/g // A + Ā.B = A + B
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A + B.C
@@ -252,23 +235,32 @@ function tests(){
     const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
     const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
 
-    console.log(test)
-    console.log(test.match(adi_1))
-
-    /*
-    let exe = 0
-    let cont = 0
-
-    while(cont == 5){
-        exe = exe +1
-        if((Resumido.match(abisor_adi)) != null){
-
+    let conatador = 0
+    let c = 1
+    while(c != 0){
+        if(Resumido.match(adi_1) != null){
+            Resumido = Resumido.replace(adi_1,"$3$7")
+        }else if(Resumido.match(adi_2) != null){
+            Resumido = Resumido.replace(adi_2,"1")
+        }else if(Resumido.match(mult_1) != null){
+            Resumido = Resumido.replace(mult_1,"0")
+        }else if(Resumido.match(mult_2) != null){
+            Resumido = Resumido.replace(mult_2,"$3$6")
+        }else if(Resumido.match(abisor_adi) != null){
+            Resumido = Resumido.replace(abisor_adi,"$1")//
+        }else if(Resumido.match(abisor_mult) != null){
+            Resumido = Resumido.replace(abisor_mult,"$1")//
+        }else if(Resumido.match(distri_adi) != null){
+            Resumido = Resumido.replace(distri_adi,"($1+$2).($1+$3)")//
+        }else if(Resumido.match(distri_mult) != null){  
+            Resumido = Resumido.replace(distri_mult,"$1.$2+$1.$3")//
         }else{
-            cont = cont+1
+            c = 0
         }
+        conatador += 1
     }
 
-    console.log(exe)
+    console.log(conatador)
     console.log(Resumido)
-    */
+    
 }
