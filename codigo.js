@@ -169,8 +169,8 @@ function Calculo(){
                 for(a=65;a<(65+Number(Numero_Entradas));a++){
                     
                     if(Binario[[l,(a-65)]] == "F"){
-                        Codigo[c] = `${Codigo[c]}\"`
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
+                        Codigo[c] = `${Codigo[c]}\"`
                         Codigo[c] = Codigo[c] + "."
                     }else{
                         Codigo[c] = Codigo[c] + String.fromCharCode(a)
@@ -221,18 +221,18 @@ function tests(){
     // + 1 ou n
     // ? 0 ou 1
 
-    let Resumido = 'A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A.B".C".D+A.B.C".D+A.B".C.D+A.B.C.D'
+    let Resumido = 'A".B".C+A.B".C+A".B.C+A.B.C' // = C
     let test = 'A+A".B A+0 Z+1 A"+A A+B C+C+C+C 0+C "G.G G".G A+(A.C) V+(V.V) S+(C.S)'
 
     const adi_1 = /(([A-Z])\+(0|\2))|(0\+([A-Z]))/g // = A+0=A ou A+A=A ou 0+A=A !$2$5
     //const adi_2 = /[A-Z]\+1/g // = A + 1 = 1
     //const adi_3 = /([A-Z])\+\1/g // = A + A = A
-    const adi_4 = /(([A-Z])\+(1|"\2))|((1|"[A-Z])\+([A-Z]))|(1\+1)/g // = A+"A=1 ou A+1=1 ou 1+1=1 !1
+    const adi_4 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|(1(\+|\.)1)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
 
-    const mult_1 = /[A-Z]\.0/g // = A . 0 = 0
-    const mult_2 = /[A-Z]\.1/g // = A . 1 = A
-    const mult_3 = /([A-Z])\.\1/g //  A . A = A
-    const mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . Ā = 0
+    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)/g // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 !0
+    const mult_2 = /((([A-Z])\.(1|\3))(?!"))|(1\.([A-Z]))/g // = A.1 ou A.A ou 1.A !$3$6
+    //const mult_3 = /([A-Z])\.\1/g //  A . A = A
+    //const mult_4 = /(([A-Z])"\.\2)|(([A-Z])\.\4")/g // A . A" = 0
     //
     const abisor_adi = /([A-Z])\+\((\1\.([A-Z](?<!\1)))\)/g // A + (A.B) = A
     const abisor_mult = /([A-Z])\.\((\1\+([A-Z](?<!\1)))\)/g // A . (A+B) = A
