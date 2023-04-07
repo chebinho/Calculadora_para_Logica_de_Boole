@@ -211,20 +211,20 @@ function tests(){
     let Resumido = '(A+B).(A+C)' // = A + B.C
 
     const adi_1 = /((([A-Z])\+(0|\3))(?!"))|((0\+([A-Z]))(?!"))/g // = A+0=A ou A+A=A ou 0+A=A !$3$7
-    const adi_2 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|(1(\+|\.)1)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
+    const adi_2 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|((1|0)(\+|\.)1)|(1\+0)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
 
-    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)/g 
-    // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 !0
+    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)|(0\+0)/g 
+    // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 ou 0+0 !0
     const mult_2 = /((([A-Z])\.(1|\3))(?!"))|(1\.([A-Z]))/g // = A.1 ou A.A ou 1.A !$3$6
     //
-    const abisor_adi = /([A-Z])\+\((\1\.([A-Z](?<!\1)))\)/g // A + (A.B) = A
-    const abisor_mult = /([A-Z])\.\((\1\+([A-Z](?<!\1)))\)/g // A . (A+B) = A
+    const abisor_adi = /([A-Z])\+\((\1(\.[A-Z])+)\)/g // A+(A.B) ou A+(A.A) ou A+(A.B.A) = A !$1
+    const abisor_mult = /([A-Z])\.\((\1(\+[A-Z])+)\)/g // A.(A+B) ou A.(A+A) ou A.(A+B+A) = A !$1
     //
     const distri_adi = /([A-Z])\+\(([A-Z](?<!\1))\.([A-Z](?<!\1|\2))\)/g // A+(B.C) = (A+B).(A+C) !($1+$2).($1+$3)
     const distri_mult = /([A-Z])\.\(([A-Z](?<!\1))\+([A-Z](?<!\1|\2))\)/ // A.(B+C) = A.B+A.C !$1.$2+$1.$3
 
     const outra_adi = /([A-Z])\+\"\1\.([A-Z](?<!\1))/g // A + Ā.B = A + B
-    const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A + B.C
+    const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
 
     const morgan_adi = 0 // (A.B)’ = A' + B'
     const morgan_mult = 0 // (A+B)’ = A' . B'
@@ -234,6 +234,8 @@ function tests(){
 
     const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
     const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
+
+    console.log(Resumido)
 
     let conatador = 0
     let c = 1
@@ -258,9 +260,10 @@ function tests(){
             c = 0
         }
         conatador += 1
+        console.log(Resumido)
     }
 
-    console.log(conatador)
     console.log(Resumido)
+    console.log(conatador+" passos")
     
 }
