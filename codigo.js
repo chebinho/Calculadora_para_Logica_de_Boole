@@ -210,16 +210,18 @@ function tests(){
 
     let Resumido = '(A+B).(A+C)' // = A + B.C
 
-    const adi_1 = /((([A-Z])\+(0|\3))(?!"))|((0\+([A-Z]))(?!"))/g // = A+0=A ou A+A=A ou 0+A=A !$3$7
-    const adi_2 = /(([A-Z])\+(1|\2"))|((1|[A-Z]")\+([A-Z]))|((1|0)(\+|\.)1)|(1\+0)/g // = A+A"=1 ou A+1=1 ou 1+1=1 1.1=1 !1
+    const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
+    // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
+    const situa_R_1 = /(1(\.|\+)1)|((1\+0)|(0\+1))|(([A-Z]"?\+1)|(1\+[A-Z]"?))|((([A-Z])"\+\11)(?!"))|(([A-Z])\+\13")/g
+    // 1.1 1+1 1+0 0+1 A+1 A"+1 1+A 1+A" A"+A A+A" = 1 !1
+    const situa_R_AZ = /((([A-Z])(\+|\.)\3)(?!"))|((0\+([A-Z]))(?!"))|(([A-Z])\+0)|((1\.([A-Z]))(?!"))|(([A-Z])\.1)/g
+    // A+A A.A A+0 0+A A.1 1.A = A !$3$7$9$12$14
+    const situa_R_AZi = /(([A-Z]")\+0)|(0\+([A-Z]"))|(([A-Z]")\.1)|(1\.([A-Z]"))|(([A-Z]")(\+|\.)\10)/g
+    // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
 
-    const mult_1 = /(([A-Z])\.(0|\2"))|((([A-Z])"\.\6)(?!"))|(0\.([A-Z]|0|1))|(1\.0)|(0\+0)/g 
-    // = A.0 ou 0.A ou A.A" ou A".A ou 0.0 ou 0.1 ou 1.0 ou 0+0 !0
-    const mult_2 = /((([A-Z])\.(1|\3))(?!"))|(1\.([A-Z]))/g // = A.1 ou A.A ou 1.A !$3$6
-    //
-    const abisor_adi = /([A-Z])\+\((\1(\.[A-Z])+)\)/g // A+(A.B) ou A+(A.A) ou A+(A.B.A) = A !$1
-    const abisor_mult = /([A-Z])\.\((\1(\+[A-Z])+)\)/g // A.(A+B) ou A.(A+A) ou A.(A+B+A) = A !$1
-    //
+    const abisor = /(([A-Z])\+\((\2(\.[A-Z])+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g
+    //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) = A !$2$6
+
     const distri_adi = /([A-Z])\+\(([A-Z](?<!\1))\.([A-Z](?<!\1|\2))\)/g // A+(B.C) = (A+B).(A+C) !($1+$2).($1+$3)
     const distri_mult = /([A-Z])\.\(([A-Z](?<!\1))\+([A-Z](?<!\1|\2))\)/ // A.(B+C) = A.B+A.C !$1.$2+$1.$3
 
@@ -240,18 +242,18 @@ function tests(){
     let conatador = 0
     let c = 1
     while(c != 0){
-        if(Resumido.match(adi_1) != null){
-            Resumido = Resumido.replace(adi_1,"$3$7")
-        }else if(Resumido.match(adi_2) != null){
-            Resumido = Resumido.replace(adi_2,"1")
-        }else if(Resumido.match(mult_1) != null){
-            Resumido = Resumido.replace(mult_1,"0")
-        }else if(Resumido.match(mult_2) != null){
-            Resumido = Resumido.replace(mult_2,"$3$6")
-        }else if(Resumido.match(abisor_adi) != null){
-            Resumido = Resumido.replace(abisor_adi,"$1")//
-        }else if(Resumido.match(abisor_mult) != null){
-            Resumido = Resumido.replace(abisor_mult,"$1")//
+        if(Resumido.match(situa_R_0) != null){
+            Resumido = Resumido.replace(situa_R_0,"0")
+        }else if(Resumido.match(situa_R_1) != null){
+            Resumido = Resumido.replace(situa_R_1,"1")
+        }else if(Resumido.match(situa_R_AZ) != null){
+            Resumido = Resumido.replace(situa_R_AZ,"$3$7$9$12$14")
+        }else if(Resumido.match(situa_R_AZi) != null){
+            Resumido = Resumido.replace(situa_R_AZi,"$2$4$6$8$10")
+
+        }else if(Resumido.match(abisor) != null){
+            Resumido = Resumido.replace(abisor,"$2$6")
+
         }else if(Resumido.match(distri_adi) != null){
             Resumido = Resumido.replace(distri_adi,"($1+$2).($1+$3)")//
         }else if(Resumido.match(distri_mult) != null){  
@@ -263,7 +265,6 @@ function tests(){
         console.log(Resumido)
     }
 
-    console.log(Resumido)
     console.log(conatador+" passos")
     
 }
