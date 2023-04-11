@@ -264,15 +264,28 @@ function tests(){
             Resumido = Resumido.replace(distri_mult,"$1.$2+$1.$3")//
         }
 
-        else if(Resumido.match(morgan) != null){
+        else if(Resumido.match(distri_3) != null){
+            let a = Resumido.match(distri_3)
+            let b = Resumido.match(distri_3)
+            Resumido = Resumido.replace(distri_3,'(/?/)')
+
+            for(l=0;l<b.length;l++){
+                b[l] = b[l].replace(/(\(|\)|\.|\+|\")/g,"")
+
+            }
+            for(l=0;l<a.length;l++){
+
+            }
+
+        }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
-            Resumido = Resumido.replace(morgan,'(/?/)"')
+            Resumido = Resumido.replace(morgan,'(/?/)')
 
             for(l=0;l<a.length;l++){
                 a[l] = a[l].replace(/([A-Z]"?)/g,'$1"')
                 a[l] = a[l].replace(/\((.+)\)\"/g,'$1')
                 a[l] = a[l].replace(/""/g,'')
-                Resumido = Resumido.replace(/\(\/\?\/\)"/,a[l])
+                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
 
         }else{
