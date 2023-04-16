@@ -233,7 +233,7 @@ function tests(){
     const outra_adi = /([A-Z])\+\"\1\.([A-Z](?<!\1))/g // A + Ā.B = A + B
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
 
-    const morgan = /\((([A-Z]"?)(\+|\.)?)+\)"/g // (A.B)’ = A' + B' !(/?/)"
+    const morgan = /\((([A-Z]"?)(\+|\.)?)+\)"/g // (A.B)’ = A'+B' !(/?/)
     //
     const comu_adi = 0 // A + B = B + A
     const comu_mult = 0 // A . B = B . A
@@ -270,7 +270,10 @@ function tests(){
             Resumido = Resumido.replace(distri_3,'(/?/)')
 
             for(l=0;l<b.length;l++){
-                b[l] = b[l].replace(/(\(|\)|\.|\+|\")/g,"")
+                b[l] = b[l].replace(/(\(|\)|\.|\+)/g,"")
+                let d = b[l].replace(/((^".)|(^.))([A-z]|")+/g,"$1")
+                b[l] = b[l].replace(/((^".)|(^.))/g,"")
+
 
             }
             for(l=0;l<a.length;l++){
@@ -303,9 +306,9 @@ function vezesLetraAparece(frase, letra) {
     var resultado = 0;
   
     for (var indiceLetra = 0; indiceLetra < frase.length; indiceLetra++) {
-      if (frase[indiceLetra] === letra) {
-        resultado++; // Somamos 1 ao contador.
-      }
+        if (frase[indiceLetra] === letra) {
+            resultado++; // Somamos 1 ao contador.
+        }
     }
     
     return resultado;
