@@ -208,7 +208,7 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
-    let Resumido = '(A+C)".(A.C+D")"' // = A + B.C
+    let Resumido = '0+1+1+0' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -266,14 +266,27 @@ function tests(){
 
         else if(Resumido.match(distri_3) != null){
             let a = Resumido.match(distri_3)
-            let b = Resumido.match(distri_3)
+            let Letra_Repe = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
 
-            for(l=0;l<b.length;l++){
-                b[l] = b[l].replace(/(\(|\)|\.|\+)/g,"")
-                let d = b[l].replace(/((^".)|(^.))([A-z]|")+/g,"$1")
-                b[l] = b[l].replace(/((^".)|(^.))/g,"")
+            for(l=0;l<Letra_Repe.length;l++){
+                Letra_Repe[l] = Letra_Repe[l].replace(/(\(|\)|\.|\+)/g,"")
+                let conta = Letra_Repe[l].length - Letra_Repe[l].replace(/[A-Z]/g,"").length
+                let letra = []
 
+                for(l2=0;l2<conta;l2++){
+                    let d = Letra_Repe[l].replace(/((^[A-Z]")|(^[A-Z]))([A-z]|")+/g,"$1")
+                    Letra_Repe[l] = Letra_Repe[l].replace(/((^.")|(^.))/g,"")
+                    console.log(d)
+
+                    for(l3=0;l3<letra.length;l3++){
+                        if(letra[l3] == d){
+                            letra[l3] = d
+                        }else{
+                            letra[l3 + 1] = d
+                        }
+                    }
+                }
 
             }
             for(l=0;l<a.length;l++){
@@ -301,17 +314,3 @@ function tests(){
     console.log(conatador+" passos")
     
 }
-
-function vezesLetraAparece(frase, letra) {
-    var resultado = 0;
-  
-    for (var indiceLetra = 0; indiceLetra < frase.length; indiceLetra++) {
-        if (frase[indiceLetra] === letra) {
-            resultado++; // Somamos 1 ao contador.
-        }
-    }
-    
-    return resultado;
-  }
-  
-  console.log(vezesLetraAparece('abaaaaaaaaaaaaaaaacaba', 'a')); // 3
