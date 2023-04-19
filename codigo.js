@@ -279,9 +279,11 @@ function tests(){
                     Letra_Repe[l] = Letra_Repe[l].replace(/((^.")|(^.))/g,"")
                     console.log(letra[l2])
                 }
-                for(l2=0;l2<letra.length;l2++){
-                    
-                }
+                
+                let novaArr = letra.filter(function(este, i) {
+                    return letra.indexOf(este) === i;
+                });
+                console.log(novaArr);
 
             }
             for(l=0;l<a.length;l++){
