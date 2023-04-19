@@ -208,7 +208,7 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
-    let Resumido = '0+1+1+0' // = A + B.C
+    let Resumido = '(A.D")+(A.C).(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -275,17 +275,12 @@ function tests(){
                 let letra = []
 
                 for(l2=0;l2<conta;l2++){
-                    let d = Letra_Repe[l].replace(/((^[A-Z]")|(^[A-Z]))([A-z]|")+/g,"$1")
+                    letra[l2] = Letra_Repe[l].replace(/((^[A-Z]")|(^[A-Z]))([A-z]|")+/g,"$1")
                     Letra_Repe[l] = Letra_Repe[l].replace(/((^.")|(^.))/g,"")
-                    console.log(d)
-
-                    for(l3=0;l3<letra.length;l3++){
-                        if(letra[l3] == d){
-                            letra[l3] = d
-                        }else{
-                            letra[l3 + 1] = d
-                        }
-                    }
+                    console.log(letra[l2])
+                }
+                for(l2=0;l2<letra.length;l2++){
+                    
                 }
 
             }
@@ -303,7 +298,6 @@ function tests(){
                 a[l] = a[l].replace(/""/g,'')
                 Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
-
         }else{
             c = c-1
         }
