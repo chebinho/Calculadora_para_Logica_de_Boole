@@ -208,7 +208,7 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
-    let Resumido = '(A.D")+(A.C).(B.D")+(B.C)' // = A + B.C
+    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -271,21 +271,28 @@ function tests(){
 
             for(l=0;l<Letra_Repe.length;l++){
                 Letra_Repe[l] = Letra_Repe[l].replace(/(\(|\)|\.|\+)/g,"")
-                let conta = Letra_Repe[l].length - Letra_Repe[l].replace(/[A-Z]/g,"").length
-                let letra = []
-
-                for(l2=0;l2<conta;l2++){
-                    letra[l2] = Letra_Repe[l].replace(/((^[A-Z]")|(^[A-Z]))([A-z]|")+/g,"$1")
-                    Letra_Repe[l] = Letra_Repe[l].replace(/((^.")|(^.))/g,"")
-                    console.log(letra[l2])
-                }
-                
-                let novaArr = letra.filter(function(este, i) {
+                let letra = Letra_Repe[l].match(/([A-Z]")|[A-Z]/g)
+                console.log(letra)
+        
+                let elemen = letra.filter(function(este, i) {
                     return letra.indexOf(este) === i;
-                });
-                console.log(novaArr);
+                })
+                console.log(elemen)
 
+                var resultado = ""
+                for(l2=0;l2<elemen.length;l2++){
+                    for(l3=0;l3<letra.length;l3++){
+                    
+                        if(elemen[l2] === letra[l3]){
+                            resultado = resultado + letra[l3]
+                        }
+
+                    }
+                }
+                console.log(" --> "+resultado)
+            
             }
+        
             for(l=0;l<a.length;l++){
 
             }
