@@ -317,3 +317,22 @@ function tests(){
     console.log(conatador+" passos")
     
 }
+
+const values = [
+    {
+      'id': 10,
+      'name': 'Cena',
+      'age': 31
+    },
+    {
+      'id': 5,
+      'name': 'Will',
+      'age': 38
+    }
+]
+
+const maxAge = values.reduce(function(prev, current) { 
+	return prev.age > current.age ? prev : current; 
+})
+
+console.log(maxAge)
