@@ -297,7 +297,7 @@ function tests(){
                 }
 
                 Letra_Repete[l] = conta_elemen.reduce(function(prev, current) { 
-                    return prev.quantidade > current.quantidade ? prev : current; 
+                    return prev.quantidade >= current.quantidade ? prev : current; 
                 })
             }
             console.log(Letra_Repete)
