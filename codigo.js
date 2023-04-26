@@ -208,7 +208,7 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
-    let Resumido = '(A.D")+(A.C).(B.D")+(B.C)' // = A + B.C
+    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -266,17 +266,18 @@ function tests(){
 
         else if(Resumido.match(distri_3) != null){
             let a = Resumido.match(distri_3)
-            let Letra_Repe = Resumido.match(distri_3)
+            let b = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
+            let Letra_Repete = []
 
-            for(l=0;l<Letra_Repe.length;l++){
-                Letra_Repe[l] = Letra_Repe[l].replace(/(\(|\)|\.|\+)/g,"")
-                let letra = Letra_Repe[l].match(/([A-Z]")|[A-Z]/g)
-                console.log(letra)
+            for(l=0;l<b.length;l++){
+                b[l] = b[l].replace(/(\(|\)|\.|\+)/g,"")
+                let letra = b[l].match(/([A-Z]")|[A-Z]/g)
         
                 let elemen = letra.filter(function(este, i) {
                     return letra.indexOf(este) === i;
                 })
+
                 var conta_elemen = []
                 for(l2=0;l2<elemen.length;l2++){
                     conta_elemen[l2] = {
@@ -285,9 +286,21 @@ function tests(){
                     }
                 }
 
-                console.log(conta_elemen)
-            
+                for(l2=0;l2<elemen.length;l2++){
+                    for(l3=0;l3<letra.length;l3++){
+
+                        if(conta_elemen[l2].letra == letra[l3]){
+                            conta_elemen[l2].quantidade = conta_elemen[l2].quantidade +1
+
+                        }
+                    }
+                }
+
+                Letra_Repete[l] = conta_elemen.reduce(function(prev, current) { 
+                    return prev.quantidade > current.quantidade ? prev : current; 
+                })
             }
+            console.log(Letra_Repete)
         
             for(l=0;l<a.length;l++){
 
@@ -313,31 +326,3 @@ function tests(){
     console.log(conatador+" passos")
     
 }
-
-/*
-let values = [
-    {
-      'id': 10,
-      'name': 'Cena',
-      'age': 31
-    },
-    {
-      'id': 5,
-      'name': 'Will',
-      'age': 38
-    }
-]
-
-values[2] = {
-    'id': 5,
-    'name': 'Will',
-    'age': 38
-  }
-console.log(values)
-
-const maxAge = values.reduce(function(prev, current) { 
-	return prev.age > current.age ? prev : current; 
-})
-
-console.log(maxAge)
-*/
