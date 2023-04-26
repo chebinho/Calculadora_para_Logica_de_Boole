@@ -208,7 +208,7 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
-    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
+    let Resumido = '(A.D")+(A.C).(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -277,19 +277,15 @@ function tests(){
                 let elemen = letra.filter(function(este, i) {
                     return letra.indexOf(este) === i;
                 })
-                console.log(elemen)
-
-                var resultado = ""
+                var conta_elemen = []
                 for(l2=0;l2<elemen.length;l2++){
-                    for(l3=0;l3<letra.length;l3++){
-                    
-                        if(elemen[l2] === letra[l3]){
-                            resultado = resultado + letra[l3]
-                        }
-
+                    conta_elemen[l2] = {
+                        'letra':elemen[l2],
+                        'quantidade':0
                     }
                 }
-                console.log(" --> "+resultado)
+
+                console.log(conta_elemen)
             
             }
         
@@ -318,7 +314,8 @@ function tests(){
     
 }
 
-const values = [
+/*
+let values = [
     {
       'id': 10,
       'name': 'Cena',
@@ -331,8 +328,16 @@ const values = [
     }
 ]
 
+values[2] = {
+    'id': 5,
+    'name': 'Will',
+    'age': 38
+  }
+console.log(values)
+
 const maxAge = values.reduce(function(prev, current) { 
 	return prev.age > current.age ? prev : current; 
 })
 
 console.log(maxAge)
+*/
