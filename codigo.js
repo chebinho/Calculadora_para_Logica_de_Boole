@@ -305,6 +305,7 @@ function tests(){
             console.log(Letra_Repete)
         
             for(l=0;l<a.length;l++){
+                
                 let Etapa_Final = ""
 
                 let primeiro_sinal = a[l].replace(/\(?([A-Z]"?)\)?/g,"")
