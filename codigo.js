@@ -208,6 +208,8 @@ function tests(){
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
 
+    // X+(X’.Y) = X+Y
+
     let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
@@ -272,7 +274,7 @@ function tests(){
 
             for(l=0;l<b.length;l++){
                 b[l] = b[l].replace(/(\(|\)|\.|\+)/g,"")
-                let letra = b[l].match(/([A-Z]")|[A-Z]/g)
+                let letra = b[l].match(/[A-Z]"?/g)
         
                 let elemen = letra.filter(function(este, i) {
                     return letra.indexOf(este) === i;
@@ -303,7 +305,18 @@ function tests(){
             console.log(Letra_Repete)
         
             for(l=0;l<a.length;l++){
+                let Etapa_Final = ""
 
+                let primeiro_sinal = a[l].replace(/\(?([A-Z]"?)\)?/g,"")
+                primeiro_sinal = primeiro_sinal.match(/^./)
+
+                let termos = a[l].match(/[A-Z]"?/g,"")
+
+                Etapa_Final = Etapa_Final + Letra_Repete[l].letra
+                Etapa_Final = Etapa_Final + primeiro_sinal + "("
+
+                console.log(termos)
+                console.log(Etapa_Final)
             }
 
         }else if(Resumido.match(morgan) != null){
