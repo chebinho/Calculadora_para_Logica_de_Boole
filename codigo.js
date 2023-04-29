@@ -309,15 +309,39 @@ function tests(){
                 let Etapa_Final = ""
 
                 let primeiro_sinal = a[l].replace(/\(?([A-Z]"?)\)?/g,"")
+                let segundo_sinal = ""
                 primeiro_sinal = primeiro_sinal.match(/^./)
 
-                let termos = a[l].match(/[A-Z]"?/g,"")
+                for(l2=0;l2<primeiro_sinal.length;l2++){
+                    if(primeiro_sinal[l2] == "+"){
+                        segundo_sinal = "."
+                    }else{
+                        segundo_sinal = "+"
+                    }
+                }
+                
+                let conjuntos = a[l].match(/\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?/g)
+                let manten = segundo_sinal
+
+                for(l2=0;l2<conjuntos.length;l2++){
+                    if(conjuntos[l2].match(Letra_Repete[l].letra) != null){
+
+                        console.log(conjuntos[l2])
+
+                    }else{
+                        manten = manten + conjuntos[l2] + segundo_sinal
+                    }
+                }
+                manten = manten.slice(0,-1)
 
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
 
-                console.log(termos)
+                Etapa_Final = Etapa_Final + ")" + manten
+
+                console.log(conjuntos)
                 console.log(Etapa_Final)
+                //Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
 
         }else if(Resumido.match(morgan) != null){
