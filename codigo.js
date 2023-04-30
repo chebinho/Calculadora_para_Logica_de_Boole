@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
+    let Resumido = 'A.D"+A.B+A.D"+A.C' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -302,8 +302,6 @@ function tests(){
                     return prev.quantidade >= current.quantidade ? prev : current; 
                 })
             }
-            console.log(Letra_Repete)
-        
             for(l=0;l<a.length;l++){
                 
                 let Etapa_Final = ""
@@ -322,26 +320,39 @@ function tests(){
                 
                 let conjuntos = a[l].match(/\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?/g)
                 let manten = segundo_sinal
+                let tira_letra = ""
 
                 for(l2=0;l2<conjuntos.length;l2++){
                     if(conjuntos[l2].match(Letra_Repete[l].letra) != null){
-
-                        console.log(conjuntos[l2])
-
+                        tira_letra = tira_letra + conjuntos[l2] + segundo_sinal
                     }else{
                         manten = manten + conjuntos[l2] + segundo_sinal
                     }
                 }
                 manten = manten.slice(0,-1)
+                tira_letra = tira_letra.slice(0,-1)
+
+                while(tira_letra.match(Letra_Repete[l].letra) != null){
+                    tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
+                }
+
+                tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
+                tira_letra = tira_letra.replace(/\((\.|\+)/g,"(")
+                tira_letra = tira_letra.replace(/(\.|\+)\)/g,")")
+                tira_letra = tira_letra.replace(/^(\+|\.)/g,"")
+
+                if(segundo_sinal == "+"){
+                    tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,"+")
+                }else{
+                    tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,".")
+                }
 
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
-
+                Etapa_Final = Etapa_Final + tira_letra
                 Etapa_Final = Etapa_Final + ")" + manten
 
-                console.log(conjuntos)
-                console.log(Etapa_Final)
-                //Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
+                Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
 
         }else if(Resumido.match(morgan) != null){
