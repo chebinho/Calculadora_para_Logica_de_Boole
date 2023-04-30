@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = 'A.D"+A.B+A.D"+A.C' // = A + B.C
+    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -220,6 +220,8 @@ function tests(){
     // A+A A.A A+0 0+A A.1 1.A = A !$3$7$9$12$14
     const situa_R_AZi = /(([A-Z]")\+0)|(0\+([A-Z]"))|(([A-Z]")\.1)|(1\.([A-Z]"))|(([A-Z]")(\+|\.)\10)/g
     // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
+    const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))\1/g
+    // A+X+A = A+X
 
     const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g
     //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) A.(A+B"+A") = A !$2$6
@@ -257,6 +259,10 @@ function tests(){
         }else if(Resumido.match(situa_R_AZi) != null){
             Resumido = Resumido.replace(situa_R_AZi,"$2$4$6$8$10")
 
+        }else if(Resumido.match(situa_A_A) != null){
+            Resumido = Resumido.replace(situa_A_A,"$1$<seila>")
+            Resumido = Resumido.replace(/((\+)\+)|((\.)\.)/g,"$2$4")
+        
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
 
