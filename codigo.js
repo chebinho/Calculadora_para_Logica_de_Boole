@@ -355,13 +355,17 @@ function tests(){
                         tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
                     }
                 }else{
-                    console.log("test")
+                    while(tira_letra.match(Letra_Repete[l].letra+'"') != null){
+                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"?")
+                    }
+                    while(tira_letra.match(Letra_Repete[l].letra) != null){
+                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
+                    }
+                    while(tira_letra.match(/\?/) != null){
+                        tira_letra = tira_letra.replace("?",Letra_Repete[l].letra)
+                    }
                 }
                 
-                while(tira_letra.match(Letra_Repete[l].letra) !== null){
-                    tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
-                }
-
                 tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
                 tira_letra = tira_letra.replace(/\((\.|\+)/g,"(")
                 tira_letra = tira_letra.replace(/(\.|\+)\)/g,")")
