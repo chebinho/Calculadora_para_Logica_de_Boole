@@ -210,7 +210,8 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = '(A.D")+(A.C)+(B.D")+(B.C)' // = A + B.C
+    //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"
+    let Resumido = 'A".B".C".B+(D"+A.D"+A.D"+C.D"+A.C.D"+A.C.D+A.D+C.D+A.C.D+A.C.D)' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -222,6 +223,10 @@ function tests(){
     // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
     const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))\1/g
     // A+X+A = A+X
+    const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
+    // (A) = A
+    const tira_rep_parentes = /\(\((.+)\)\)/g
+    // ((A+Z)) = (A+Z)
 
     const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g
     //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) A.(A+B"+A") = A !$2$6
@@ -258,6 +263,11 @@ function tests(){
             Resumido = Resumido.replace(situa_R_AZ,"$3$7$9$12$14")
         }else if(Resumido.match(situa_R_AZi) != null){
             Resumido = Resumido.replace(situa_R_AZi,"$2$4$6$8$10")
+
+        }else if(Resumido.match(tira_parentes) != null){
+            Resumido = Resumido.replace(tira_parentes,"$1")
+        }else if(Resumido.match(tira_rep_parentes) != null){
+            Resumido = Resumido.replace(tira_rep_parentes,"($1)")
 
         }else if(Resumido.match(situa_A_A) != null){
             Resumido = Resumido.replace(situa_A_A,"$1$<seila>")
@@ -308,6 +318,7 @@ function tests(){
                     return prev.quantidade >= current.quantidade ? prev : current; 
                 })
             }
+            console.log(Letra_Repete)
             for(l=0;l<a.length;l++){
                 
                 let Etapa_Final = ""
@@ -337,8 +348,17 @@ function tests(){
                 }
                 manten = manten.slice(0,-1)
                 tira_letra = tira_letra.slice(0,-1)
-
-                while(tira_letra.match(Letra_Repete[l].letra) != null){
+                
+                let test_aspa = Letra_Repete[l].letra.match(/[A-Z]"/)
+                if(test_aspa != null){
+                    while(tira_letra.match(Letra_Repete[l].letra) != null){
+                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
+                    }
+                }else{
+                    console.log("test")
+                }
+                
+                while(tira_letra.match(Letra_Repete[l].letra) !== null){
                     tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
                 }
 
