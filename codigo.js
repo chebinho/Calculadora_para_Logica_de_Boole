@@ -334,8 +334,8 @@ function tests(){
                     }
                 }
                 //\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?
-                //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\(|\))([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)\9)\)?)|(\([A-Z]"?(\+|\.)[A-Z]"?\))|(([A-Z]"?))
-                let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)\9)\)?)|(\([A-Z]"?(\+|\.)[A-Z]"?\))|(([A-Z]"?))/g)
+                //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))
+                let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))/g)
                 let manten = segundo_sinal
                 let tira_letra = ""
 
@@ -346,14 +346,13 @@ function tests(){
                             conjuntos[l2] = conjuntos[l2].slice(1)
                         }
                         tira_letra = tira_letra + conjuntos[l2] + segundo_sinal
+                        console.log(tira_letra + " <-------")
                     }else{
-                        console.log(conjuntos[l2] +" -------")
                         if(conjuntos[l2].match(/(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\3)([A-Z]"?)\3)\)?)/g) != null){
                             conjuntos[l2] = conjuntos[l2].slice(0,-1)
                             conjuntos[l2] = conjuntos[l2].slice(1)
                         }
                         manten = manten + conjuntos[l2] + segundo_sinal
-                        console.log(manten +" <-----")
                     }
                 }
                 manten = manten.slice(0,-1)
@@ -373,7 +372,13 @@ function tests(){
                 }else{
                     tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,".")
                 }
-                console.log(manten + " final")
+
+                tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
+                tira_letra = tira_letra.replace(/\((\.|\+)/g,"(")
+                tira_letra = tira_letra.replace(/(\.|\+)\)/g,")")
+                tira_letra = tira_letra.replace(/^(\+|\.)/g,"")
+                
+                console.log(tira_letra + " final")
 
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
@@ -403,10 +408,6 @@ function tests(){
     console.log(conatador+" passos")
     
 }
-
-let vari = '12345'
-console.log(vari.slice(1))
-
 
 /*
 
