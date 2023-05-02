@@ -210,8 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"
-    let Resumido = 'A".B".C".B+(D"+A.D"+A.D"+C.D"+A.C.D"+A.C.D+A.D+C.D+A.C.D+A.C.D)' // = A + B.C
+    let Resumido = 'A".B".C"+A.B".C"+A".B.C"+A.B.C"+A".B".C+A.B".C+A".B.C+A.B.C' // = A + B.C
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -318,7 +317,7 @@ function tests(){
                     return prev.quantidade >= current.quantidade ? prev : current; 
                 })
             }
-            console.log(Letra_Repete)
+            //console.log(Letra_Repete)
             for(l=0;l<a.length;l++){
                 
                 let Etapa_Final = ""
@@ -334,37 +333,36 @@ function tests(){
                         segundo_sinal = "+"
                     }
                 }
-                
-                let conjuntos = a[l].match(/\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?/g)
+                //\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?
+                //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\(|\))([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)\9)\)?)|(\([A-Z]"?(\+|\.)[A-Z]"?\))|(([A-Z]"?))
+                let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)\9)\)?)|(\([A-Z]"?(\+|\.)[A-Z]"?\))|(([A-Z]"?))/g)
                 let manten = segundo_sinal
                 let tira_letra = ""
 
                 for(l2=0;l2<conjuntos.length;l2++){
-                    if(conjuntos[l2].match(Letra_Repete[l].letra) != null){
+                    if(conjuntos[l2].match(RegExp(`(${Letra_Repete[l].letra})(?!")`,"g")) != null){
+                        if(conjuntos[l2].match(/(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\3)([A-Z]"?)\3)\)?)/g) != null){
+                            conjuntos[l2] = conjuntos[l2].slice(0,-1)
+                            conjuntos[l2] = conjuntos[l2].slice(1)
+                        }
                         tira_letra = tira_letra + conjuntos[l2] + segundo_sinal
                     }else{
+                        console.log(conjuntos[l2] +" -------")
+                        if(conjuntos[l2].match(/(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\3)([A-Z]"?)\3)\)?)/g) != null){
+                            conjuntos[l2] = conjuntos[l2].slice(0,-1)
+                            conjuntos[l2] = conjuntos[l2].slice(1)
+                        }
                         manten = manten + conjuntos[l2] + segundo_sinal
+                        console.log(manten +" <-----")
                     }
                 }
                 manten = manten.slice(0,-1)
                 tira_letra = tira_letra.slice(0,-1)
-                
-                let test_aspa = Letra_Repete[l].letra.match(/[A-Z]"/)
-                if(test_aspa != null){
-                    while(tira_letra.match(Letra_Repete[l].letra) != null){
-                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
-                    }
-                }else{
-                    while(tira_letra.match(Letra_Repete[l].letra+'"') != null){
-                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"?")
-                    }
-                    while(tira_letra.match(Letra_Repete[l].letra) != null){
-                        tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
-                    }
-                    while(tira_letra.match(/\?/) != null){
-                        tira_letra = tira_letra.replace("?",Letra_Repete[l].letra)
-                    }
+
+                while(tira_letra.match(RegExp(`(${Letra_Repete[l].letra})(?!")`,"g")) != null){
+                    tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
                 }
+                
                 
                 tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
                 tira_letra = tira_letra.replace(/\((\.|\+)/g,"(")
@@ -376,6 +374,7 @@ function tests(){
                 }else{
                     tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,".")
                 }
+                console.log(manten + " final")
 
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
@@ -405,3 +404,16 @@ function tests(){
     console.log(conatador+" passos")
     
 }
+
+let vari = '12345'
+console.log(vari.slice(1))
+
+
+/*
+
+let current_counter = 1;
+let regex = new RegExp(`\\[${current_counter}\\]`, 'g');
+let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
+console.log(novo_valor); // teste[2]
+
+*/
