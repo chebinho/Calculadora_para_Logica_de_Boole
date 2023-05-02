@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = 'A".B".C"+A.B".C"+A".B.C"+A.B.C"+A".B".C+A.B".C+A".B.C+A.B.C' // = A + B.C
+    let Resumido = 'A".B".C"+A".B.C+A".B.C"+A.B".C"+A.B.C"'
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -280,14 +280,8 @@ function tests(){
         
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
-
-        }else if(Resumido.match(distri_adi) != null){
-            Resumido = Resumido.replace(distri_adi,"($1+$2).($1+$3)")//
-        }else if(Resumido.match(distri_mult) != null){  
-            Resumido = Resumido.replace(distri_mult,"$1.$2+$1.$3")//
-        }
-
-        else if(Resumido.match(distri_3) != null){
+        
+        }else if(Resumido.match(distri_3) != null){
             let a = Resumido.match(distri_3)
             let b = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
@@ -386,6 +380,8 @@ function tests(){
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
                 Etapa_Final = Etapa_Final + tira_letra
                 Etapa_Final = Etapa_Final + ")" + manten
+
+                Etapa_Final = Etapa_Final.replace(/(\+|\.)\(\)/g,"")
 
                 Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
