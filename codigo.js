@@ -363,7 +363,6 @@ function tests(){
                     tira_letra = tira_letra.replace(Letra_Repete[l].letra,"")
                 }
                 
-                
                 tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
                 tira_letra = tira_letra.replace(/\((\.|\+)/g,"(")
                 tira_letra = tira_letra.replace(/(\.|\+)\)/g,")")
