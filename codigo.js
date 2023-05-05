@@ -346,7 +346,6 @@ function tests(){
                             conjuntos[l2] = conjuntos[l2].slice(1)
                         }
                         tira_letra = tira_letra + conjuntos[l2] + segundo_sinal
-                        console.log(tira_letra + " <-------")
                     }else{
                         if(conjuntos[l2].match(/(\(?((\+|\.)([A-Z]"?)(\+|\.)(?<!\3)([A-Z]"?)\3)\)?)/g) != null){
                             conjuntos[l2] = conjuntos[l2].slice(0,-1)
@@ -373,8 +372,6 @@ function tests(){
                         tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,".")
                     }
                 }
-     
-                console.log(tira_letra + " final")
 
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
