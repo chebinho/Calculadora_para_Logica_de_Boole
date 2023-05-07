@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = 'A".B".C"+A".B.C+A".B.C"+A.B".C"+A.B.C"'
+    let Resumido = 'A.S.A.D+A.E.X.D+A.W.S.D.W+C'
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -220,7 +220,7 @@ function tests(){
     // A+A A.A A+0 0+A A.1 1.A = A !$3$7$9$12$14
     const situa_R_AZi = /(([A-Z]")\+0)|(0\+([A-Z]"))|(([A-Z]")\.1)|(1\.([A-Z]"))|(([A-Z]")(\+|\.)\10)/g
     // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
-    const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))\1/g
+    const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))(\1)(?!")/g
     // A+X+A = A+X
     const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
     // (A) = A
@@ -255,7 +255,7 @@ function tests(){
     let c = 1
     while(c != 0){
 
-        if(comtador == 50){ // trava de segurança
+        if(comtador == 99){ // trava de segurança
             c = c-1
             console.log("maximo de 100 execuções")
         }
@@ -276,7 +276,7 @@ function tests(){
 
         }else if(Resumido.match(situa_A_A) != null){
             Resumido = Resumido.replace(situa_A_A,"$1$<seila>")
-            Resumido = Resumido.replace(/((\+)\+)|((\.)\.)/g,"$2$4")
+            Resumido = Tira_Resto(Resumido)
         
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
@@ -333,7 +333,6 @@ function tests(){
                         segundo_sinal = "+"
                     }
                 }
-                //\(?([A-Z]"?(\.|\+))+[A-Z]"?\)?
                 //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))
                 let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))/g)
                 let manten = segundo_sinal
@@ -359,7 +358,7 @@ function tests(){
 
                 tira_letra = tira_letra.replace(RegExp(`(${Letra_Repete[l].letra})(?!")`,"g"),"")
                 
-                while(tira_letra.match(/(((\.|\+|\()\.+)|(\+|\.|\()(\+|\))+)|((?<![A-Z])"(?<![A-Z]))|(^(\.|\+|"))|((\.|\+)$)/g) != null){
+                while(tira_letra.match(/(((\.|\+|\()\.+)|((\+|\.|\()(\+|\)))+)|((?<![A-Z])"(?<![A-Z]))|(^(\.|\+|"))|((\.|\+)$)/g) != null){
 
                     tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
                     tira_letra = tira_letra.replace(/\((\.|\+|")/g,"(")
@@ -373,10 +372,16 @@ function tests(){
                     }
                 }
 
+                if(a[l].match(/^\(/) != null){
+                    Etapa_Final = Etapa_Final + "("
+                }
                 Etapa_Final = Etapa_Final + Letra_Repete[l].letra
                 Etapa_Final = Etapa_Final + primeiro_sinal + "("
                 Etapa_Final = Etapa_Final + tira_letra
                 Etapa_Final = Etapa_Final + ")" + manten
+                if(a[l].match(/\)$/) != null){
+                    Etapa_Final = Etapa_Final + ")"
+                }
 
                 Etapa_Final = Etapa_Final.replace(/(\+|\.)\(\)/g,"")
 
@@ -394,6 +399,7 @@ function tests(){
                 Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
         }else{
+            console.log("Resultado final: ")
             c = c-1
         }
         comtador += 1
@@ -412,3 +418,15 @@ let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
 console.log(novo_valor); // teste[2]
 
 */
+
+function Tira_Resto(tira_letra){
+    while(tira_letra.match(/(((\.|\()\.+)|((\+|\()(\+|\)))+)|((?<![A-Z])"(?<![A-Z]))|(^(\.|\+|"))|((\.|\+)$)/g) != null){
+
+        tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
+        tira_letra = tira_letra.replace(/\((\.|\+|")/g,"(")
+        tira_letra = tira_letra.replace(/(\.|\+|")\)/g,")")
+        tira_letra = tira_letra.replace(/(^(\.|\+|"))|((\.|\+)$)/g,"")
+        console.log("haaaaaaaaaaaaaaaaaaa")
+    }
+    return tira_letra
+}
