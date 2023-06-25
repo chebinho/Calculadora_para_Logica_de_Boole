@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = 'A.S.A.D+A.E.X.D+A.W.S.D.W+C'
+    let Resumido = '(A.S.A.D+A.E.X.(D)+A.W.S.D.W+C)'
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -224,6 +224,8 @@ function tests(){
     // A+X+A = A+X
     const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
     // (A) = A
+    const tira_ulti_parentes = /((^\()((([A-Z]"?)|(1|0|\.|\+)))*(\)$))/g
+    //(A.C) = A.C
     const tira_rep_parentes = /\(\((.+)\)\)/g
     // ((A+Z)) = (A+Z)
 
@@ -273,7 +275,10 @@ function tests(){
             Resumido = Resumido.replace(tira_parentes,"$1")
         }else if(Resumido.match(tira_rep_parentes) != null){
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
-
+        }else if(Resumido.match(tira_ulti_parentes) != null){
+            Resumido = Resumido.replace(/^\(/,"")
+            Resumido = Resumido.replace(/\)$/,"")
+        
         }else if(Resumido.match(situa_A_A) != null){
             Resumido = Resumido.replace(situa_A_A,"$1$<seila>")
             Resumido = Tira_Resto(Resumido)
