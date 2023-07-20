@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = '(A.S.A.D+A.E.X.(D)+A.W.S.D.W+C)'
+    let Resumido = 'A".B".C"+A".B.C"+A.B".C'
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -237,6 +237,7 @@ function tests(){
 
     const distri_2 = /(\(([A-Z]"?)(\+|\.)([A-Z]"?)\))(\+|\.)(\(([A-Z]"?)\3([A-Z]"?)\))/g
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
+    
     const distri_3 = /(\((\(?(([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)((\+|\.)(\(?([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)+\))|((\(?(([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)((\+|\.)(\(?([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)+)/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
 
@@ -281,7 +282,9 @@ function tests(){
         
         }else if(Resumido.match(situa_A_A) != null){
             Resumido = Resumido.replace(situa_A_A,"$1$<seila>")
-            Resumido = Tira_Resto(Resumido)
+            Resumido = Tira_Resto(Resumido)// ------------
+            Resumido = Resumido.replace(/\+\./g,"+")
+            Resumido = Resumido.replace(/\.\+/g,".")
         
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
@@ -392,7 +395,8 @@ function tests(){
 
                 Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
-
+            console.log("dor de cabeça")
+            
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
             Resumido = Resumido.replace(morgan,'(/?/)')
@@ -431,7 +435,7 @@ function Tira_Resto(tira_letra){
         tira_letra = tira_letra.replace(/\((\.|\+|")/g,"(")
         tira_letra = tira_letra.replace(/(\.|\+|")\)/g,")")
         tira_letra = tira_letra.replace(/(^(\.|\+|"))|((\.|\+)$)/g,"")
-        console.log("haaaaaaaaaaaaaaaaaaa")
+        console.log("Tira resto")
     }
     return tira_letra
 }
