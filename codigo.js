@@ -210,7 +210,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = 'A".B".C"+A".B.C"+A.B".C'
+    let Resumido = 'A".B".C"+A.B".C"+A".B.C"+A.B.C"+A".B".C+A.B".C+A".B.C+A.B.C'
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -239,6 +239,7 @@ function tests(){
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
     
     const distri_3 = /(\((\(?(([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)((\+|\.)(\(?([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)+\))|((\(?(([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)((\+|\.)(\(?([A-Z]"?)(\+|\.))+([A-Z]"?)\)?)+)/g
+    const distri_exe = /\(?([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))*(?:\1)\)?/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
 
     const outra_adi = /([A-Z])\+\"\1\.([A-Z](?<!\1))/g // A + Ā.B = A + B
@@ -289,7 +290,7 @@ function tests(){
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
         
-        }else if(Resumido.match(distri_3) != null){
+        }else if((Resumido.match(distri_3) != null) && (Resumido.match(distri_exe) != null)){
             let a = Resumido.match(distri_3)
             let b = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
