@@ -1,9 +1,8 @@
 var Solusao = [[]]
 var Binario = [[]]
-var Codigo = []
 
-var Numero_Entradas = 2
-var Numero_Saidas = 1
+var Numero_Entradas = 3
+var Numero_Saidas = 3
 
 function Ler_fomulario(){
 
@@ -160,9 +159,21 @@ function Ler_Botao(Botao,Tamanho){
 function Calculo(){
 
     let Linhas = 2**Number(Numero_Entradas)
+    let Codigo = []
+    let Codigo2 = []
+    let Codigo_final = []
+
+    let cont_Min = 0
+    let cont_Max = 0
 
     for(c=0;c<Numero_Saidas;c++){
         Codigo[c] = ""
+        Codigo2[c] = ""
+        Codigo_final[c] = ""
+
+        cont_Min = 0
+        cont_Max = 0
+        
         for(l=0;l<Linhas;l++){
             
             if(Solusao[[l,c]] == true){
@@ -180,19 +191,53 @@ function Calculo(){
                 }
                 Codigo[c] = Codigo[c].slice(0,-1)
                 Codigo[c] = Codigo[c] + "+"
+
+                cont_Min++
+            }else{
+                for(a=65;a<(65+Number(Numero_Entradas));a++){
+                    
+                    if(Binario[[l,(a-65)]] == "V"){
+                        Codigo2[c] = Codigo2[c] + String.fromCharCode(a)
+                        Codigo2[c] = `${Codigo2[c]}\"`
+                        Codigo2[c] = Codigo2[c] + "+"
+                    }else{
+                        Codigo2[c] = Codigo2[c] + String.fromCharCode(a)
+                        Codigo2[c] = Codigo2[c] + "+"
+                    }
+                    
+                }
+                Codigo2[c] = Codigo2[c].slice(0,-1)
+                Codigo2[c] = Codigo2[c] + "."
+
+                cont_Max++
+            }
+        }
+
+        Codigo[c] = Codigo[c].slice(0,-1)
+        Codigo2[c] = Codigo2[c].slice(0,-1)
+
+        console.log(cont_Min + " --- " + cont_Max)
+
+        if(cont_Max > cont_Min){
+            Codigo_final[c] = Codigo[c]
+            if(Codigo_final[c] == ""){
+                Codigo_final[c] = "apenas F"
+            }
+
+        }else{
+            Codigo_final[c] = Codigo2[c]
+            if(Codigo_final[c] == ""){
+                Codigo_final[c] = "apenas V"
             }
 
         }
-        Codigo[c] = Codigo[c].slice(0,-1)
-        console.log("Solução "+Number(c+1)+" "+ Codigo[c])
+
+        console.log("Solução "+Number(c+1)+" "+ Codigo_final[c])
+
     }
     console.log("------------")
-    for(c=0;c<Numero_Saidas;c++){
-        Codigo[c] = Simplificar(Codigo[c])
-    }
-
     document.getElementById("Resultado_Bruto").innerHTML = "";
-    document.getElementById("Resultado_Bruto").innerHTML = Codigo[0]
+    document.getElementById("Resultado_Bruto").innerHTML = Codigo_final
 }
 
 function Simplificar(Resumido){
