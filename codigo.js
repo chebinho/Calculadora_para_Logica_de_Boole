@@ -255,8 +255,10 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = `(A".B".C")+(A.B".C")+(A".B.C")+(A.B.C")+(A".B".C)+(A.B".C)+(A".B.C)+(A.B.C)`
-    
+    let Resumido = `A.B.C+A.C"+A.B"`
+    //((A"+B).(B"+C))"
+    //A.B.C+A.C"+A.B" = A
+
     const execao_1 = /([A-Z])\+\1"\.([A-Z](?<!\1)"?)/g 
     // A+A".B = A+B ! $1+$2
 
@@ -272,10 +274,12 @@ function tests(){
     // A+X+A = A+X
     const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
     // (A) = A
-    const tira_ulti_parentes = /((^\()((([A-Z]"?)|(1|0|\.|\+)))*(\)$))/g
+    const tira_ulti_parentes = /(?<!"|\.|\+)\((([A-Z]"?)((\+|\.)(([A-Z]"?)))+)\)(?!"|\.|\+)/g
     //(A.C) = A.C
-    const tira_rep_parentes = /\(\((.+)\)\)/g
+    const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+)+)\)\)/g
     // ((A+Z)) = (A+Z)
+    const tira_parentes_2 = /0/g
+    // 
 
     const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g //-----------------------------------
     //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) A.(A+B"+A") = A !$2$6
@@ -287,13 +291,13 @@ function tests(){
     const distri_2 = /(\(([A-Z]"?)(\+|\.)([A-Z]"?)\))(\+|\.)(\(([A-Z]"?)\3([A-Z]"?)\))/g
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
     
-    const distri_3 = /\(?([A-Z]"?)((\+|\.)([A-Z]"?))+\)?((\+|\.)\(?([A-Z]"?)(\3([A-Z]"?))+\)?)+/g
+    const distri_3 = /(\(?)([A-Z]"?)((\+|\.)([A-Z]"?))+(\)?)((\+|\.)\1([A-Z]"?)(\4([A-Z]"?))+\6)+/g
     const distri_exe_3 = /\(?([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))*(?:\1)\)?/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
 
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
 
-    const morgan = /\((([A-Z]"?)(\+|\.)?)+\)"/g // (A.B)’ = A'+B' !(/?/)
+    const morgan = /\((([A-Z]"?)|\+|\.|\(|\))+\)"/g // (A.B)’ = A'+B' !(/?/)
     //
     const comu_adi = 0 // A + B = B + A
     const comu_mult = 0 // A . B = B . A
@@ -328,6 +332,8 @@ function tests(){
             Resumido = Resumido.replace(tira_parentes,"$1")
         }else if(Resumido.match(tira_rep_parentes) != null){
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
+            console.log("test")
+
         }else if(Resumido.match(tira_ulti_parentes) != null){
             Resumido = Resumido.replace(/^\(/,"")
             Resumido = Resumido.replace(/\)$/,"")
@@ -345,58 +351,51 @@ function tests(){
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
         
+        }else if(Resumido.match(tira_parentes_2) != null){
+            Resumido = Resumido.replace(tira_parentes_2,"$1$7$8")
+        
+        }else if(Resumido.match(morgan) != null){
+            let a = Resumido.match(morgan)
+            Resumido = Resumido.replace(morgan,'(/?/)')
+
+            for(l=0;l<a.length;l++){
+                a[l] = a[l].replace(/([A-Z]"?)/g,'$1"')
+
+                a[l] = a[l].replace(/(\.)/g,'?')
+                a[l] = a[l].replace(/(\+)/g,'.')
+                a[l] = a[l].replace(/(\?)/g,'+')
+
+                a[l] = a[l].replace(/\((.+)\)\"/g,'$1')
+                a[l] = a[l].replace(/""/g,'')
+                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
+            }
+
         }else if((Resumido.match(distri_3) != null) && (Resumido.match(distri_exe_3) != null)){
             let a = Resumido.match(distri_3)
             let b = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
             let Letra_Repete = []
 
-            for(l=0;l<b.length;l++){
-                b[l] = b[l].replace(/(\(|\)|\.|\+)/g,"")
-                let letra = b[l].match(/[A-Z]"?/g)
-        
-                let elemen = letra.filter(function(este, i) {
-                    return letra.indexOf(este) === i;
-                })
-
-                var conta_elemen = []
-                for(l2=0;l2<elemen.length;l2++){
-                    conta_elemen[l2] = {
-                        'letra':elemen[l2],
-                        'quantidade':0
-                    }
-                }
-
-                for(l2=0;l2<elemen.length;l2++){
-                    for(l3=0;l3<letra.length;l3++){
-
-                        if(conta_elemen[l2].letra == letra[l3]){
-                            conta_elemen[l2].quantidade = conta_elemen[l2].quantidade +1
-
-                        }
-                    }
-                }
-
-                Letra_Repete[l] = conta_elemen.reduce(function(prev, current) { 
-                    return prev.quantidade >= current.quantidade ? prev : current; 
-                })
+            //pega a letra mais repetida
+            for(l=0;l<b.length;l++){    
+                Letra_Repete[l] = Letra_Repetida(b[l])
             }
-            //console.log(Letra_Repete)
+            
             for(l=0;l<a.length;l++){
                 
                 let Etapa_Final = ""
 
                 let primeiro_sinal = a[l].replace(/\(?([A-Z]"?)\)?/g,"")
-                let segundo_sinal = ""
-                primeiro_sinal = primeiro_sinal.match(/^./)
+                let segundo_sinal = primeiro_sinal
 
-                for(l2=0;l2<primeiro_sinal.length;l2++){
-                    if(primeiro_sinal[l2] == "+"){
-                        segundo_sinal = "."
-                    }else{
-                        segundo_sinal = "+"
-                    }
+                primeiro_sinal = primeiro_sinal.match(/^(\.|\+)/g)
+                segundo_sinal = segundo_sinal.replaceAll(primeiro_sinal,"")
+                segundo_sinal = segundo_sinal.match(/^(\.|\+)/g)
+
+                if(segundo_sinal == null){
+                    segundo_sinal = primeiro_sinal
                 }
+
                 //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))
                 let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))/g)
                 let manten = segundo_sinal
@@ -453,16 +452,6 @@ function tests(){
             }
             console.log("dor de cabeça")
             
-        }else if(Resumido.match(morgan) != null){
-            let a = Resumido.match(morgan)
-            Resumido = Resumido.replace(morgan,'(/?/)')
-
-            for(l=0;l<a.length;l++){
-                a[l] = a[l].replace(/([A-Z]"?)/g,'$1"')
-                a[l] = a[l].replace(/\((.+)\)\"/g,'$1')
-                a[l] = a[l].replace(/""/g,'')
-                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
-            }
         }else{
             console.log("Resultado final: ")
             c = c-1
@@ -493,4 +482,37 @@ function Tira_Resto(tira_letra){
         tira_letra = tira_letra.replace(/(^(\.|\+|"))|((\.|\+)$)/g,"")
     }
     return tira_letra
+}
+
+function Letra_Repetida(texto){
+
+    let letra = texto.match(/[A-Z]"?/g)
+
+    let elemen = letra.filter(function(este, i) {
+        return letra.indexOf(este) === i;
+    })
+
+    var conta_elemen = []
+    for(l2=0;l2<elemen.length;l2++){
+        conta_elemen[l2] = {
+            'letra':elemen[l2],
+            'quantidade':0
+        }
+    }
+
+    for(l2=0;l2<elemen.length;l2++){
+        for(l3=0;l3<letra.length;l3++){
+
+            if(conta_elemen[l2].letra == letra[l3]){
+                conta_elemen[l2].quantidade = conta_elemen[l2].quantidade +1
+
+            }
+        }
+    }
+
+    let Letra_Repete = conta_elemen.reduce(function(prev, current) { 
+        return prev.quantidade >= current.quantidade ? prev : current; 
+    })
+
+    return Letra_Repete
 }
