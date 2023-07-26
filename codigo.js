@@ -1,8 +1,8 @@
 var Solusao = [[]]
 var Binario = [[]]
 
-var Numero_Entradas = 3
-var Numero_Saidas = 3
+var Numero_Entradas = 2
+var Numero_Saidas = 1
 
 function Ler_fomulario(){
 
@@ -231,7 +231,7 @@ function Calculo(){
             }
 
         }
-
+        console.log("Solução seila "+Number(c+1)+" "+ Codigo[c])
         console.log("Solução "+Number(c+1)+" "+ Codigo_final[c])
 
     }
@@ -256,8 +256,8 @@ function tests(){
     // X+(X’.Y) = X+Y
 
     let Resumido = `A.B.C+A.C"+A.B"`
-    //((A"+B).(B"+C))"
     //A.B.C+A.C"+A.B" = A
+    //A".B"+A.B"+A".B+A.B = 1
 
     const execao_1 = /([A-Z])\+\1"\.([A-Z](?<!\1)"?)/g 
     // A+A".B = A+B ! $1+$2
@@ -292,8 +292,9 @@ function tests(){
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
     
     const distri_3 = /(\(?)([A-Z]"?)((\+|\.)([A-Z]"?))+(\)?)((\+|\.)\1([A-Z]"?)(\4([A-Z]"?))+\6)+/g
-    const distri_exe_3 = /\(?([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))*(?:\1)\)?/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
+    const distri_exe_3 = /(([A-Z])"?)(([A-Z]"?)|\.|\+)*(\2"?)/g
+    // B(qualquer letra, ponto e mais)B = true
 
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
 
@@ -372,13 +373,12 @@ function tests(){
 
         }else if((Resumido.match(distri_3) != null) && (Resumido.match(distri_exe_3) != null)){
             let a = Resumido.match(distri_3)
-            let b = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
             let Letra_Repete = []
 
             //pega a letra mais repetida
-            for(l=0;l<b.length;l++){    
-                Letra_Repete[l] = Letra_Repetida(b[l])
+            for(l=0;l<a.length;l++){    
+                Letra_Repete[l] = Letra_Repetida(a[l])
             }
             
             for(l=0;l<a.length;l++){
@@ -396,8 +396,10 @@ function tests(){
                     segundo_sinal = primeiro_sinal
                 }
 
-                //(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))
-                let conjuntos = a[l].match(/(\(?([A-Z]"?)(\.|\+)(([A-Z]"?)\3)+([A-Z]"?)\)?)|(\(?((\+|\.|\()([A-Z]"?)(\+|\.)(?<!\9)([A-Z]"?)(\9|\)))\)?)|(([A-Z]"?))/g)
+                //console.log("primeiro sinal = "+primeiro_sinal)
+                //console.log("segundo sinal = "+segundo_sinal)
+
+                let conjuntos = a[l].match(/(\(?([A-Z]"?)(\+([A-Z]"?))+\)?)|(\(?([A-Z]"?)(\.([A-Z]"?))+\)?)/g)
                 let manten = segundo_sinal
                 let tira_letra = ""
 
