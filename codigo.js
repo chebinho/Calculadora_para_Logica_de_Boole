@@ -255,12 +255,21 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = `A.B.C+A.C"+A.B"`
+    let Resumido = `A".B"+A.B"+A".B+A.B`
     //A.B.C+A.C"+A.B" = A
     //A".B"+A.B"+A".B+A.B = 1
 
-    const execao_1 = /([A-Z])\+\1"\.([A-Z](?<!\1)"?)/g 
+    const execao_1 = /([A-Z])\+\1"\.([A-Z](?<!\1)"?)/g
     // A+A".B = A+B ! $1+$2
+
+    const tudo_mais_1 = /(\((([A-Z]"?)|\+|\.)+\)\+1)|(1\+\((([A-Z]"?)|\+|\.)+\))/g
+    // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
+    const tudo_ponto_1 = /((\((([A-Z]"?)|\+|\.)+\))\.1)|(1\.(\((([A-Z]"?)|\+|\.)+\)))/g
+    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = 1 ! $2$6
+    const tudo_mais_0 = /((\((([A-Z]"?)|\+|\.)+\))\+0)|(0\+(\((([A-Z]"?)|\+|\.)+\)))/g
+    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = 1 ! $2$6
+    const tudo_ponto_0 = /(\((([A-Z]"?)|\+|\.)+\)\.0)|(0\.\((([A-Z]"?)|\+|\.)+\))/g
+    // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 1 ! 0
 
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
@@ -272,17 +281,20 @@ function tests(){
     // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
     const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))(\1)(?!")/g
     // A+X+A = A+X
+
     const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
     // (A) = A
     const tira_ulti_parentes = /(?<!"|\.|\+)\((([A-Z]"?)((\+|\.)(([A-Z]"?)))+)\)(?!"|\.|\+)/g
     //(A.C) = A.C
     const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+)+)\)\)/g
     // ((A+Z)) = (A+Z)
-    const tira_parentes_2 = /0/g
-    // 
+    const junta_AA = /(\(?([A-Z]"?)((\+|\.)([A-Z]"?))+\)?)(\.|\+)\1/g
+    // A+Z.A+Z = A.Z ! $1
 
     const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g //-----------------------------------
     //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) A.(A+B"+A") = A !$2$6
+    //X+(X"⋅Y)=X+Y
+    //X.(X"+Y)=X.Y
 
     const distri_1 = /([A-Z]"?)(\+|\.)\(([A-Z]"?)(\+|\.)([A-Z]"?)\)/g //---------------------------------------------
     // C+(C"+B) == (C+C"+C+B) ! ($1$2$3$4$1$2$5)
@@ -352,8 +364,8 @@ function tests(){
         }else if(Resumido.match(abisor) != null){
             Resumido = Resumido.replace(abisor,"$2$6")
         
-        }else if(Resumido.match(tira_parentes_2) != null){
-            Resumido = Resumido.replace(tira_parentes_2,"$1$7$8")
+        }else if(Resumido.match(junta_AA) != null){
+            Resumido = Resumido.replace(junta_AA,"$1")
         
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
