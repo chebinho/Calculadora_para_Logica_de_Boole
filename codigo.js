@@ -288,7 +288,7 @@ function tests(){
     //(A.C) = A.C
     const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+)+)\)\)/g
     // ((A+Z)) = (A+Z)
-    const junta_AA = /(\(?([A-Z]"?)((\+|\.)([A-Z]"?))+\)?)(\.|\+)\1/g
+    const junta_AA = /(\(?([A-Z]"?)((\+|\.)([A-Z]"?))+\)?)(\.|\+)\1(?!")/g
     // A+Z.A+Z = A.Z ! $1
 
     const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g //-----------------------------------
@@ -305,7 +305,8 @@ function tests(){
     
     const distri_3 = /(\(?)([A-Z]"?)((\+|\.)([A-Z]"?))+(\)?)((\+|\.)\1([A-Z]"?)(\4([A-Z]"?))+\6)+/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
-    const distri_exe_3 = /(([A-Z])"?)(([A-Z]"?)|\.|\+)*(\2"?)/g
+    const distri_exe_3 = /([A-Z]"?)(([A-Z]"?)|\.|\+)*(\1"?)/g
+    //(([A-Z])"?)(([A-Z]"?)|\.|\+)*(\2"?) test
     // B(qualquer letra, ponto e mais)B = true
 
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
@@ -366,7 +367,7 @@ function tests(){
         
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,"$1")
-        
+            
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
             Resumido = Resumido.replace(morgan,'(/?/)')
