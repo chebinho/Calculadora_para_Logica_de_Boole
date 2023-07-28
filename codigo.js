@@ -271,6 +271,13 @@ function tests(){
     const tudo_ponto_0 = /(\((([A-Z]"?)|\+|\.)+\)\.0)|(0\.\((([A-Z]"?)|\+|\.)+\))/g
     // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 1 ! 0
 
+    const situa_grupo_AZmaisAZ = /((\(?)([A-Z]")(\.([A-Z]"))+\+([A-Z])(\.([A-Z]))+\)?)|((\()([A-Z]")(\.([A-Z]"))+\)\+\(([A-Z])(\.([A-Z]))+\))|((\(?)([A-Z])(\.([A-Z]))+\+([A-Z]")(\.([A-Z]"))+\)?)|((\()([A-Z])(\.([A-Z]))+\)\+\(([A-Z]")(\.([A-Z]"))+\))/g
+    //test ((\(?(([A-Z])")\.(([A-Z])")(\.(([A-Z])"))*)\)?\+\(?(\4\.\6(\.\9)?)\)?)|(\(?([A-Z])\.([A-Z])(\.([A-Z]))*\)?\+\(?(\13"\.\14"(\.\16")?)\)?)
+    // A".B"+A.B ou A.B+A".B" ou (A".B")+(A.B) ! 1
+    const situa_grupo_AZpontoAZ = /((\(?)([A-Z]")(\+([A-Z]"))+\.([A-Z])(\+([A-Z]))+\)?)|((\()([A-Z]")(\+([A-Z]"))+\)\.\(([A-Z])(\+([A-Z]))+\))|((\(?)([A-Z])(\+([A-Z]))+\.([A-Z]")(\+([A-Z]"))+\)?)|((\()([A-Z])(\+([A-Z]))+\)\.\(([A-Z]")(\+([A-Z]"))+\))/g
+    //test ((\(?(([A-Z])")\+(([A-Z])")(\+(([A-Z])"))*)\)?\.\(?(\4\+\6(\+\9)?)\)?)|(\(?([A-Z])\+([A-Z])(\+([A-Z]))*\)?\.\(?(\13"\+\14"(\+\16")?)\)?)
+    // A"+B".A+B ou A+B.A"+B" ou (A"+B").(A+B) ! 0
+
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
     const situa_R_1 = /(1(\.|\+)1)|((1\+0)|(0\+1))|(([A-Z]"?\+1)|(1\+[A-Z]"?))|((([A-Z])"\+\11)(?!"))|(([A-Z])\+\13")/g
@@ -346,7 +353,6 @@ function tests(){
             Resumido = Resumido.replace(tira_parentes,"$1")
         }else if(Resumido.match(tira_rep_parentes) != null){
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
-            console.log("test")
 
         }else if(Resumido.match(tira_ulti_parentes) != null){
             Resumido = Resumido.replace(/^\(/,"")
@@ -358,7 +364,7 @@ function tests(){
             Resumido = Resumido.replace(/\+\./g,"+")
             Resumido = Resumido.replace(/\.\+/g,".")
         
-        }else if((Resumido.match(distri_1) != null) && (Resumido.match(distri_exe_1) != null)){
+        }else if((Resumido.match(distri_1) != null) && (Resumido.match(distri_exe_1) != null)){//--------------
             Resumido = Resumido.replace(distri_1,"($1$2$3$4$1$2$5)")
             console.log("test distri_1 ------------")
         
@@ -368,6 +374,25 @@ function tests(){
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,"$1")
             
+        }else if(Resumido.match(situa_grupo_AZmaisAZ) != null){
+            let Base = Resumido.match(situa_grupo_AZmaisAZ)
+            Resumido = Resumido.replace(situa_grupo_AZmaisAZ,'(/?/)')
+
+            for(l=0;l<Base.length;l++){
+                let com_aspas = Base[l].match(/([A-Z]")(\+([A-Z]"))+/g)
+                let sem_aspas = Base[l].match(/([A-Z])(\+([A-Z]))+(?!")/g)
+
+                com_aspas = com_aspas.replace(/"/g,"")
+
+                if(com_aspas == sem_aspas){
+
+                }
+
+            }
+
+        }else if(Resumido.match(situa_grupo_AZpontoAZ) != null){
+            situa_grupo_AZpontoAZ
+
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
             Resumido = Resumido.replace(morgan,'(/?/)')
@@ -530,4 +555,8 @@ function Letra_Repetida(texto){
     })
 
     return Letra_Repete
+}
+
+function Compara_Conjunto(texto1, texto2){
+
 }
