@@ -255,7 +255,7 @@ function tests(){
 
     // X+(X’.Y) = X+Y
 
-    let Resumido = `A".B"+A.B"+A".B+A.B   A.B.C+A.C"+A.B"   A+(A.B)`
+    let Resumido = `A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D`
     //A.B.C+A.C"+A.B" = A
     //A".B"+A.B"+A".B+A.B = 1
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
@@ -289,11 +289,13 @@ function tests(){
     //(A.C) = A.C
     const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+)+)\)\)/g
     // ((A+Z)) = (A+Z)
-    const junta_AA = /(\(?([A-Z]"?)((\+|\.)([A-Z]"?))+\)?)(\.|\+)\1(?!")/g
-    // A+Z.A+Z = A.Z ! $1
+    const junta_AA = /((([A-Z]"?)|\.|\+|(\((.+)\)))+)(\.|\+)\1(?!")/g
+    // A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E))! $1
 
-    const abisor = /(([A-Z])\+\((\2(\.[A-Z]"?)+)\))|(([A-Z])\.\((\6(\+[A-Z])+)\))/g //-----------------------------------
-    //A+(A.B) A+(A.A) A+(A.B.A) A.(A+B) A.(A+A) A.(A+B+A) A.(A+B"+A") = A !$2$6
+    const abisor = /(([A-Z]"?)\+\(([A-Z]"?\.)+\2\))|(([A-Z]"?)\+\(\5(\.[A-Z]"?)+\))|(([A-Z]"?)\.\(([A-Z]"?\+)+\8\))|(([A-Z]"?)\.\(\11(\+[A-Z]"?)+\))/g //-----------------------------------
+    //A+(A.B) e A+(B.A) = A ou A.(A+B) e A.(B+A) = A !$2$5$8$11
+
+    const abisor_2 = 0
     //X+(X"⋅Y)=X+Y
     //X.(X"+Y)=X.Y
 
@@ -367,7 +369,7 @@ function tests(){
             console.log("test distri_1 ------------")
         
         }else if(Resumido.match(abisor) != null){
-            Resumido = Resumido.replace(abisor,"$2$6")
+            Resumido = Resumido.replace(abisor,"$2$5$8$11")
         
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,"$1")
