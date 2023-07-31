@@ -260,27 +260,36 @@ function tests(){
     //A".B"+A.B"+A".B+A.B = 1
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
 
-    const execao_1 = /([A-Z])\+\1"\.([A-Z](?<!\1)"?)/g
-    // A+A".B = A+B ! $1+$2
+    const execao_1 = /(([A-Z]"?)(\.[A-Z]"?)+)/g
+    // Z+A+C.A = Z+A+(C.A) ! ($1)
 
-    const tudo_mais_1 = /(\((([A-Z]"?)|\+|\.)+\)\+1)|(1\+\((([A-Z]"?)|\+|\.)+\))/g
+    const tudo_mais_1 = /(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)\+1(?!\.))|((?<!\.)1\+\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))/g
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
-    const tudo_ponto_1 = /((\((([A-Z]"?)|\+|\.)+\))\.1)|(1\.(\((([A-Z]"?)|\+|\.)+\)))/g
-    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = 1 ! $2$6
-    const tudo_mais_0 = /((\((([A-Z]"?)|\+|\.)+\))\+0)|(0\+(\((([A-Z]"?)|\+|\.)+\)))/g
-    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = 1 ! $2$6
-    const tudo_ponto_0 = /(\((([A-Z]"?)|\+|\.)+\)\.0)|(0\.\((([A-Z]"?)|\+|\.)+\))/g
+    const tudo_ponto_1 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.1)|(1\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
+    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = 1 ! $2$8
+    const tudo_mais_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\+0(?!\.))|((?<!\.)0\+(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
+    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = 1 ! $2$8
+    const tudo_ponto_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.0)|(0\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
     // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 1 ! 0
 
-    //0+0 0.0 0.1 1.0 = 0
-    //1.1 1+1 1+0 0+1 = 1
+    const situa_R_0 = /((?<!\.)(0(\+|\.)0)(?!\.))|((?<!\.)(0\.(1|([A-Z]"?)))(?!\.))|((?<!\.)((1|([A-Z]"?))\.0)(?!\.))/g
+    //0+0 0.0 0.1 1.0 = 0 | A.0 A".0 0.A 0.A" = 0 !0
+    const situa_R_1 = /((?<!\.)(1(\+|\.)1)(?!\.))|((?<!\.)((0|([A-Z]"?))\+1)(?!\.))|((?<!\.)(1\+(0|([A-Z]"?)))(?!\.))/g
+    //1.1 1+1 1+0 0+1 = 1 | A+1 A"+1 1+A 1+A" = 1 !1 
 
-    //A".A A.A" = 0
-    //A"+A A+A" = 1
+    const situa_R_A = /((?<!\.)([A-Z]"?)(\+|\.)(0|1))(?!\.)|((?<!\.)(0|1)(\+|\.)([A-Z]"?)(?!\.))/g
+    //A+0 0+A A.1 1.A = A | A"+0 0+A" A".1 1.A" = A" ! $2$8
 
-    //A+A A.A = A
-    //A"+A" A".A = A"
+    const situa_R_0_2 = /(([A-Z])\.\2")|(([A-Z])(")\.\4(?!"))/g
+    //A".A A.A" = 0 ! 0
+    const situa_R_1_2 = /((?<!\.)([A-Z])\+\2"(?!\.))|((?<!\.)([A-Z])(")\+\4(?!\.|"))/g
+    //A"+A A+A" = 1 ! 1
 
+    const situa_R_AA = /(?<!\.)(([A-Z]"?)(\+|\.)\2)(?!\.)/g
+    //A+A A.A = A | A"+A" A".A" = A" ! $2
+
+    /*
+    
     const situa_R_0 = /(0(\+|\.)0)|((0\.1)|(1\.0))|((([A-Z]"?)\.0)|(0\.([A-Z]"?)))|((([A-Z])"\.\13)(?!"))|((([A-Z])\.\16"))/g
     // 0+0 0.0 0.1 1.0 A.0 A".0 0.A 0.A" A".A A.A" = 0 !0
     const situa_R_1 = /(1(\.|\+)1)|((1\+0)|(0\+1))|(([A-Z]"?\+1)|(1\+[A-Z]"?))|((([A-Z])"\+\11)(?!"))|(([A-Z])\+\13")/g
@@ -289,6 +298,9 @@ function tests(){
     // A+A A.A A+0 0+A A.1 1.A = A !$3$7$9$12$14
     const situa_R_AZi = /(([A-Z]")\+0)|(0\+([A-Z]"))|(([A-Z]")\.1)|(1\.([A-Z]"))|(([A-Z]")(\+|\.)\10)/g
     // A"+A" A".A" A"+0 0+A" A".1 1.A" = A" !$2$4$6$8$10
+    
+    */
+
     const situa_A_A = /([A-Z]"?)(?<seila>((\+|\.)(([A-Z]"?)(?<!\1)\4)+))(\1)(?!")/g
     // A+X+A = A+X
 
@@ -317,7 +329,7 @@ function tests(){
     
     const distri_3 = /(\(?)([A-Z]"?)((\+|\.)([A-Z]"?))+(\)?)((\+|\.)\1([A-Z]"?)(\4([A-Z]"?))+\6)+/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
-    const distri_exe_3 = /([A-Z]"?)(([A-Z]"?)|\.|\+)*(\1"?)/g
+    const distri_exe_3 = /([A-Z]"?)(([A-Z]"?)|\.|\+|\(|\))*(\1"?)/g
     // B(qualquer letra, ponto e mais)B = true
 
     const outra_mult = /\(([A-Z])\+([A-Z](?<!\1))\)\.\(\1\+([A-Z](?<!\1|\2))\)/g // (A+B).(A+C) = A+B.C
@@ -339,6 +351,12 @@ function tests(){
 
     let comtador = 0
     let c = 1
+
+    if(Resumido.match(execao_1) != null){
+        Resumido = Resumido.replace(execao_1,"($1)")
+        console.log(Resumido)
+    }
+
     while(c != 0){
 
         if(comtador == 99){ // trava de segurança
@@ -346,17 +364,28 @@ function tests(){
             console.log("maximo de 100 execuções")
         }
 
-        if(Resumido.match(execao_1) != null){
-            Resumido = Resumido.replace(execao_1,"$1+$2")
-
+        if(Resumido.match(tudo_mais_1) != null){
+            Resumido = Resumido.replace(tudo_mais_1,"1")
+        }else if(Resumido.match(tudo_ponto_1) != null){
+            Resumido = Resumido.replace(tudo_ponto_1,"$2$8")
+        }else if(Resumido.match(tudo_mais_0) != null){
+            Resumido = Resumido.replace(tudo_mais_0,"$2$8")
+        }else if(Resumido.match(tudo_ponto_0) != null){
+            Resumido = Resumido.replace(tudo_ponto_0,"0")
+            
         }else if(Resumido.match(situa_R_0) != null){
             Resumido = Resumido.replace(situa_R_0,"0")
         }else if(Resumido.match(situa_R_1) != null){
             Resumido = Resumido.replace(situa_R_1,"1")
-        }else if(Resumido.match(situa_R_AZ) != null){
-            Resumido = Resumido.replace(situa_R_AZ,"$3$7$9$12$14")
-        }else if(Resumido.match(situa_R_AZi) != null){
-            Resumido = Resumido.replace(situa_R_AZi,"$2$4$6$8$10")
+        }else if(Resumido.match(situa_R_0_2) != null){
+            Resumido = Resumido.replace(situa_R_0_2,"0")
+        }else if(Resumido.match(situa_R_1_2) != null){
+            Resumido = Resumido.replace(situa_R_1_2,"1")
+            
+        }else if(Resumido.match(situa_R_A) != null){
+            Resumido = Resumido.replace(situa_R_A,"$2$8")
+        }else if(Resumido.match(situa_R_AA) != null){
+            Resumido = Resumido.replace(situa_R_AA,"$2")
 
         }else if(Resumido.match(tira_parentes) != null){
             Resumido = Resumido.replace(tira_parentes,"$1")
@@ -502,7 +531,7 @@ function tests(){
                     Resumido = Resumido.replace(/\(\/\?\/\)/,"1")
                 }else{
                     Resumido = Resumido.replace(/\(\/\?\/\)/,Base[l])
-                    continue
+                    c++
                 }
             }
 
@@ -526,7 +555,7 @@ function tests(){
                     Resumido = Resumido.replace(/\(\/\?\/\)/,"0")
                 }else{
                     Resumido = Resumido.replace(/\(\/\?\/\)/,Base[l])
-                    continue
+                    c++
                 }
             }
 
