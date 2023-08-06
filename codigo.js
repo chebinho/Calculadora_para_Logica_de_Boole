@@ -256,6 +256,7 @@ function tests(){
     // A.A+C = A+C / A+A.C = A
 
     let Resumido = `A.B.C+A.C"+A.B"`
+    //((A.(C+B))+(A.B)) = (A.(B+B+C))
     //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
     //A".B"+A.B"+A".B+A.B = 1
@@ -307,9 +308,11 @@ function tests(){
     const abisor_2 = /(([A-Z])\+\(([A-Z]"?\.)+\2"\))|(([A-Z])\+\(\5"(\.[A-Z]"?)+\))|(([A-Z])\.\(([A-Z]"?\+)+\8"\))|(([A-Z])\.\(\11"(\+[A-Z]"?)+\))/g
     //X+(X".Y)=X+Y
     //A.(A"+B)=A.B
+    //A+(A.B) = A
+    //A".(A"+B) = A"
 
     const distri_AB = /((?<!\.)([A-Z]"?)(\+|\.)\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|((?<!\.)([A-Z])(\+|\.)\(([A-Z]"?(\.|\+))*\10"((\+|\.)([A-Z]"?))*\))|((?<!\.)([A-Z])"(\+|\.)\(([A-Z]"?(\.|\+))*\18((\+|\.)([A-Z]"?))*\))/g
-    //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) !(/?/)
+    //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) ! (/?/)
     const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\+|\.)\5(?!"|\.))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)\14"(?!\.))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)\23(?!"|\.))/g
     //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R)| (X".Y)+X = X+(X".Y)| (S.A).A" = A.(S.A) ! $5$14$23$9$18$27$2$11$20
 
@@ -394,10 +397,14 @@ function tests(){
 
         }else if(Resumido.match(distri_BA) != null){//--------------
             Resumido = Resumido.replace(distri_BA,"$5$14$23$9$18$27$2$11$20")
-            console.log("test distri_BA ------------")
         }else if(Resumido.match(distri_AB) != null){
+            let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
+            console.log(a)
 
+            for(l=0;l<a.length;l++){
+                //
+            }
         
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
