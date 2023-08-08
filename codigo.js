@@ -255,7 +255,7 @@ function tests(){
 
     // A.A+C = A+C / A+A.C = A
 
-    let Resumido = `A.B.C+A.C"+A.B"`
+    let Resumido = `A.(C+A+D)`
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
     //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
@@ -403,7 +403,35 @@ function tests(){
             console.log(a)
 
             for(l=0;l<a.length;l++){
-                //
+                let primeira_letra = a[l].match(/^([A-Z]"?)/g)
+                let segunda_letra = a[l].match(RegExp(`${primeira_letra}"?`,"g"))
+                console.log(segunda_letra)
+                
+                let sinais = a[l].match(/(\+|\.)/g)
+                let sinal = ""
+                for(l2=0;l2<sinais.length;l2++){
+                    sinal = sinal + sinais[l2]
+                }
+                console.log(sinal)
+
+                if(sinal.match(/^\+\.+/g) != null){
+                    if(segunda_letra[0] == segunda_letra[segunda_letra.length-1]){
+                        a[l] = primeira_letra
+                    }else{
+
+                    }
+
+                }else if(sinal.match(/^\.\++/g) != null){
+                    if(segunda_letra[0] == segunda_letra[segunda_letra.length-1]){
+                        a[l] = primeira_letra
+                    }else{
+
+                    }
+
+                }else{
+
+                }
+                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
         
         }else if(Resumido.match(morgan) != null){
