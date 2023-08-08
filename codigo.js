@@ -395,9 +395,9 @@ function tests(){
             Resumido = Resumido.replace(/\)$/,"")
         
 
-        }else if(Resumido.match(distri_BA) != null){//--------------
+        }else if(Resumido.match(distri_BA) != null){
             Resumido = Resumido.replace(distri_BA,"$5$14$23$9$18$27$2$11$20")
-        }else if(Resumido.match(distri_AB) != null){
+        }else if(Resumido.match(distri_AB) != null){// A+C+(A.D) = A+C
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
             console.log(a)
