@@ -252,10 +252,11 @@ function tests(){
     // + 1 ou n
     // ? 0 ou 1
     // (A)(?!") = não pode ter " no final
+    // test() retorna true ou fause
 
     // A.A+C = A+C / A+A.C = A
 
-    let Resumido = `A.(C+A+D)`
+    let Resumido = `A".(C+A+D)`
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
     //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
@@ -400,38 +401,55 @@ function tests(){
         }else if(Resumido.match(distri_AB) != null){// A+C+(A.D) = A+C
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
-            console.log(a)
+            console.log("matris = "+a)
 
             for(l=0;l<a.length;l++){
                 let primeira_letra = a[l].match(/^([A-Z]"?)/g)
-                let segunda_letra = a[l].match(RegExp(`${primeira_letra}"?`,"g"))
-                console.log(segunda_letra)
+
+                let inver_letra = primeira_letra + '"'
+                inver_letra = inver_letra.replace(/""/g,"")
+
+                let segunda_letra = a[l].match(RegExp(`(${primeira_letra}"?)|(${inver_letra}"?)`,"g")).slice(1).toString()
                 
-                let sinais = a[l].match(/(\+|\.)/g)
-                let sinal = ""
-                for(l2=0;l2<sinais.length;l2++){
-                    sinal = sinal + sinais[l2]
-                }
-                console.log(sinal)
+                let sinal = a[l].match(/(\+|\.|\(|\))/g).toString()
 
-                if(sinal.match(/^\+\.+/g) != null){
-                    if(segunda_letra[0] == segunda_letra[segunda_letra.length-1]){
+                console.log("primeira letra = "+primeira_letra)
+                console.log("inverso da primeira = "+inver_letra)
+                console.log("segunda letra = "+segunda_letra)
+                console.log("conjunto de sinais = "+sinal)
+
+                if(segunda_letra.match(primeira_letra) != null){
+                    // A A
+                    if(sinal.match(/(^(\+,)+\((\.|\,|(\(((\+|\.|,)+)\)))+\)$)|(^(\.,)+\((\+|\,|(\(((\+|\.|,)+)\)))+\)$)/g) != null){ 
+                        // .,(,+,+,) | +,(,.,(,.,),) 
                         a[l] = primeira_letra
+                        
                     }else{
-
-                    }
-
-                }else if(sinal.match(/^\.\++/g) != null){
-                    if(segunda_letra[0] == segunda_letra[segunda_letra.length-1]){
-                        a[l] = primeira_letra
-                    }else{
-
+    
                     }
 
                 }else{
+                    // A" A
+                    if(sinal.match(/(^(\+,)+\((\.|\,|(\(((\+|\.|,)+)\)))+\)$)|(^(\.,)+\((\+|\,|(\(((\+|\.|,)+)\)))+\)$)/g) != null){ 
+                        // .,(,+,+,) | +,(,.,(,.,),) 
+
+                        if(a[l].match(/((([A-Z])\+)(\((([A-Z]"?)\.)*(\3")(\.([A-Z]"?))*\)))|((([A-Z])"\+)(\((([A-Z]"?)\.)*(\12)(\.([A-Z]"?))*\)))/g) != null){
+                            // A+(Q.C.A") | A"+(Q.A.C)
+                            a[l] = a[l].replace(RegExp(`(\\.(${inver_letra})(?!"))|((?<=\\()((${inver_letra})\\.))`,"g"),"") 
+
+                        }else if(a[l].match(/((([A-Z])\.)(\((([A-Z]"?)\+)*(\3")(\+([A-Z]"?))*\)))|((([A-Z])"\.)(\((([A-Z]"?)\+)*(\12)(\+([A-Z]"?))*\)))/g) != null){
+                            // A.(Q+C+A") | A".(Q+A+C)
+                            a[l] = a[l].replace(RegExp(`(\\+(${inver_letra})(?!"))|((?<=\\()((${inver_letra})\\+))`,"g"),"")
+                            
+                        }
+                        
+                    }else{
+    
+                    }
 
                 }
-                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
+                console.log("resultado = "+a[l])
+                //Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
         
         }else if(Resumido.match(morgan) != null){
