@@ -255,8 +255,9 @@ function tests(){
     // test() retorna true ou fause
 
     // A.A+C = A+C / A+A.C = A
+    // (C.A.D)+U+A.B = (C.A.D)+U+(A.B)
 
-    let Resumido = `A".(C+A+D)`
+    let Resumido = `(C.A.D)+U+A.B`
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
     //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
@@ -312,11 +313,11 @@ function tests(){
     //A+(A.B) = A
     //A".(A"+B) = A"
 
-    const distri_AB = /((?<!\.)([A-Z]"?)(\+|\.)\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|((?<!\.)([A-Z])(\+|\.)\(([A-Z]"?(\.|\+))*\10"((\+|\.)([A-Z]"?))*\))|((?<!\.)([A-Z])"(\+|\.)\(([A-Z]"?(\.|\+))*\18((\+|\.)([A-Z]"?))*\))/g
+    const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
     //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) ! (/?/)
-    const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\+|\.)\5(?!"|\.))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)\14"(?!\.))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)\23(?!"|\.))/g
-    //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R)| (X".Y)+X = X+(X".Y)| (S.A).A" = A.(S.A) ! $5$14$23$9$18$27$2$11$20
-
+    const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))((\+|\.)[A-Z]"?)*(\10|(\+|\.))\5(?!"))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))((\+|\.)[A-Z]"?)*(\22|(\+|\.))\17")|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))((\+|\.)[A-Z]"?)*(\34|(\.|\+))\29(?!"))/g
+    //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R)| (X".Y)+X = X+(X".Y)| (S.A).A" = A.(S.A)
+    //((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\+|\.)\5(?!"|\.))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)\14"(?!\.))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)\23(?!"|\.)) ! $5$14$23$9$18$27$2$11$20
 
     const distri_2 = /(\(([A-Z]"?)(\+|\.)([A-Z]"?)\))(\+|\.)(\(([A-Z]"?)\3([A-Z]"?)\))/g
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
@@ -397,7 +398,7 @@ function tests(){
         
 
         }else if(Resumido.match(distri_BA) != null){
-            Resumido = Resumido.replace(distri_BA,"$5$14$23$9$18$27$2$11$20")
+            Resumido = Resumido.replace(distri_BA,"")//-----------------------------
         }else if(Resumido.match(distri_AB) != null){// A+C+(A.D) = A+C
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
@@ -418,7 +419,11 @@ function tests(){
                 console.log("segunda letra = "+segunda_letra)
                 console.log("conjunto de sinais = "+sinal)
 
-                if(segunda_letra.match(primeira_letra) != null){
+                if(a[l].match(/^([A-Z]"?(\.|\+)\()/g) == null){
+                    a[l] = a[l].replace(/^([A-Z]"?(\+|\.))((([A-Z]"?)(\2))+)(\()/g,"$3$1$7")
+                    // A+D+T+Z+( = D+T+Z+A+( ! $3$1$7
+                    
+                }else if(segunda_letra.match(primeira_letra) != null){
                     // A A
                     if(sinal.match(/(^(\+,)+\((\.|\,|(\(((\+|\.|,)+)\)))+\)$)|(^(\.,)+\((\+|\,|(\(((\+|\.|,)+)\)))+\)$)/g) != null){ 
                         // .,(,+,+,) | +,(,.,(,.,),) 
@@ -432,15 +437,14 @@ function tests(){
                     // A" A
                     if(sinal.match(/(^(\+,)+\((\.|\,|(\(((\+|\.|,)+)\)))+\)$)|(^(\.,)+\((\+|\,|(\(((\+|\.|,)+)\)))+\)$)/g) != null){ 
                         // .,(,+,+,) | +,(,.,(,.,),) 
-
                         if(a[l].match(/((([A-Z])\+)(\((([A-Z]"?)\.)*(\3")(\.([A-Z]"?))*\)))|((([A-Z])"\+)(\((([A-Z]"?)\.)*(\12)(\.([A-Z]"?))*\)))/g) != null){
                             // A+(Q.C.A") | A"+(Q.A.C)
                             a[l] = a[l].replace(RegExp(`(\\.(${inver_letra})(?!"))|((?<=\\()((${inver_letra})\\.))`,"g"),"") 
-
+                            // A+(Q.C)
                         }else if(a[l].match(/((([A-Z])\.)(\((([A-Z]"?)\+)*(\3")(\+([A-Z]"?))*\)))|((([A-Z])"\.)(\((([A-Z]"?)\+)*(\12)(\+([A-Z]"?))*\)))/g) != null){
                             // A.(Q+C+A") | A".(Q+A+C)
                             a[l] = a[l].replace(RegExp(`(\\+(${inver_letra})(?!"))|((?<=\\()((${inver_letra})\\+))`,"g"),"")
-                            
+                            // A+(Q.C)
                         }
                         
                     }else{
@@ -449,7 +453,7 @@ function tests(){
 
                 }
                 console.log("resultado = "+a[l])
-                //Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
+                Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
         
         }else if(Resumido.match(morgan) != null){
