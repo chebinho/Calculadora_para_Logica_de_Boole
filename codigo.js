@@ -397,7 +397,7 @@ function tests(){
         
 
         }else if(Resumido.match(distri_BA) != null){
-            Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")//-----------------------------
+            Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
         }else if(Resumido.match(distri_AB) != null){// A+C+(A.D) = A+C
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
