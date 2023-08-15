@@ -257,7 +257,7 @@ function tests(){
     // A.A+C = A+C / A+A.C = A
     // (C.A.D)+U+A.B = (C.A.D)+U+(A.B)
 
-    let Resumido = `C+B+X+(B.C)`
+    let Resumido = `C+B+X+(B".D)`
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
     //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
@@ -265,10 +265,7 @@ function tests(){
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
 
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
-    // A+C+X.C = (A+C+X).C | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
-    
-    //const execao_2 = /((([A-Z]"?)(\.[A-Z]"?)+)(\+)((([A-Z]"?)(\.[A-Z]"?)+)))|((([A-Z]"?)(\+[A-Z]"?)+)(\.)((([A-Z]"?)(\+[A-Z]"?)+)))/g
-    // A+C".A+B" = (A+C").(A+B") | A.C"+A.B" = (A.C")+(A.B") ! ($2$11)$5$14($6$15)
+    // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
 
     const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
     // (A) = A
@@ -280,14 +277,18 @@ function tests(){
     const tudo_mais_1 = /(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)\+1(?!\.))|((?<!\.)1\+\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))/g
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
     const tudo_ponto_1 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.1)|(1\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = 1 ! $2$8
+    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = A ! $2$8
     const tudo_mais_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\+0(?!\.))|((?<!\.)0\+(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = 1 ! $2$8
+    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = A ! $2$8
     const tudo_ponto_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.0)|(0\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 1 ! 0
+    // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 ! 0
 
     const junta_AA = /(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(\.|\+)\2(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)((\.|\+)(([A-Z]"?)(\+|\.))+([A-Z]"?))\15\9(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(((\.|\+)\((([A-Z]"?)|\.|\+|(\((.+)\)))+\))+)\28\22(?!"|\.))/g
     // A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $2$9$14$24$26
+    const situa_grupo_A_mais_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\+\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\+\7(?!"))/g
+    // (B.X)+(B.X)" = 1 | (B.X)"+(B.X) = 1 ! 1
+    const situa_grupo_A_ponto_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\.\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\.\7(?!"))/g
+    // (B.X).(B.X)" = 0 | (B.X)".(B.X) = 0 ! 0
 
     const situa_R_0 = /((?<!\.)(0(\+|\.)0)(?!\.))|((?<!\.)(0\.(1|([A-Z]"?)))(?!\.))|((?<!\.)((1|([A-Z]"?))\.0)(?!\.))/g
     //0+0 0.0 0.1 1.0 = 0 | A.0 A".0 0.A 0.A" = 0 !0
@@ -302,21 +303,12 @@ function tests(){
     
     const situa_R_AA = /(?<!\.)(([A-Z]"?)(\+|\.)\2)(?!\.)/g
     //A+A A.A = A | A"+A" A".A" = A" ! $2
-    const situa_A_A = /(([A-Z]"?)(\.|\+)(([A-Z]"?)|\3|\(|\)|(\(((\.|([A-Z]"?)|\+|(\((\+|\.|([A-Z]"?))+\))))+\)))+)\3\2(?!")/g
+    const situa_A_A = /(([A-Z]"?)(\.|\+)(([A-Z]"?)|\3|(\(((\.|([A-Z]"?)|\+|(\((\+|\.|([A-Z]"?))+\))))+\)))+)\3\2(?!")/g
     // A+X+A = A+X ! $1
     const situa_A_A_mais = /(([A-Z])"\+(\+|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\2(?!"))|(([A-Z])\+(\+|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\15")/g
     // A"+X+S+A = 1 | A+X+S+A" = 1 ! 1
     const situa_A_A_ponto = /(([A-Z])"\.(\.|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\2(?!"))|(([A-Z])\.(\.|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\15")/g
     // A".X.S.A = 0 | A.X.S.A" = 0 ! 0
-
-
-    const abisor = /(([A-Z]"?)\+\(?([A-Z]"?\.)+\2(?!")\)?)|(([A-Z]"?)\+\(?\5(\.[A-Z]"?)+\)?)|(([A-Z]"?)\.\(([A-Z]"?\+)+\8(?!")\))|(([A-Z]"?)\.\(\11(\+[A-Z]"?)+\))/g
-    //A+(A.B) e A+B.A = A ou A.(A+B) e A.(B+A) = A !$2$5$8$11
-    const abisor_2 = /(([A-Z])\+\(([A-Z]"?\.)+\2"\))|(([A-Z])\+\(\5"(\.[A-Z]"?)+\))|(([A-Z])\.\(([A-Z]"?\+)+\8"\))|(([A-Z])\.\(\11"(\+[A-Z]"?)+\))/g
-    //X+(X".Y)=X+Y
-    //A.(A"+B)=A.B
-    //A+(A.B) = A
-    //A".(A"+B) = A"
 
     const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
     //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) ! (/?/)
@@ -369,7 +361,7 @@ function tests(){
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
         }else if(Resumido.match(tira_ulti_parentes) != null){
             Resumido = Resumido.replace(/^\(/,"")
-            Resumido = Resumido.replace(/\)$/,"")  
+            Resumido = Resumido.replace(/\)$/,"") 
 
         }else if(Resumido.match(tudo_mais_1) != null){
             Resumido = Resumido.replace(tudo_mais_1,"1")
@@ -382,6 +374,10 @@ function tests(){
             
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,"$2$9$14$24$26")
+        }else if(Resumido.match(situa_grupo_A_mais_Ai) != null){
+            Resumido = Resumido.replace(situa_grupo_A_mais_Ai,"1")    
+        }else if(Resumido.match(situa_grupo_A_ponto_Ai) != null){
+            Resumido = Resumido.replace(situa_grupo_A_ponto_Ai,"0")
             
         }else if(Resumido.match(situa_R_0) != null){
             Resumido = Resumido.replace(situa_R_0,"0")
@@ -406,7 +402,7 @@ function tests(){
         
         }else if(Resumido.match(distri_BA) != null){
             Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
-        }else if(Resumido.match(distri_AB) != null){// A+C+(A.D) = A+C
+        }else if(Resumido.match(distri_AB) != null){
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
             console.log("matris = "+a)
@@ -429,11 +425,11 @@ function tests(){
                 if(segunda_letra.match(RegExp(`${primeira_letra}(?!")`,"g")) != null){
                     // A A
                     if(sinal.match(/(^(\+,)+\((\.|\,|(\(((\+|\.|,)+)\)))+\)$)|(^(\.,)+\((\+|\,|(\(((\+|\.|,)+)\)))+\)$)/g) != null){ 
-                        // .,(,+,+,) | +,(,.,(,.,),) 
-                        a[l] = primeira_letra
-                        
+                        // .,(,+,+,) | +,(,.,(,.,),)
+                        a[l] = a[l].replace(/(^([A-Z]"?))(\+|\.)((([A-Z]"?)\3)*)?\((\+|\.|\(|\)|([A-Z]"?))+\)/,"$4")+primeira_letra
+                        // A.(B+A) = A
                     }else{
-    
+                        a[l] = a[l].replace(/\(|\)/g,"")
                     }
 
                 }else{
@@ -451,9 +447,8 @@ function tests(){
                         }
                         
                     }else{
-    
+                        a[l] = a[l].replace(/\(|\)/g,"")
                     }
-
                 }
 
                 a[l] = a[l].toString()
