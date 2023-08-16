@@ -257,12 +257,13 @@ function tests(){
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
     // (C.A.D)+U+A.B = (C.A.D)+U+(A.B)
 
-    let Resumido = `A".B"+A.B"+A".B+A.B`
+    let Resumido = `(A.D")+(A.C)+(B.D")+(B.C)`
     //(A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
-    //A.(B.C+(B.C)") = A.1
     //A.B.C+A.C"+A.B" = A
     //A".B"+A.B"+A".B+A.B = 1
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
+
+    let Tudo_Entre_Paren = '(\(([A-Z]"?|\+|\.!!!)+\))' // |(\(([A-Z]"?|\+|\.!!!)+\))
 
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
     // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
@@ -335,8 +336,6 @@ function tests(){
     const comu_adi = 0 // A + B = B + A
     const comu_mult = 0 // A . B = B . A
 
-    const asso_adi = 0 // A+(B+C) = (A+B)+C = A+B+C
-    const asso_mult = 0 // A.(B.C) = (A.B).C = A.B.C
 
     console.log(Resumido)
 
@@ -450,15 +449,7 @@ function tests(){
                         a[l] = a[l].replace(/\(|\)/g,"")
                     }
                 }
-                /*
-                a[l] = a[l].toString()
-                
-                if(a[l].match(/^([A-Z]"?(\.|\+)\()/g) != null){
-                    a[l] = a[l].replace(/^([A-Z]"?(\+|\.))((([A-Z]"?)(\2))+)(\()/g,"$3$1$7")
-                    // A+D+T+Z+( = D+T+Z+A+( ! $3$1$7
-                    
-                }
-                */
+
                 Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
         
@@ -487,6 +478,7 @@ function tests(){
             for(l=0;l<a.length;l++){    
                 Letra_Repete[l] = Letra_Repetida(a[l])
             }
+            //console.log(Letra_Repete)
             
             for(l=0;l<a.length;l++){
                 
@@ -496,15 +488,14 @@ function tests(){
                 let segundo_sinal = primeiro_sinal
 
                 primeiro_sinal = primeiro_sinal.match(/^(\.|\+)/g)
-                segundo_sinal = segundo_sinal.replaceAll(primeiro_sinal,"")
-                segundo_sinal = segundo_sinal.match(/^(\.|\+)/g)
+                segundo_sinal = segundo_sinal.replaceAll(primeiro_sinal,"").match(/^(\.|\+)/g)
 
                 if(segundo_sinal == null){
                     segundo_sinal = primeiro_sinal
                 }
 
-                //console.log("primeiro sinal = "+primeiro_sinal)
-                //console.log("segundo sinal = "+segundo_sinal)
+                //console.log("primeiro sinal = "+primeiro_sinal)//---
+                //console.log("segundo sinal = "+segundo_sinal)//---
 
                 let conjuntos = a[l].match(/(\(?([A-Z]"?)(\+([A-Z]"?))+\)?)|(\(?([A-Z]"?)(\.([A-Z]"?))+\)?)/g)
                 let manten = segundo_sinal
@@ -528,21 +519,12 @@ function tests(){
                 manten = manten.slice(0,-1)
                 tira_letra = tira_letra.slice(0,-1)
 
-                tira_letra = tira_letra.replace(RegExp(`(${Letra_Repete[l].letra})(?!")`,"g"),"")
-                
-                while(tira_letra.match(/(((\.|\+|\()\.+)|((\+|\.|\()(\+|\)))+)|((?<![A-Z])"(?<![A-Z]))|(^(\.|\+|"))|((\.|\+)$)/g) != null){
+                //console.log(tira_letra)//---
+                //console.log(manten)//---
 
-                    tira_letra = tira_letra.replace(/((\.)\.)|((\+)\+)/g,"$2$4")
-                    tira_letra = tira_letra.replace(/\((\.|\+|")/g,"(")
-                    tira_letra = tira_letra.replace(/(\.|\+|")\)/g,")")
-                    tira_letra = tira_letra.replace(/(^(\.|\+|"))|((\.|\+)$)/g,"")
-
-                    if(segundo_sinal == "+"){
-                        tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,"+")
-                    }else{
-                        tira_letra = tira_letra.replace(/(\+\.)|(\.\+)/g,".")
-                    }
-                }
+                tira_letra = tira_letra.replace(RegExp(`((\\.|\\+)(${Letra_Repete[l].letra})(?!"))|((?<=\\()((${Letra_Repete[l].letra})(\\.|\\+)))`,"g"),"") 
+            
+                //console.log(tira_letra)/---
 
                 if(a[l].match(/(^\()|(\)$)/) != null){
                     Etapa_Final = Etapa_Final + "("
@@ -629,6 +611,21 @@ let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
 console.log(novo_valor); // teste[2]
 
 */
+
+function Quantos_Entre(texto,par1="\\(",par2="\\)"){
+
+    let pares = RegExp(`${par1}${par2}`,"g")
+    let c = 0
+
+    texto = texto.replace(RegExp(`[^${par1}^${par2}]`,"g"),"")
+    while((texto.match(pares) != null)||(c>10000)){
+        texto = texto.replace(pares,"")
+        c++
+    }
+    if(c==10000){console.log("limite de pares atingido")}
+
+    return c
+}
 
 function Letra_Repetida(texto){
 
