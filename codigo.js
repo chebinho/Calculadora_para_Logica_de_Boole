@@ -263,7 +263,11 @@ function tests(){
     //A".B"+A.B"+A".B+A.B = 1
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
 
-    let Tudo_Entre_Paren = '(\(([A-Z]"?|\+|\.!!!)+\))' // |(\(([A-Z]"?|\+|\.!!!)+\))
+    let Tudo_Entre_Paren = '(\\(([A-Z]"?|\\+|\\.!!!)+\\))' // |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
+    for(t=0;t<Quantos_Entre(Resumido);t++){
+        Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'|(\\(([A-Z]"?|\\+|\\.!!!)+\\))')
+    }
+    Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'')
 
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
     // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
@@ -344,9 +348,9 @@ function tests(){
 
     while(c != 0){
 
-        if(comtador == 99){ // trava de segurança
+        if(comtador == 999){ // trava de segurança
             c = c-1
-            console.log("maximo de 100 execuções")
+            console.log("maximo de 1000 execuções")
         }
 
         if(Resumido.match(execao_1) != null){
@@ -604,12 +608,10 @@ function tests(){
 }
 
 /*
-
 let current_counter = 1;
 let regex = new RegExp(`\\[${current_counter}\\]`, 'g');
 let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
 console.log(novo_valor); // teste[2]
-
 */
 
 function Quantos_Entre(texto,par1="\\(",par2="\\)"){
