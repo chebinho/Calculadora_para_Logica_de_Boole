@@ -272,7 +272,7 @@ function tests(){
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
     // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
 
-    const tira_parentes = /\((([A-Z]"?)|(1|0))\)/g
+    const tira_parentes = /\((([A-Z]"?)|(1|0))?\)/g
     // (A) = A
     const tira_ulti_parentes = /(?<!"|\.|\+)\((([A-Z]"?)((\+|\.)(([A-Z]"?)))+)\)(?!"|\.|\+)/g
     //(A.C) = A.C
