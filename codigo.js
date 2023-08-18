@@ -263,14 +263,17 @@ function tests(){
     //A".B"+A.B"+A".B+A.B = 1
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
 
+    const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
+    // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
+
+    Resumido = Resumido.replace(execao_1,"$2($3$8)$12")
+    Resumido = Resumido.replace(execao_1,"$2($3$8)$12")
+
     let Tudo_Entre_Paren = '(\\(([A-Z]"?|\\+|\\.!!!)+\\))' // |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
     for(t=0;t<Quantos_Entre(Resumido);t++){
         Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'|(\\(([A-Z]"?|\\+|\\.!!!)+\\))')
     }
     Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'')
-
-    const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
-    // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
 
     const tira_parentes = /\((([A-Z]"?)|(1|0))?\)/g
     // (A) = A
@@ -315,10 +318,13 @@ function tests(){
     const situa_A_A_ponto = /(([A-Z])"\.(\.|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\2(?!"))|(([A-Z])\.(\.|([A-Z])|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?)|(\((\+|\.|([A-Z]"?))+\)))+\)))+\)))+\15")/g
     // A".X.S.A = 0 | A.X.S.A" = 0 ! 0
 
+    const reescrever_1 = /(([A-Z]"?)(\+|\.)((([A-Z]"?)|\+|\.|\(|\))+)(\+|\.)([A-Z]"?)\3\4)|(((([A-Z]"?)|\+|\.|\(|\))+)(\+|\.)([A-Z]"?)(\.|\+)\10\13([A-Z]"?))/g
+    // A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | (D"+C).A+(D"+C).B = (D"+C).(A+B) ! $10$13($14$13$16$2$7$8)$3$4
+
     const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
     //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) ! (/?/)
     const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\.|\+)(([A-Z]\9)*)?\5(?!"))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\20)*)?(\16"))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\32)*)?\28)/g
-    //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R)| (X".Y)+X = X+(X".Y)| (S.A).A" = A.(S.A) ! $5$9$10$2$23$20$21$13$28$32$33$25
+    //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R) | (X".Y)+X = X+(X".Y) | (S.A).A" = A.(S.A) ! $5$9$10$2$23$20$21$13$28$32$33$25
 
     const distri_2 = /(\(([A-Z]"?)(\+|\.)([A-Z]"?)\))(\+|\.)(\(([A-Z]"?)\3([A-Z]"?)\))/g
     // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
@@ -355,8 +361,6 @@ function tests(){
 
         if(Resumido.match(execao_1) != null){
             Resumido = Resumido.replace(execao_1,"$2($3$8)$12")
-        //}else if(Resumido.match(execao_2) != null){
-        //    Resumido = Resumido.replace(execao_2,"($2$11)$5$14($6$15)")
 
         }else if(Resumido.match(tira_parentes) != null){
             Resumido = Resumido.replace(tira_parentes,"$1")
@@ -402,6 +406,9 @@ function tests(){
             Resumido = Resumido.replace(situa_A_A_mais,"1")
         }else if(Resumido.match(situa_A_A_ponto) != null){
             Resumido = Resumido.replace(situa_A_A_ponto,"0")
+        
+        }else if(Resumido.match(reescrever_1) != null){
+            Resumido = Resumido.replace(reescrever_1,"$10$13($14$13$16$2$7$8)$3$4")
         
         }else if(Resumido.match(distri_BA) != null){
             Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
@@ -614,7 +621,7 @@ let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
 console.log(novo_valor); // teste[2]
 */
 
-function Quantos_Entre(texto,par1="\\(",par2="\\)"){
+function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
 
     let pares = RegExp(`${par1}${par2}`,"g")
     let c = 0
