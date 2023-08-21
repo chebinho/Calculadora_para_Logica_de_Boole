@@ -254,10 +254,10 @@ function tests(){
     // (A)(?!") = não pode ter " no final
     // test() retorna true ou fause
 
+    //(A".B".C")+(A.B".C")) = ((A+A").B".C")
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
-    // (C.A.D)+U+A.B = (C.A.D)+U+(A.B)
 
-    let Resumido = `A+A".B`
+    let Resumido = `1+(A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D)`
     //A+A".B = A+B
     //(A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
     //A.B.C+A.C"+A.B" = A
@@ -267,28 +267,17 @@ function tests(){
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
     // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
 
-    function Cria_TEP(Resumido){
-        let Tudo_Entre_Paren = '(\\(([A-Z]"?|\\+|\\.!!!)+\\))' // |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
-        for(t=0;t<Quantos_Entre(Resumido);t++){
-            Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'|(\\(([A-Z]"?|\\+|\\.!!!)+\\))')
-        }
-        Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'')
-        return Tudo_Entre_Paren
-    }
+    // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
+    // (A.E.D+Q).1 = A ! $2
+    // 1.(A.E.D+Q) = A ! $2
+    // (A.E.D+Q)+0 = A ! $2
+    // 0+(A.E.D+Q) = A ! $2
+    // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 ! 0
 
     const tira_parentes = /\((([A-Z]"?)|(1|0))?\)/g
     // (A) = A
     const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+|(\(.+\)))+)\)\)/g
     // ((A+Z)) = (A+Z)
-
-    const tudo_mais_1 = /(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)\+1(?!\.))|((?<!\.)1\+\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))/g
-    // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
-    const tudo_ponto_1 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.1)|(1\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q).1 ou 1.(A.E.D+Q) = A ! $2$8
-    const tudo_mais_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\+0(?!\.))|((?<!\.)0\+(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q)+0 ou 0+(A.E.D+Q) = A ! $2$8
-    const tudo_ponto_0 = /((\((([A-Z]"?)|\+|\.|(\((.+)\)))+\))\.0)|(0\.(\((([A-Z]"?)|\+|\.|(\((.+)\)))+\)))/g
-    // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 ! 0
 
     const junta_AA = /(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(\.|\+)\2(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)((\.|\+)(([A-Z]"?)(\+|\.))+([A-Z]"?))\15\9(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(((\.|\+)\((([A-Z]"?)|\.|\+|(\((.+)\)))+\))+)\28\22(?!"|\.))/g
     // A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $2$9$14$24$26
@@ -299,10 +288,10 @@ function tests(){
 
     const situa_R_0 = /((0(\+|\.)0))|((0\.(1|([A-Z]"?))))|(((1|([A-Z]"?))\.0))/g
     //0+0 0.0 0.1 1.0 = 0 | A.0 A".0 0.A 0.A" = 0 !0
-    const situa_R_1 = /((1(\+|\.)1))|(((0|([A-Z]"?))\+1)(?!\.))|((1\+(0|([A-Z]"?))))/g
+    const situa_R_1 = /((?<!\.)(1\+1)(?!\.))|((?<!\.)((0|([A-Z]"?))\+1)(?!\.))|((?<!\.)(1\+(0|([A-Z]"?)))(?!\.))|(1\.1)/g
     //1.1 1+1 1+0 0+1 = 1 | A+1 A"+1 1+A 1+A" = 1 !1 
-    const situa_R_A = /(([A-Z]"?)(\+|\.)(0|1))|((0|1)(\+|\.)([A-Z]"?))/g
-    //A+0 0+A A.1 1.A = A | A"+0 0+A" A".1 1.A" = A" ! $2$8
+    const situa_R_A = /(([A-Z]"?)\.(0|1))|((0|1)\.([A-Z]"?))|((?<!\.)([A-Z]"?)\+(0|1)(?!\.))|((?<!\.)(0|1)\+([A-Z]"?)(?!"|\.))/g
+    //A+0 0+A A.1 1.A = A | A"+0 0+A" A".1 1.A" = A" ! $2$6$8$12
     const situa_R_0_2 = /(([A-Z])\.\2")|(([A-Z])(")\.\4(?!"))/g
     //A".A A.A" = 0 ! 0
     const situa_R_1_2 = /((?<!\.)([A-Z])\+\2"(?!\.))|((?<!\.)([A-Z])(")\+\4(?!\.|"))/g
@@ -359,12 +348,33 @@ function tests(){
 
     let comtador = 0
     let c = 1
+    let atualizar = Quantos_Entre(Resumido)
 
     while(c != 0){
 
         if(comtador == 999){ // trava de segurança
             c = c-1
             console.log("maximo de 1000 execuções")
+        }
+
+        if(atualizar != Quantos_Entre(Resumido)){
+            console.log("atualizou")
+
+            let Tudo_Entre_Paren = Cria_TEP(Resumido)
+            atualizar = Quantos_Entre(Resumido)
+
+            var tudo_mais_1 = RegExp(`(${Tudo_Entre_Paren}\\+1(?!\\.))|((?<!\\.)1\\+${Tudo_Entre_Paren})`,"g")
+            // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
+            var tudo_ponto_1_01 = RegExp(`((${Tudo_Entre_Paren})\\.1)`,"g")
+            // (A.E.D+Q).1 = A ! $2
+            var tudo_ponto_1_02 = RegExp(`(1\\.(${Tudo_Entre_Paren}))`,"g")
+            // 1.(A.E.D+Q) = A ! $2
+            var tudo_mais_0_01 = RegExp(`((${Tudo_Entre_Paren})\\+0(?!\\.))`,"g")
+            // (A.E.D+Q)+0 = A ! $2
+            var tudo_mais_0_02 = RegExp(`((?<!\\.)0\\+(${Tudo_Entre_Paren}))`,"g")
+            // 0+(A.E.D+Q) = A ! $2
+            var tudo_ponto_0 = RegExp(`((${Tudo_Entre_Paren})\\.0)|(0\\.(${Tudo_Entre_Paren}))`,"g")
+            // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 ! 0
         }
 
         if(Resumido.match(execao_1) != null){
@@ -377,10 +387,14 @@ function tests(){
 
         }else if(Resumido.match(tudo_mais_1) != null){
             Resumido = Resumido.replace(tudo_mais_1,"1")
-        }else if(Resumido.match(tudo_ponto_1) != null){
-            Resumido = Resumido.replace(tudo_ponto_1,"$2$8")
-        }else if(Resumido.match(tudo_mais_0) != null){
-            Resumido = Resumido.replace(tudo_mais_0,"$2$8")
+        }else if(Resumido.match(tudo_ponto_1_01) != null){
+            Resumido = Resumido.replace(tudo_ponto_1_01,"$2")
+        }else if(Resumido.match(tudo_ponto_1_02) != null){
+            Resumido = Resumido.replace(tudo_ponto_1_02,"$2")
+        }else if(Resumido.match(tudo_mais_0_01) != null){
+            Resumido = Resumido.replace(tudo_mais_0_01,"$2")
+        }else if(Resumido.match(tudo_mais_0_02) != null){
+            Resumido = Resumido.replace(tudo_mais_0_02,"$2")
         }else if(Resumido.match(tudo_ponto_0) != null){
             Resumido = Resumido.replace(tudo_ponto_0,"0")
             
@@ -401,7 +415,7 @@ function tests(){
             Resumido = Resumido.replace(situa_R_1_2,"1")
             
         }else if(Resumido.match(situa_R_A) != null){
-            Resumido = Resumido.replace(situa_R_A,"$2$8")
+            Resumido = Resumido.replace(situa_R_A,"$2$6$8$12")
         }else if(Resumido.match(situa_R_AA) != null){
             Resumido = Resumido.replace(situa_R_AA,"$2")
             
@@ -414,16 +428,21 @@ function tests(){
         
         }else if(Resumido.match(reescrever_1) != null){
             Resumido = Resumido.replace(reescrever_1,"$10$13($14$13$16$2$7$8)$3$4")
+            console.log("reescrever_1")
         }else if(Resumido.match(reescrever_2) != null){
             Resumido = Resumido.replace(reescrever_2,"$10$13($14$13$16$2$7$8)$3$4")
+            console.log("reescrever_2")
         }else if(Resumido.match(reescrever_3) != null){
             Resumido = Resumido.replace(reescrever_3,"$10$13($14$13$16$2$7$8)$3$4")
+            console.log("reescrever_3")
         }else if(Resumido.match(reescrever_4) != null){
             Resumido = Resumido.replace(reescrever_4,"$10$13($14$13$16$2$7$8)$3$4")
+            console.log("reescrever_4")
         
         }else if(Resumido.match(distri_BA) != null){
             Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
         }else if(Resumido.match(distri_AB) != null){
+            console.log("distri_AB")
             let a = Resumido.match(distri_AB)
             Resumido = Resumido.replace(distri_AB,"(/?/)")
             //console.log("matris = "+a)
@@ -476,6 +495,7 @@ function tests(){
             }
         
         }else if(Resumido.match(morgan) != null){
+            console.log("morgan")
             let a = Resumido.match(morgan)
             Resumido = Resumido.replace(morgan,'(/?/)')
 
@@ -650,6 +670,14 @@ function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
     if(c==10000){console.log("limite de pares atingido")}
 
     return c
+}
+function Cria_TEP(Resumido){
+    let Tudo_Entre_Paren = '(\\(([A-Z]"?|\\+|\\.!!!)+\\))' // |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
+    for(t=0;t<Quantos_Entre(Resumido)-1;t++){
+        Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'|(\\(([A-Z]"?|\\+|\\.!!!)+\\))')
+    }
+    Tudo_Entre_Paren = Tudo_Entre_Paren.replace(/\!\!\!/g,'')
+    return Tudo_Entre_Paren
 }
 
 function Letra_Repetida(texto){
