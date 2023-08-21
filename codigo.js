@@ -257,7 +257,7 @@ function tests(){
     //(A".B".C")+(A.B".C")) = ((A+A").B".C")
     //((A.(C+B))+(A.B)) = (A.(B+B+C))
 
-    let Resumido = `A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D`
+    let Resumido = `(A.D")+(A.C)+(B.D")+(B.C)`
     //A+A".B = A+B
     //(A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
     //A.B.C+A.C"+A.B" = A
@@ -351,7 +351,7 @@ function tests(){
 
     let comtador = 0
     let c = 1
-    let atualizar = Quantos_Entre(Resumido)
+    let atualizar = -1
 
     while(c != 0){
 
@@ -522,6 +522,7 @@ function tests(){
             }
 
         }else if((Resumido.match(distri_3) != null) && (Resumido.match(distri_exe_3) != null)){
+            console.log("distri 3")
             let a = Resumido.match(distri_3)
             Resumido = Resumido.replace(distri_3,'(/?/)')
             let Letra_Repete = []
@@ -593,9 +594,25 @@ function tests(){
 
                 Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
-            console.log("distri 3")
             
-        }else if((Resumido.match(situa_grupo_AZmaisAZ) != null)&&(c>=2)){
+        }else if(Resumido.match(tira_ulti_parentes) != null){
+            console.log("tira_ulti_parentes")
+            Resumido = Resumido.replace(tira_ulti_parentes,"$1")
+
+        }else{
+            console.log("Resultado final: ")
+            c = c-1
+        }
+        comtador += 1
+        console.log(Resumido)
+    }
+
+    console.log(comtador+" passos")
+    
+}
+
+/*
+    }else if((Resumido.match(situa_grupo_AZmaisAZ) != null)&&(c>=2)){
             console.log("AZ+AZ")
             let Base = Resumido.match(situa_grupo_AZmaisAZ)
             Resumido = Resumido.replace(situa_grupo_AZmaisAZ,'(/?/)')
@@ -644,27 +661,7 @@ function tests(){
                     c++
                 }
             }
-
-        }else if(Resumido.match(tira_ulti_parentes) != null){
-            Resumido = Resumido.replace(tira_ulti_parentes,"$1")
-
-        }else{
-            console.log("Resultado final: ")
-            c = c-1
         }
-        comtador += 1
-        console.log(Resumido)
-    }
-
-    console.log(comtador+" passos")
-    
-}
-
-/*
-let current_counter = 1;
-let regex = new RegExp(`\\[${current_counter}\\]`, 'g');
-let novo_valor = 'teste[1]'.replace(regex, `[${current_counter + 1}]`);
-console.log(novo_valor); // teste[2]
 */
 
 function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
