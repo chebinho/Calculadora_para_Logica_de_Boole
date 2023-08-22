@@ -231,7 +231,7 @@ function Calculo(){
             }
 
         }
-        console.log("Solução seila "+Number(c+1)+" "+ Codigo[c])
+        //console.log("Solução Maior "+Number(c+1)+" "+ Codigo[c])
         console.log("Solução "+Number(c+1)+" "+ Codigo_final[c])
 
     }
@@ -254,14 +254,14 @@ function tests(){
     // (A)(?!") = não pode ter " no final
     // test() retorna true ou fause
 
-    //(A".B".C")+(A.B".C")) = ((A+A").B".C")
-    //((A.(C+B))+(A.B)) = (A.(B+B+C))
+    let Resumido = `A+B".A"+B"`
+    //A+B".A"+B" = B" <-----
 
-    let Resumido = `(A.D")+(A.C)+(B.D")+(B.C)`
     //A+A".B = A+B
     //(A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
     //A.B.C+A.C"+A.B" = A
     //A".B"+A.B"+A".B+A.B = 1
+    //(A+B).(A+C) = A+B.C
     //A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D
 
     const execao_1 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
@@ -319,12 +319,9 @@ function tests(){
     // ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A.B)) ! $10$13($14$13$16$2$7$8)$3$4
 
     const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
-    //Z"+(A.Z") | Z.(A+Z.S.R) | X+(X".Y) | A".(S.A) ! (/?/)
+    //Z"+(A.Z") = Z" | Z.(A+Z.S.R) = Z | X+(X".Y) = X+Y | A".(S.A) = A".S ! (/?/)
     const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\.|\+)(([A-Z]\9)*)?\5(?!"))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\20)*)?(\16"))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\32)*)?\28)/g
     //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R) | (X".Y)+X = X+(X".Y) | (S.A).A" = A.(S.A) ! $2$13($6$11$6$17"$22$17)$7$18
-
-    const distri_2 = /(\(([A-Z]"?)(\+|\.)([A-Z]"?)\))(\+|\.)(\(([A-Z]"?)\3([A-Z]"?)\))/g
-    // (A+B).(D"+C) = (A.D")+(A.C)+(B.D")+(B.C) !($2$5$7)$3($2$5$8)$3($4$5$7)$3($4$5$8)
 
     const distri_3 = /(\(?)([A-Z]"?)((\+|\.)([A-Z]"?))+(\)?)((\+|\.)\1([A-Z]"?)(\4([A-Z]"?))+\6)+/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
@@ -340,13 +337,6 @@ function tests(){
     const situa_grupo_AZpontoAZ = /((\(?)([A-Z]")(\+([A-Z]"))+\.([A-Z])(\+([A-Z]))+(?!")\)?)|((\()([A-Z]")(\+([A-Z]"))+\)\.\(([A-Z])(\+([A-Z]))+(?!")\))|((\(?)([A-Z])(\+([A-Z]))+\.([A-Z]")(\+([A-Z]"))+\)?)|((\()([A-Z])(\+([A-Z]))+\)\.\(([A-Z]")(\+([A-Z]"))+\))/g
     // A"+B".A+B ou A+B.A"+B" ou (A"+B").(A+B) ! 0
 
-    const tira_ulti_parentes = /(?<!"|\.|\+)\((([A-Z]"?)((\+|\.)(([A-Z]"?)))+)\)(?!"|\.|\+)/g
-    //(A.C) = A.C
-
-    const comu_adi = 0 // A + B = B + A
-    const comu_mult = 0 // A . B = B . A
-
-
     console.log(Resumido)
 
     let comtador = 0
@@ -355,17 +345,20 @@ function tests(){
 
     while(c != 0){
 
-        if(comtador == 999){ // trava de segurança
+        if(comtador == 9999){ // trava de segurança
             c = c-1
-            console.log("maximo de 1000 execuções")
+            console.log("maximo de 10000 execuções")
         }
 
         if(atualizar != Quantos_Entre(Resumido)){
-            console.log("atualizou")
+            //console.log("atualizou")
 
             let Tudo_Entre_Paren = Cria_TEP(Resumido)
             // (\\(([A-Z]"?|\\+|\\.!!!)+\\))' + |(\\(([A-Z]"?|\\+|\\.!!!)+\\)) 2 4 6
             atualizar = Quantos_Entre(Resumido)
+
+            var tira_ulti_parentes = RegExp(`^\\(((([A-Z]"?)|\\+|\\.|${Tudo_Entre_Paren})*)\\)$`,"g")
+            //(A.C) = A.C
 
             var tudo_mais_1 = RegExp(`(${Tudo_Entre_Paren}\\+1(?!\\.))|((?<!\\.)1\\+${Tudo_Entre_Paren})`,"g")
             // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
@@ -391,6 +384,8 @@ function tests(){
             Resumido = Resumido.replace(tira_parentes,"$1")
         }else if(Resumido.match(tira_rep_parentes) != null){
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
+        }else if(Resumido.match(tira_ulti_parentes) != null){
+            Resumido = Resumido.replace(tira_ulti_parentes,"$1")
 
         }else if(Resumido.match(tudo_mais_1) != null){
             Resumido = Resumido.replace(tudo_mais_1,"1")
@@ -595,10 +590,6 @@ function tests(){
                 Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
             }
             
-        }else if(Resumido.match(tira_ulti_parentes) != null){
-            console.log("tira_ulti_parentes")
-            Resumido = Resumido.replace(tira_ulti_parentes,"$1")
-
         }else{
             console.log("Resultado final: ")
             c = c-1
