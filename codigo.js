@@ -255,7 +255,7 @@ function tests(){
     // (A)(?!") = não pode ter " no final
     // test() retorna true ou fause
 
-    let Resumido = `A.(D"+C+(X.V+(F.Y)))+B.(D"+C+(X.V+(F.Y)))`
+    let Resumido = `(D"+C+(X.V+(F.Y))).A+(D"+C+(X.V+(F.Y))).B`
     //A+B".A"+B" = B" <-----
 
     //A+A".B = A+B
@@ -464,7 +464,8 @@ function tests(){
         
         }else if(Resumido.match(reescrever_t2) != null){
             console.log("reescrever_t2")
-        
+            Resumido = Resumido.replace(reescrever_t2,`$2$${2+(atualizar*2)}$${11+(atualizar*2)}$${11+(atualizar*4)}($${3+(atualizar*2)}$${4+(atualizar*2)}$${7+(atualizar*2)}$${9+(atualizar*2)}$${12+(atualizar*4)}$${13+(atualizar*4)}$${16+(atualizar*4)}$${18+(atualizar*4)})`)
+            //$2$4x$13x$15xx($5x$6x$9x$11x$16xx$17xx$20xx$22xx)
 
         }else if(Resumido.match(distri_BA) != null){
             console.log("distri_BA")
