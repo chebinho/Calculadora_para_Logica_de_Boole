@@ -255,7 +255,7 @@ function tests(){
     // (A)(?!") = não pode ter " no final
     // test() retorna true ou fause
 
-    let Resumido = `(D"+C+(X.V+(F.Y))).A+(D"+C+(X.V+(F.Y))).B`
+    let Resumido = `A.(D"+C+(X.V+(F.Y)))+B.(D"+C+(X.V+(F.Y)))`
     //A+B".A"+B" = B" <-----
 
     //A+A".B = A+B
@@ -383,8 +383,6 @@ function tests(){
             var reescrever_t2 = RegExp(`(${Tudo_Entre_Paren}(\\.|\\+)([A-Z]"?))(\\.|\\+)((\\2\\${2+(atualizar*2)}([A-Z]"?))|(\\(\\2\\${2+(atualizar*2)}([A-Z]"?))\\))|(\\(${Tudo_Entre_Paren}(\\.|\\+)([A-Z]"?)\\))(\\.|\\+)((\\${11+(atualizar*2)}\\${11+(atualizar*4)}([A-Z]"?))|(\\(\\${11+(atualizar*2)}\\${11+(atualizar*4)}([A-Z]"?))\\))`,"g")
             // (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) ! $2$4$13$15($5$6$9$11$16$17$20$22)
 
-            console.log(reescrever_t2)
-
             var morgan = RegExp(`\\(${Tudo_Entre_Paren}\\)"`,"g")
             // (A.B)’ = A'+B' | (A+C)" = A".C" | A.(B.C+(B.C+(S+T))") = A.(B.C+B"+C".(S".T")) !(/?/)
         }
@@ -462,6 +460,7 @@ function tests(){
 
         }else if(Resumido.match(reescrever_t1) != null){
             console.log("reescrever_t1")
+            Resumido = Resumido.replace(reescrever_t1,`($3$${5+(atualizar*2)}$${8+(atualizar*2)}$${10+(atualizar*2)}$${13+(atualizar*2)}$${15+(atualizar*4)}$${18+(atualizar*4)}$${20+(atualizar*4)})$4$5$${14+(atualizar*2)}$${15+(atualizar*2)}`)
         
         }else if(Resumido.match(reescrever_t2) != null){
             console.log("reescrever_t2")
