@@ -241,7 +241,7 @@ function Calculo(){
     document.getElementById("Resultado_Bruto").innerHTML = Codigo_final
 }
 
-function Simplificar(Resumido){
+function Simplificar(){
 
 //subistituir pelo teste
 
@@ -255,7 +255,7 @@ function tests(){
     // (A)(?!") = não pode ter " no final
     // test() retorna true ou fause
 
-    let Resumido = `(D"+C+(X.V+(F.Y))).A+(D"+C+(X.V+(F.Y))).B`
+    let Resumido = `A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D | A".B".C".D"+A.B".C".D"+A".B.C".D"+A.B.C".D"+A".B".C.D"+A.B".C.D"+A".B.C.D"+A.B.C.D"+A".B".C".D+A.B".C".D+A".B.C".D+A.B.C".D+A".B".C.D+A.B".C.D+A".B.C.D+A.B.C.D`
     //A+B".A"+B" = B" <-----
 
     //A+A".B = A+B
@@ -287,8 +287,8 @@ function tests(){
     const tira_sinal_parent = /((\+|\.)\(([A-Z]"?(\2[A-Z]"?)+)\)\2)|((\+|\.)\(([A-Z]"?(\6[A-Z]"?)+)(?!\6)\))|((?<!\.)\(([A-Z]"?((\+)[A-Z]"?)+)\)\12)|((?<!\+)\(([A-Z]"?((\.)[A-Z]"?)+)\)\16)/g
     // (A".B").(A+B) = A".B".(A+B) | (A+B).(A".B") = (A+B).A".B" | .(A".B".T). = .A".B".T. ! $2$3$2$6$7$10$12$14$16
 
-    const junta_AA = /(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(\.|\+)\2(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)((\.|\+)(([A-Z]"?)(\+|\.))+([A-Z]"?))\15\9(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(((\.|\+)\((([A-Z]"?)|\.|\+|(\((.+)\)))+\))+)\28\22(?!"|\.))/g
-    // A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $2$9$14$24$26
+    //junta_AA = /(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(\.|\+)\2(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)((\.|\+)(([A-Z]"?)(\+|\.))+([A-Z]"?))\15\9(?!"|\.))|(((([A-Z]"?)|\.|\+|(\((.+)\)))+)(((\.|\+)\((([A-Z]"?)|\.|\+|(\((.+)\)))+\))+)\28\22(?!"|\.))/g
+    // A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $2$9$14$24$26     <---------------------------
     const situa_grupo_A_mais_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\+\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\+\7(?!"))/g
     // (B.X)+(B.X)" = 1 | (B.X)"+(B.X) = 1 ! 1
     const situa_grupo_A_ponto_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\.\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\.\7(?!"))/g
@@ -351,10 +351,13 @@ function tests(){
             console.log("atualizou = " + atualizar)
 
             let Tudo_Entre_Paren = Cria_TEP(Resumido)
-            // (\\(([A-Z]"?|\\+|\\.!!!)+\\)) + |(\\(([A-Z]"?|\\+|\\.!!!)+\\)) 2 4 6
+            // (\\(([A-Z]"?|\\+|\\.!!!)+\\)) + |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
+            // (\(([A-Z]"?|\+|\.!!!)+\)) + |(\(([A-Z]"?|\+|\.!!!)+\))
 
             var tira_ulti_parentes = RegExp(`(?<=\\s|^)\\(((([A-Z]"?)|\\+|\\.|${Tudo_Entre_Paren})*)\\)(?=\\s|$)`,"g")
             //(A.C) = A.C
+
+            var junta_AA = RegExp(`((\\(${Tudo_Entre_Paren}\\))(\\+|\\.)\\2)|(${Tudo_Entre_Paren}(\\+|\\.)\\${6+(atualizar*2)})`,"g")
             
             var situa_A_A = RegExp(`(([A-Z]"?)(\\.|\\+)(([A-Z]"?)|\\3|${Tudo_Entre_Paren})+)\\3\\2(?!")`,"g")
             // situa_A_A: A+X+A = A+X ! $1
@@ -417,7 +420,7 @@ function tests(){
             Resumido = Resumido.replace(tudo_ponto_0,"0")
             
         }else if(Resumido.match(junta_AA) != null){
-            Resumido = Resumido.replace(junta_AA,"$2$9$14$24$26")
+            Resumido = Resumido.replace(junta_AA,`$2$${6+(atualizar*2)}`)
         }else if(Resumido.match(situa_grupo_A_mais_Ai) != null){
             Resumido = Resumido.replace(situa_grupo_A_mais_Ai,"1")    
         }else if(Resumido.match(situa_grupo_A_ponto_Ai) != null){
@@ -465,7 +468,7 @@ function tests(){
         }else if(Resumido.match(reescrever_t2) != null){
             console.log("reescrever_t2")
             Resumido = Resumido.replace(reescrever_t2,`$2$${2+(atualizar*2)}$${11+(atualizar*2)}$${11+(atualizar*4)}($${3+(atualizar*2)}$${4+(atualizar*2)}$${7+(atualizar*2)}$${9+(atualizar*2)}$${12+(atualizar*4)}$${13+(atualizar*4)}$${16+(atualizar*4)}$${18+(atualizar*4)})`)
-            //$2$4x$13x$15xx($5x$6x$9x$11x$16xx$17xx$20xx$22xx)
+
 
         }else if(Resumido.match(distri_BA) != null){
             console.log("distri_BA")
@@ -617,7 +620,7 @@ function tests(){
     }
 
     console.log(comtador+" passos")
-    
+    return Resumido
 }
 
 function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
@@ -631,7 +634,7 @@ function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
         c++
     }
     if(c==10000){console.log("limite de pares atingido")}
-
+    //console.log("test")
     return c
 }
 function Cria_TEP(Resumido){
