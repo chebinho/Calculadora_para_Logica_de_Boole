@@ -216,7 +216,7 @@ function Calculo(){
         Codigo[c] = Codigo[c].slice(0,-1)
         Codigo2[c] = Codigo2[c].slice(0,-1)
 
-        console.log(cont_Min + " --- " + cont_Max)
+        console.log("Min:" + cont_Min + " --- " + "Max:" +cont_Max)
 
         if(cont_Max > cont_Min){
             Codigo_final[c] = Codigo[c]
@@ -231,14 +231,20 @@ function Calculo(){
             }
 
         }
-        console.log("Solução Max "+Number(c+1)+" "+ Codigo[c])
-        console.log("Solução Min "+Number(c+1)+" "+ Codigo2[c])
+        //console.log("Solução Max "+Number(c+1)+" "+ Codigo[c])
+        //console.log("Solução Min "+Number(c+1)+" "+ Codigo2[c])
         console.log("Solução "+Number(c+1)+" "+ Codigo_final[c])
 
     }
+    
+    let r1 = Simplificar(Codigo[0])
+    let r2 = Simplificar(Codigo2[0])
+
+    console.log(`Min:${r1} | Max:${r2}`)
+
     console.log("------------")
     document.getElementById("Resultado_Bruto").innerHTML = "";
-    document.getElementById("Resultado_Bruto").innerHTML = Codigo_final
+    document.getElementById("Resultado_Bruto").innerHTML = `Min:${r1} | Max:${r2}`
 }
 
 function Simplificar(Resumido=""){
