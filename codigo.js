@@ -238,16 +238,27 @@ function Calculo(){
     }
     
     let r1 = Simplificar(Codigo[0])
+    console.log("- - - - - - - - - - - - - -")
     let r2 = Simplificar(Codigo2[0])
+    console.log("- - - - - - - - - - - - - -")
+
+    let solu = []
+    let hr = []
+    let div_solu = document.getElementById("solu")
+
+    for(a=0;a<Codigo_final.length;a++){
+        solu[a] = document.createElement("p")
+        hr[a] = document.createElement("hr")
+        solu[a].innerText = `Solução ${a+1} = ${Simplificar(Codigo_final[a])}`
+        div_solu.appendChild(solu[a])
+    }
+    div_solu.appendChild(hr[hr.length-1])
 
     console.log(`Min:${r1} | Max:${r2}`)
-
     console.log("------------")
-    document.getElementById("Resultado_Bruto").innerHTML = "";
-    document.getElementById("Resultado_Bruto").innerHTML = `Min:${r1} | Max:${r2}`
 }
 
-function Simplificar(Resumido=""){
+function Simplificar(Resumido=``){
 
     // (A)(?!") = não pode ter " no final
 
@@ -281,9 +292,9 @@ function Simplificar(Resumido=""){
 
     //junta_AA = A+Z.A+Z = A.Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E))
 
-    const situa_grupo_A_mais_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\+\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\+\7(?!"))/g
+    //const situa_grupo_A_mais_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\+\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\+\7(?!"))/g
     // (B.X)+(B.X)" = 1 | (B.X)"+(B.X) = 1 ! 1
-    const situa_grupo_A_ponto_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\.\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\.\7(?!"))/g
+    //const situa_grupo_A_ponto_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\.\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\.\7(?!"))/g
     // (B.X).(B.X)" = 0 | (B.X)".(B.X) = 0 ! 0
 
     const situa_R_0 = /((0(\+|\.)0))|((0\.(1|([A-Z]"?))))|(((1|([A-Z]"?))\.0))/g
@@ -315,7 +326,7 @@ function Simplificar(Resumido=""){
     const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\.|\+)(([A-Z]\9)*)?\5(?!"))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\20)*)?(\16"))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\32)*)?\28)/g
     //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R) | (X".Y)+X = X+(X".Y) | (S.A).A" = A.(S.A) ! $2$13($6$11$6$17"$22$17)$7$18
 
-    const distri_3 = /((\((([A-Z]"?\.)*)?([A-Z]"?)((\.[A-Z]"?)*)?\))\+(\(([A-Z]"?|\+|\.)+\)\+)*(\((([A-Z]"?\.)*)?\5((\.[A-Z]"?)*)?\)))|((\((([A-Z]"?\+)*)?([A-Z]"?)((\+[A-Z]"?)*)?\))\.(\(([A-Z]"?|\+|\.)+\)\.)*(\((([A-Z]"?\+)*)?\19((\+[A-Z]"?)*)?\)))/g
+    const distri = /((\((([A-Z]"?\.)*)?([A-Z]"?)((\.[A-Z]"?)*)?\))\+(\(([A-Z]"?|\+|\.)+\)\+)*(\((([A-Z]"?\.)*)?\5((\.[A-Z]"?)*)?\)))|((\((([A-Z]"?\+)*)?([A-Z]"?)((\+[A-Z]"?)*)?\))\.(\(([A-Z]"?|\+|\.)+\)\.)*(\((([A-Z]"?\+)*)?\19((\+[A-Z]"?)*)?\)))/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
 
     // morgan (A.B)’ = A'+B' | (A+C)" = A".C" | A.(B.C+(B.C+(S+T))") = A.(B.C+B"+C".(S".T")) !(/?/)
@@ -331,9 +342,9 @@ function Simplificar(Resumido=""){
 
     while(c != 0){
 
-        if(comtador == 9999){ // trava de segurança
+        if(comtador == 99999){ // trava de segurança
             c = c-1
-            console.log("maximo de 10000 execuções")
+            console.log("maximo de 100.000 execuções")
         }
 
         if(atualizar != Quantos_Entre(Resumido)){
@@ -411,10 +422,11 @@ function Simplificar(Resumido=""){
             
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,`$1`)
-        }else if(Resumido.match(situa_grupo_A_mais_Ai) != null){
-            Resumido = Resumido.replace(situa_grupo_A_mais_Ai,"1")    
-        }else if(Resumido.match(situa_grupo_A_ponto_Ai) != null){
-            Resumido = Resumido.replace(situa_grupo_A_ponto_Ai,"0")
+
+        //}else if(Resumido.match(situa_grupo_A_mais_Ai) != null){
+        //    Resumido = Resumido.replace(situa_grupo_A_mais_Ai,"1")    
+        //}else if(Resumido.match(situa_grupo_A_ponto_Ai) != null){
+        //    Resumido = Resumido.replace(situa_grupo_A_ponto_Ai,"0")
             
         }else if(Resumido.match(situa_R_0) != null){
             Resumido = Resumido.replace(situa_R_0,"0")
@@ -513,9 +525,9 @@ function Simplificar(Resumido=""){
                 Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
 
-        }else if(Resumido.match(distri_3) != null){
-            let a = Resumido.match(distri_3)
-            Resumido = Resumido.replace(distri_3,'(/?/)')
+        }else if(Resumido.match(distri) != null){
+            let a = Resumido.match(distri)
+            Resumido = Resumido.replace(distri,'(/?/)')
             let Letra_Repete = []
 
             //pega a letra mais repetida
