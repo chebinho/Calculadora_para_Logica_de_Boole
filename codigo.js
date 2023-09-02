@@ -361,7 +361,7 @@ function Simplificar(Resumido=``){
             // A+Z.A+Z = A+Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $1
             
             var situa_A_A = RegExp(`(([A-Z]"?)(\\.|\\+)(([A-Z]"?)|\\3|${Tudo_Entre_Paren})+)\\3\\2(?!")`,"g")
-            // situa_A_A: A+X+A = A+X ! $1
+            // situa_A_A: A+X+A = A+X ! $1   <------------
             var situa_A_A_mais_1 = RegExp(`(([A-Z])\\+(\\+|([A-Z])|${Tudo_Entre_Paren})+\\2")`,"g")
             var situa_A_A_mais_2 = RegExp(`(([A-Z])"\\+(\\+|([A-Z])|${Tudo_Entre_Paren})+\\2(?!"))`,"g")
             // situa_A_A_mais: A"+X+S+A = 1 | A+X+S+A" = 1 ! 1
