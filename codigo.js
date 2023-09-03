@@ -243,15 +243,16 @@ function Calculo(){
     console.log("- - - - - - - - - - - - - -")
 
     let solu = []
-    let hr = []
     let div_solu = document.getElementById("solu")
 
     for(a=0;a<Codigo_final.length;a++){
         solu[a] = document.createElement("p")
-        hr[a] = document.createElement("hr")
         solu[a].innerText = `Solução ${a+1} = ${Simplificar(Codigo_final[a])}`
         div_solu.appendChild(solu[a])
     }
+    
+    let hr = []
+    hr[hr.length-1] = document.createElement("hr")
     div_solu.appendChild(hr[hr.length-1])
 
     console.log(`Min:${r1} | Max:${r2}`)
