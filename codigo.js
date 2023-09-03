@@ -269,12 +269,12 @@ function Simplificar(Resumido=``){
     //A".B"+A.B"+A".B+A.B = 1
     //(A+B).(A+C) = A+B.C
 
-    const execao_1 = /(?<=[ ]|^|\)\+|\)\.)([A-Z]"?(\+[A-Z]"?)+)\.((([A-Z]"?(\+[A-Z]"?)+)(\.))*)?([A-Z]"?(\+[A-Z]"?)+)(?=[ ]|$|\+\(|\.\()/g
+    const excecao_1 = /(?<=[ ]|^|\)\+|\)\.)([A-Z]"?(\+[A-Z]"?)+)\.((([A-Z]"?(\+[A-Z]"?)+)(\.))*)?([A-Z]"?(\+[A-Z]"?)+)(?=[ ]|$|\+\(|\.\()/g
     // A+D".A+C.B+D".B+C = (A+D").A+C.B+D".(B+C) ! ($1).$3($8)
-    const execao_2 = /(?<=\)\.)([A-Z]"?(\+[A-Z]"?)+)(?=\.\()/g
+    const excecao_2 = /(?<=\)\.)([A-Z]"?(\+[A-Z]"?)+)(?=\.\()/g
     // (A+D").B+D".(B+C) = (A+D").(B+D").(B+C) ! ($1)
 
-    const execao_3 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
+    const excecao_3 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
     // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
 
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
@@ -392,12 +392,12 @@ function Simplificar(Resumido=``){
             // (A.B)’ = A'+B' | (A+C)" = A".C" | A.(B.C+(B.C+(S+T))") = A.(B.C+B"+C".(S".T")) !(/?/)
         }
 
-        if(Resumido.match(execao_1) != null){
-            Resumido = Resumido.replace(execao_1,"($1).$3($8)")
-        }else if(Resumido.match(execao_2) != null){
-            Resumido = Resumido.replace(execao_2,"($1)")
-        }else if(Resumido.match(execao_3) != null){
-            Resumido = Resumido.replace(execao_3,"$2($3$8)$12")
+        if(Resumido.match(excecao_1) != null){
+            Resumido = Resumido.replace(excecao_1,"($1).$3($8)")
+        }else if(Resumido.match(excecao_2) != null){
+            Resumido = Resumido.replace(excecao_2,"($1)")
+        }else if(Resumido.match(excecao_3) != null){
+            Resumido = Resumido.replace(excecao_3,"$2($3$8)$12")
 
         }else if(Resumido.match(tira_parentes) != null){
             Resumido = Resumido.replace(tira_parentes,"$1")
