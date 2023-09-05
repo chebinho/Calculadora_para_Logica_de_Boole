@@ -269,6 +269,9 @@ function Simplificar(Resumido=``){
     //A".B"+A.B"+A".B+A.B = 1
     //(A+B).(A+C) = A+B.C
 
+    // fazer uma regex para organizar as letras
+    // descobrir como fazer uma regex reconhecer um termo oposto
+
     const excecao_1 = /(?<=[ ]|^|\)\+|\)\.)([A-Z]"?(\+[A-Z]"?)+)\.((([A-Z]"?(\+[A-Z]"?)+)(\.))*)?([A-Z]"?(\+[A-Z]"?)+)(?=[ ]|$|\+\(|\.\()/g
     // A+D".A+C.B+D".B+C = (A+D").A+C.B+D".(B+C) ! ($1).$3($8)
     const excecao_2 = /(?<=\)\.)([A-Z]"?(\+[A-Z]"?)+)(?=\.\()/g
@@ -298,17 +301,13 @@ function Simplificar(Resumido=``){
     //const situa_grupo_A_ponto_Ai = /((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))\.\2")|((\(([A-Z]"?)(\+|\.|\(|\)|([A-Z]"?))+\))"\.\7(?!"))/g
     // (B.X).(B.X)" = 0 | (B.X)".(B.X) = 0 ! 0
 
-    const situa_R_0 = /((0(\+|\.)0))|((0\.(1|([A-Z]"?))))|(((1|([A-Z]"?))\.0))/g
-    //0+0 0.0 0.1 1.0 = 0 | A.0 A".0 0.A 0.A" = 0 !0
-    const situa_R_1 = /((?<!\.)(1\+1)(?!\.))|((?<!\.)((0|([A-Z]"?))\+1)(?!\.))|((?<!\.)(1\+(0|([A-Z]"?)))(?!\.))|(1\.1)/g
-    //1.1 1+1 1+0 0+1 = 1 | A+1 A"+1 1+A 1+A" = 1 !1 
+    const situa_R_0 = /(([A-Z])\.\2")|(([A-Z])(")\.\4(?!"))|((0(\+|\.)0))|((0\.(1|([A-Z]"?))))|(((1|([A-Z]"?))\.0))/g
+    //0+0 0.0 0.1 1.0 = 0 | A.0 A".0 0.A 0.A" = 0 | A".A A.A" = 0 ! 0
+    const situa_R_1 = /((?<!\.)([A-Z])\+\2"(?!\.))|((?<!\.)([A-Z])(")\+\4(?!\.|"))|((?<!\.)(1\+1)(?!\.))|((?<!\.)((0|([A-Z]"?))\+1)(?!\.))|((?<!\.)(1\+(0|([A-Z]"?)))(?!\.))|(1\.1)/g
+    //1.1 1+1 1+0 0+1 = 1 | A+1 A"+1 1+A 1+A" = 1 | A"+A A+A" = 1 ! 1 ! 1 
     const situa_R_A = /(([A-Z]"?)\.(0|1))|((0|1)\.([A-Z]"?))|((?<!\.)([A-Z]"?)\+(0|1)(?!\.))|((?<!\.)(0|1)\+([A-Z]"?)(?!"|\.))/g
     //A+0 0+A A.1 1.A = A | A"+0 0+A" A".1 1.A" = A" ! $2$6$8$12
-    const situa_R_0_2 = /(([A-Z])\.\2")|(([A-Z])(")\.\4(?!"))/g
-    //A".A A.A" = 0 ! 0
-    const situa_R_1_2 = /((?<!\.)([A-Z])\+\2"(?!\.))|((?<!\.)([A-Z])(")\+\4(?!\.|"))/g
-    //A"+A A+A" = 1 ! 1
-    
+
     const situa_R_AA = /(?<!\.)(([A-Z]"?)(\+|\.)\2)(?!\.|")/g
     //A+A A.A = A | A"+A" A".A" = A" ! $2
     
@@ -317,10 +316,10 @@ function Simplificar(Resumido=``){
     // situa_A_A_ponto: A".X.S.A = 0 | A.X.S.A" = 0 ! 0
 
     const reescrever_1 = /(\(((([A-Z]"?)(\+|\.))*)?([A-Z])"(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\2\6\7\))|(\(((([A-Z]"?)(\+|\.))*)?([A-Z])(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\13\17"\18\))/g
-    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18)
+    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18) <-----------------
 
-    //reescrever_2 = A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C))
-    //reescrever_3 = (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B))
+    //reescrever_2 = A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) <-------- possivel problama do ponto
+    //reescrever_3 = (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) <-------- possivel problama do ponto
 
     const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
     //Z"+(A.Z") = Z" | Z.(A+Z.S.R) = Z | X+(X".Y) = X+Y | A".(S.A) = A".S ! (/?/)
@@ -355,33 +354,33 @@ function Simplificar(Resumido=``){
             // (\\(([A-Z]"?|\\+|\\.!!!)+\\)) + |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
             // (\(([A-Z]"?|\+|\.!!!)+\)) + |(\(([A-Z]"?|\+|\.!!!)+\))
 
+            var tudo_mais_1 = RegExp(`(${Tudo_Entre_Paren}"?\\+1(?!\\.))|((?<!\\.)1\\+${Tudo_Entre_Paren}"?)`,"g")
+            // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
+            var tudo_ponto_1_01 = RegExp(`((${Tudo_Entre_Paren})"?\\.1)`,"g")
+            // (A.E.D+Q).1 = A ! $2
+            var tudo_ponto_1_02 = RegExp(`(1\\.(${Tudo_Entre_Paren})"?)`,"g")
+            // 1.(A.E.D+Q) = A ! $2
+            var tudo_mais_0_01 = RegExp(`((${Tudo_Entre_Paren})"?\\+0(?!\\.))`,"g")
+            // (A.E.D+Q)+0 = A ! $2
+            var tudo_mais_0_02 = RegExp(`((?<!\\.)0\\+(${Tudo_Entre_Paren})"?)`,"g")
+            // 0+(A.E.D+Q) = A ! $2
+            var tudo_ponto_0 = RegExp(`((${Tudo_Entre_Paren})"?\\.0)|(0\\.(${Tudo_Entre_Paren})"?)`,"g")
+            // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 
+
             var tira_ulti_parentes = RegExp(`(?<=\\s|^)\\(((([A-Z]"?)|\\+|\\.|${Tudo_Entre_Paren})*)\\)(?=\\s|$)`,"g")
             //(A.C) = A.C
 
             var junta_AA = RegExp(`(([A-Z]"?|\\.|\\+|${Tudo_Entre_Paren})+)(\\+|\\.)\\1(?!")`,"g")
-            // A+Z.A+Z = A+Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $1
+            // A+Z.A+Z = A+Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $1 <-------------
             
             var situa_A_A = RegExp(`(([A-Z]"?)(\\.|\\+)(([A-Z]"?)|\\3|${Tudo_Entre_Paren})+)\\3\\2(?!")`,"g")
-            // situa_A_A: A+X+A = A+X ! $1   <------------
+            // situa_A_A: A+X+A = A+X ! $1 
             var situa_A_A_mais_1 = RegExp(`(([A-Z])\\+(\\+|([A-Z])|${Tudo_Entre_Paren})+\\2")`,"g")
             var situa_A_A_mais_2 = RegExp(`(([A-Z])"\\+(\\+|([A-Z])|${Tudo_Entre_Paren})+\\2(?!"))`,"g")
             // situa_A_A_mais: A"+X+S+A = 1 | A+X+S+A" = 1 ! 1
             var situa_A_A_ponto_1 = RegExp(`(([A-Z])\\.(\\.|([A-Z])|${Tudo_Entre_Paren})+\\2")`,"g")
             var situa_A_A_ponto_2 = RegExp(`(([A-Z])"\\.(\\.|([A-Z])|${Tudo_Entre_Paren})+\\2(?!"))`,"g")
             // situa_A_A_ponto: A".X.S.A = 0 | A.X.S.A" = 0 ! 0
-
-            var tudo_mais_1 = RegExp(`(${Tudo_Entre_Paren}\\+1(?!\\.))|((?<!\\.)1\\+${Tudo_Entre_Paren})`,"g")
-            // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
-            var tudo_ponto_1_01 = RegExp(`((${Tudo_Entre_Paren})\\.1)`,"g")
-            // (A.E.D+Q).1 = A ! $2
-            var tudo_ponto_1_02 = RegExp(`(1\\.(${Tudo_Entre_Paren}))`,"g")
-            // 1.(A.E.D+Q) = A ! $2
-            var tudo_mais_0_01 = RegExp(`((${Tudo_Entre_Paren})\\+0(?!\\.))`,"g")
-            // (A.E.D+Q)+0 = A ! $2
-            var tudo_mais_0_02 = RegExp(`((?<!\\.)0\\+(${Tudo_Entre_Paren}))`,"g")
-            // 0+(A.E.D+Q) = A ! $2
-            var tudo_ponto_0 = RegExp(`((${Tudo_Entre_Paren})\\.0)|(0\\.(${Tudo_Entre_Paren}))`,"g")
-            // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 
 
             var reescrever_2 = RegExp(`((([A-Z]"?)(\\.|\\+)${Tudo_Entre_Paren})(\\+|\\.)((([A-Z]"?)\\4\\5)|(\\(([A-Z]"?)\\4\\5\\))))|(\\((([A-Z]"?)(\\.|\\+)${Tudo_Entre_Paren})\\)(\\+|\\.)((([A-Z]"?)\\${16+(atualizar*2)}\\${17+(atualizar*2)})|(\\(([A-Z]"?)\\${16+(atualizar*2)}\\${17+(atualizar*2)}\\))))`,"g")
             // A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) ! ($3$7$10$12$15$19$22$24)$4$5$16$17
@@ -433,11 +432,6 @@ function Simplificar(Resumido=``){
             Resumido = Resumido.replace(situa_R_0,"0")
         }else if(Resumido.match(situa_R_1) != null){
             Resumido = Resumido.replace(situa_R_1,"1")
-        }else if(Resumido.match(situa_R_0_2) != null){
-            Resumido = Resumido.replace(situa_R_0_2,"0")
-        }else if(Resumido.match(situa_R_1_2) != null){
-            Resumido = Resumido.replace(situa_R_1_2,"1")
-            
         }else if(Resumido.match(situa_R_A) != null){
             Resumido = Resumido.replace(situa_R_A,"$2$6$8$12")
         }else if(Resumido.match(situa_R_AA) != null){
