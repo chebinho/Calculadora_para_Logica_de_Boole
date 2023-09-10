@@ -247,7 +247,7 @@ function Calculo(){
 
     for(a=0;a<Codigo_final.length;a++){
         solu[a] = document.createElement("p")
-        solu[a].innerText = `Solução ${a+1} = ${Simplificar(Codigo_final[a])}`
+        solu[a].innerText = `S${a+1} = ${Simplificar(Codigo_final[a])}`
         div_solu.appendChild(solu[a])
     }
     
