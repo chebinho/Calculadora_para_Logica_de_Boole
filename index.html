@@ -13,11 +13,16 @@
 
     <form>
         <label>Quantas entradas de informação :
-            <br><input id="Numero_Entradas" type="number" min="2">
+            <br><input id="Numero_Entradas" type="number" value="2" min="2">
         </label><br>
         <label>Quantas saidas de informação :
-            <br><input id="Numero_Saidas" type="number" min="1">
+            <br><input id="Numero_Saidas" type="number" value="1" min="1">
         </label><br>
+        <!--
+        <label>Agrupar os dados em quantas colunas:
+            <br><input id="Numero_grupos" type="number" value="4" min="2">
+        </label><br>
+        -->
         <br>
         <input type="button" value="Salvar" onclick="Ler_fomulario()">
     </form>
@@ -34,4 +39,5 @@
     </div>
 </body>
 <script src="codigo.js"></script>
+<script src="Simplificar.js"></script>
 </html>

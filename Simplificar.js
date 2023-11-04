@@ -1,6 +1,4 @@
-//import Simplificar from "./Simplificar.js"
-//colocar type="module no html"
-export default function Simplificar(Resumido=``){
+function Simplificar(Resumido=``){
 
     // (A)(?!") = não pode ter " no final
 
@@ -336,6 +334,7 @@ export default function Simplificar(Resumido=``){
     console.log(comtador+" passos")
     return Resumido
 
+    // outras funções 
 
     function Quantos_Entre(texto="A",par1="\\(",par2="\\)"){
 
