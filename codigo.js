@@ -78,14 +78,14 @@ function Criar_Tabela(Entradas,Saidas){
                 for(a=0;a<c;a++){
                     VF[[conta_linha,conta_coluna]] = document.createTextNode("V")
                     Binario[[conta_linha,conta_coluna]] = "V"
-                    conta_linha = conta_linha+1
+                    conta_linha++
                 }
             }else{
                 test = 1
                 for(a=0;a<c;a++){
                     VF[[conta_linha,conta_coluna]] = document.createTextNode("F")
                     Binario[[conta_linha,conta_coluna]] = "F"
-                    conta_linha = conta_linha+1
+                    conta_linha++
                 }
             }
         }
