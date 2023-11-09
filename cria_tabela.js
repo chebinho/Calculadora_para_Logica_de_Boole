@@ -4,8 +4,6 @@ var Binario = [[]]
 let Numero_Entradas = 2
 let Numero_Saidas = 1
 
-//console.log(Solusao)
-
 function Ler_fomulario(){
 
     Numero_Entradas = document.getElementById("Numero_Entradas").value
@@ -90,15 +88,14 @@ function Criar_Tabela(Entradas,Saidas,grupos){
             }else{
                 elemento[[l,c]] = document.createTextNode("V")
                 Binario[[(l-1),c]] = "V"
-                if(contador > (test**2)*2){
-                    contador = 0
-                }else{
+                if(contador < (2**test)*2-1){
                     contador++
+                }else{
+                    contador = 0
                 }
             }
             //console.log("L:"+l+" - C:"+c)
         }
-        console.log(2**test)
         contador = 0
         test++
     }
@@ -109,11 +106,9 @@ function Criar_Tabela(Entradas,Saidas,grupos){
 
         for(c=0;c<Colunas;c++){
             td[[l,c]] = document.createElement("td")
-
-            if(elemento[[l,c]] != undefined){
+            //if(elemento[[l,c]] != undefined){ // if para fazer tests
                 td[[l,c]].appendChild(elemento[[l,c]])
-            }
-            
+            //}
             tr[l].appendChild(td[[l,c]])
             //console.log("L:"+l+" - C:"+c)
         }
@@ -188,7 +183,6 @@ function Calculo(){
                         Codigo2[c] = Codigo2[c] + String.fromCharCode(a)
                         Codigo2[c] = Codigo2[c] + "+"
                     }
-                    
                 }
                 Codigo2[c] = Codigo2[c].slice(0,-1)
                 Codigo2[c] = Codigo2[c] + "."
@@ -221,10 +215,12 @@ function Calculo(){
 
     }
     
+    /*
     let r1 = Simplificar(Codigo[0])
     console.log("- - - - - - - - - - - - - -")
     let r2 = Simplificar(Codigo2[0])
     console.log("- - - - - - - - - - - - - -")
+    */
 
     let solu = []
     let div_solu = document.getElementById("solu")
@@ -239,6 +235,6 @@ function Calculo(){
     hr[hr.length-1] = document.createElement("hr")
     div_solu.appendChild(hr[hr.length-1])
 
-    console.log(`Min:${r1} | Max:${r2}`)
+    //console.log(`Min:${r1} | Max:${r2}`)
     console.log("------------")
 }

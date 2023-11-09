@@ -11,6 +11,8 @@ function Simplificar(Resumido=``){
     // fazer uma regex para organizar as letras
     // descobrir como fazer uma regex reconhecer um termo oposto
 
+    //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
+
     const excecao_1 = /(?<=[ ]|^|\)\+|\)\.)([A-Z]"?(\+[A-Z]"?)+)\.((([A-Z]"?(\+[A-Z]"?)+)(\.))*)?([A-Z]"?(\+[A-Z]"?)+)(?=[ ]|$|\+\(|\.\()/g
     // A+D".A+C.B+D".B+C = (A+D").A+C.B+D".(B+C) ! ($1).$3($8)
     const excecao_2 = /(?<=\)\.)([A-Z]"?(\+[A-Z]"?)+)(?=\.\()/g
