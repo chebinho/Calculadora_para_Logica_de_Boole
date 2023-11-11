@@ -24,13 +24,13 @@ function Ler_fomulario(){
     Criar_Tabela(Numero_Entradas,Numero_Saidas,Numero_grupos)
 }
 
-function Criar_Tabela(Entradas,Saidas,grupos){
+function Criar_Tabela(Entradas=2,Saidas=1,grupos=4){
 
     let entrada = Number(Entradas)
     let saida = Number(Saidas)
 
-    let Linhas = 2**Number(Entradas)+1
-    let Colunas = Number(Entradas)+Number(Saidas)+1
+    let Linhas = 2**entrada+1
+    let Colunas = entrada+saida+1
 
     // limpa a tabela antes de criar a nova
     var container = document.querySelector("#Tabela");
