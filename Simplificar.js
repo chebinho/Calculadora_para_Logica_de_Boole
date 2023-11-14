@@ -10,6 +10,7 @@ function Simplificar(Resumido=``){
 
     // fazer uma regex para organizar as letras
     // descobrir como fazer uma regex reconhecer um termo oposto
+    // adicionar parenteses extras caso haja uma multiplicação que altere a ordem
 
     //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
 
@@ -57,7 +58,7 @@ function Simplificar(Resumido=``){
     // situa_A_A_ponto: A".X.S.A = 0 | A.X.S.A" = 0 ! 0
 
     const reescrever_1 = /(\(((([A-Z]"?)(\+|\.))*)?([A-Z])"(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\2\6\7\))|(\(((([A-Z]"?)(\+|\.))*)?([A-Z])(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\13\17"\18\))/g
-    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18) <-----------------
+    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18) <------------ possivel problama do ponto
 
     //reescrever_2 = A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) <-------- possivel problama do ponto
     //reescrever_3 = (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) <-------- possivel problama do ponto
@@ -193,15 +194,40 @@ function Simplificar(Resumido=``){
             Resumido = Resumido.replace(reescrever_1,'($2$13($6$11$6$17"$22$17)$7$18)')
 
         }else if(Resumido.match(reescrever_2) != null){
-            Resumido = Resumido.replace(reescrever_2,`($3$${5+(atualizar*2)}$${8+(atualizar*2)}$${10+(atualizar*2)}$${13+(atualizar*2)}$${15+(atualizar*4)}$${18+(atualizar*4)}$${20+(atualizar*4)})$4$5$${14+(atualizar*2)}$${15+(atualizar*2)}`)
+            let test_ponto = Resumido.replace(reescrever_2,'\(\/\?\/\)')
+
+            if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                Resumido = Resumido.replace(reescrever_2,`(($3$${5+(atualizar*2)}$${8+(atualizar*2)}$${10+(atualizar*2)}$${13+(atualizar*2)}$${15+(atualizar*4)}$${18+(atualizar*4)}$${20+(atualizar*4)})$4$5$${14+(atualizar*2)}$${15+(atualizar*2)})`)
+            }else{
+                Resumido = Resumido.replace(reescrever_2,`($3$${5+(atualizar*2)}$${8+(atualizar*2)}$${10+(atualizar*2)}$${13+(atualizar*2)}$${15+(atualizar*4)}$${18+(atualizar*4)}$${20+(atualizar*4)})$4$5$${14+(atualizar*2)}$${15+(atualizar*2)}`)
+            }
+
         }else if(Resumido.match(reescrever_3) != null){
-            Resumido = Resumido.replace(reescrever_3,`$2$${2+(atualizar*2)}$${11+(atualizar*2)}$${11+(atualizar*4)}($${3+(atualizar*2)}$${4+(atualizar*2)}$${7+(atualizar*2)}$${9+(atualizar*2)}$${12+(atualizar*4)}$${13+(atualizar*4)}$${16+(atualizar*4)}$${18+(atualizar*4)})`)
+            let test_ponto = Resumido.replace(reescrever_2,'\(\/\?\/\)')
+
+            if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                Resumido = Resumido.replace(reescrever_3,`($2$${2+(atualizar*2)}$${11+(atualizar*2)}$${11+(atualizar*4)}($${3+(atualizar*2)}$${4+(atualizar*2)}$${7+(atualizar*2)}$${9+(atualizar*2)}$${12+(atualizar*4)}$${13+(atualizar*4)}$${16+(atualizar*4)}$${18+(atualizar*4)}))`)
+            }else{
+                Resumido = Resumido.replace(reescrever_3,`$2$${2+(atualizar*2)}$${11+(atualizar*2)}$${11+(atualizar*4)}($${3+(atualizar*2)}$${4+(atualizar*2)}$${7+(atualizar*2)}$${9+(atualizar*2)}$${12+(atualizar*4)}$${13+(atualizar*4)}$${16+(atualizar*4)}$${18+(atualizar*4)})`)
+            }
 
         }else if(Resumido.match(distri_BA) != null){
-            Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
+            let test_ponto = Resumido.replace(distri_AB,'\(\/\?\/\)')
+            if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                Resumido = Resumido.replace(distri_BA,"($5$9$10$2$23$20$21$13$28$32$33$25)")
+            }else{
+                Resumido = Resumido.replace(distri_BA,"$5$9$10$2$23$20$21$13$28$32$33$25")
+            }
+
         }else if(Resumido.match(distri_AB) != null){
+            let test_ponto = Resumido.replace(distri_AB,'\(\/\?\/\)')
             let a = Resumido.match(distri_AB)
-            Resumido = Resumido.replace(distri_AB,"(/?/)")
+
+            if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                Resumido = Resumido.replace(distri_AB,"((/?/))")
+            }else{
+                Resumido = Resumido.replace(distri_AB,"(/?/)")
+            }
 
             for(l=0;l<a.length;l++){
                 let primeira_letra = a[l].match(/^([A-Z]"?)/g)
@@ -244,7 +270,7 @@ function Simplificar(Resumido=``){
 
                 Resumido = Resumido.replace(/\(\/\?\/\)/,a[l])
             }
-        
+
         }else if(Resumido.match(morgan) != null){
             let a = Resumido.match(morgan)
             Resumido = Resumido.replace(morgan,'(/?/)')
@@ -262,6 +288,8 @@ function Simplificar(Resumido=``){
             }
 
         }else if(Resumido.match(distri) != null){
+            let test_ponto = Resumido.replace(distri,'\(\/\?\/\)')
+
             let a = Resumido.match(distri)
             Resumido = Resumido.replace(distri,'(/?/)')
             let Letra_Repete = []
@@ -315,16 +343,28 @@ function Simplificar(Resumido=``){
             
                 //console.log(tira_letra)/---
 
-                Etapa_Final = Etapa_Final + Letra_Repete[l].letra
-                Etapa_Final = Etapa_Final + primeiro_sinal + "("
-                Etapa_Final = Etapa_Final + tira_letra
-                Etapa_Final = Etapa_Final + ")" + manten
+                if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                    Etapa_Final = "(" + Etapa_Final + Letra_Repete[l].letra
+                    Etapa_Final = Etapa_Final + primeiro_sinal + "("
+                    Etapa_Final = Etapa_Final + tira_letra
+                    Etapa_Final = Etapa_Final + "))" + manten
 
-                Etapa_Final = Etapa_Final.replace(/(\+|\.)\(\)/g,"")
+                    Etapa_Final = Etapa_Final.replace(/(\+|\.)\(\)/g,"")
 
-                Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
+                    Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
+
+                }else{
+                    Etapa_Final = Etapa_Final + Letra_Repete[l].letra
+                    Etapa_Final = Etapa_Final + primeiro_sinal + "("
+                    Etapa_Final = Etapa_Final + tira_letra
+                    Etapa_Final = Etapa_Final + ")" + manten
+
+                    Etapa_Final = Etapa_Final.replace(/(\+|\.)\(\)/g,"")
+
+                    Resumido = Resumido.replace(/\(\/\?\/\)/,Etapa_Final)
+                }
             }
-            
+
         }else{
             console.log("Resultado final: ")
             c = c-1

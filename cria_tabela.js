@@ -82,12 +82,12 @@ function Criar_Tabela(Entradas=2,Saidas=1,grupos=4){
     for(c=entrada-1;c>=0;c--){
         for(l=1;l<Linhas;l++){
             if(contador < (2**test)){
-                elemento[[l,c]] = document.createTextNode("F")
-                Binario[[(l-1),c]] = "F"
-                contador++
-            }else{
                 elemento[[l,c]] = document.createTextNode("V")
                 Binario[[(l-1),c]] = "V"
+                contador++
+            }else{
+                elemento[[l,c]] = document.createTextNode("F")
+                Binario[[(l-1),c]] = "F"
                 if(contador < (2**test)*2-1){
                     contador++
                 }else{
@@ -215,12 +215,12 @@ function Calculo(){
 
     }
     
-    /*
+    
     let r1 = Simplificar(Codigo[0])
     console.log("- - - - - - - - - - - - - -")
     let r2 = Simplificar(Codigo2[0])
     console.log("- - - - - - - - - - - - - -")
-    */
+    
 
     let solu = []
     let div_solu = document.getElementById("solu")
@@ -235,6 +235,6 @@ function Calculo(){
     hr[hr.length-1] = document.createElement("hr")
     div_solu.appendChild(hr[hr.length-1])
 
-    //console.log(`Min:${r1} | Max:${r2}`)
+    console.log(`Min:${r1} | Max:${r2}`)
     console.log("------------")
 }
