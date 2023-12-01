@@ -1,0 +1,8 @@
+table,td,tr{
+    border: 1px black solid;
+    text-align: center;
+}
+.resul{
+    width: 50px;
+    background-color: red;
+}
