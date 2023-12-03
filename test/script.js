@@ -46,11 +46,11 @@ function calculo(){
         troca_cor("S3","F")
     }
     
-    //S4 = (A"+B"+C").(A+B+C)
-    if( (A_||B_||C_)&&(A||B||C) ){
-        troca_cor("S4","F")
-    }else{
+    //S4 = (A.B.C)+(A".B".C")
+    if( (A&&B&&C)||(A_&&B_&&C_) ){
         troca_cor("S4","V")
+    }else{
+        troca_cor("S4","F")
     }
     
 }
@@ -71,4 +71,4 @@ function troca_cor(valor,sinal="F"){
 //S1 = (A"+B).(A+B")
 //S2 = (A"+B+C").(A+B"+C)
 //S3 = (A"+B").(A+B)
-//S4 = (A+B+C).(A"+B"+C")
+//S4 = (A.B.C)+(A".B".C")
