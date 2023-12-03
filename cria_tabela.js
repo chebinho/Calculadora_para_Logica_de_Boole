@@ -239,40 +239,20 @@ function Calculo(){
     console.log("------------")
 }
 
-function N_Letras(valor){ //maximo de 701 combinações
-    if(valor < 0){
-        return "A"
-    }else{
-        valor = valor+65
-        if(valor < 90){
-            //console.log(String.fromCharCode(valor))
-            return String.fromCharCode(valor)
-
-        }else if(valor <= 766){
-            let c = 64
-            while(valor > 90){
-                c++
-                valor = valor - 26
-            }
-            console.log(String.fromCharCode(c)+String.fromCharCode(valor))
-            return String.fromCharCode(c)+String.fromCharCode(valor)
-        }else{
-            console.log("maximo")
-        }
-    }
-}
-
 function N_Letra(valor){ // test sem limite
     if(valor < 0){
-        return "A"
+        return "_"
     }else{
-        valor = valor+65
-        if(valor < 90){
-            //console.log(String.fromCharCode(valor))
-            return String.fromCharCode(valor)
+        if(valor < 26){
+            //console.log(String.fromCharCode(valor+65))
+            return String.fromCharCode(valor+65)
 
         }else {
-            
+            let resul = N_Letra(valor%26)
+            resul = N_Letra((valor/26-1)) + resul
+
+            //console.log(resul)
+            return resul
         }
     }
 }
