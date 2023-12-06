@@ -164,10 +164,10 @@ function Calculo(){
                 for(a=0;a<(Number(Numero_Entradas));a++){
 
                     if(Binario[[l,a]] == "F"){
-                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)+'"'
+                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)
                         Expressao_Max[c] = Expressao_Max[c] + "+"
                     }else{
-                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)
+                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)+'"'
                         Expressao_Max[c] = Expressao_Max[c] + "+"
                     }
                 }

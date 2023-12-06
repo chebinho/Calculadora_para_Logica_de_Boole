@@ -342,8 +342,14 @@ function Simplificar(Resumido=``){
                 tira_letra = tira_letra.replace(RegExp(`((\\.|\\+)(${Letra_Repete[l].letra})(?!"))|((?<=\\()((${Letra_Repete[l].letra})(\\.|\\+)))`,"g"),"") 
             
                 //console.log(tira_letra)/---
+                let A 
+                if(manten != null){
+                    A = true
+                }else{
+                    A = manten.match(/^(\+|\.)/g) != null
+                }
 
-                if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
+                if((test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null)||A){
                     Etapa_Final = "(" + Etapa_Final + Letra_Repete[l].letra
                     Etapa_Final = Etapa_Final + primeiro_sinal + "("
                     Etapa_Final = Etapa_Final + tira_letra
