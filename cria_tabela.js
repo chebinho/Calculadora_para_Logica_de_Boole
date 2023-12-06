@@ -136,98 +136,75 @@ function Ler_Botao(Botao,Tamanho){
 }
 
 function Calculo(){
-
     let Linhas = 2**Number(Numero_Entradas)
-    let Codigo = []
-    let Codigo2 = []
-    let Codigo_final = []
-
-    let cont_Min = 0
-    let cont_Max = 0
-
+    let Expressao_Min = []
+    let Expressao_Max = []
+    let Expressao_Final = []
+    //N_Letra()
     for(c=0;c<Numero_Saidas;c++){
-        Codigo[c] = ""
-        Codigo2[c] = ""
-        Codigo_final[c] = ""
+        Expressao_Min[c] = ""
+        Expressao_Max[c] = ""
 
-        cont_Min = 0
-        cont_Max = 0
-        
         for(l=0;l<Linhas;l++){
-            
+
             if(Solusao[[l,c]] == true){
-                for(a=65;a<(65+Number(Numero_Entradas));a++){
-                    
-                    if(Binario[[l,(a-65)]] == "F"){
-                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
-                        Codigo[c] = `${Codigo[c]}\"`
-                        Codigo[c] = Codigo[c] + "."
-                    }else{
-                        Codigo[c] = Codigo[c] + String.fromCharCode(a)
-                        Codigo[c] = Codigo[c] + "."
-                    }
-                    
-                }
-                Codigo[c] = Codigo[c].slice(0,-1)
-                Codigo[c] = Codigo[c] + "+"
 
-                cont_Min++
+                for(a=0;a<Numero_Entradas;a++){
+                    if(Binario[[l,a]] == "F"){
+                        Expressao_Min[c] = Expressao_Min[c] + N_Letra(a)+'"'
+                        Expressao_Min[c] = Expressao_Min[c] + "."
+                    }else{
+                        Expressao_Min[c] = Expressao_Min[c] + N_Letra(a)
+                        Expressao_Min[c] = Expressao_Min[c] + "."
+                    }
+                }
+                Expressao_Min[c] = Expressao_Min[c].slice(0,-1)
+                Expressao_Min[c] = Expressao_Min[c] + "+"
             }else{
-                for(a=65;a<(65+Number(Numero_Entradas));a++){
-                    
-                    if(Binario[[l,(a-65)]] == "V"){
-                        Codigo2[c] = Codigo2[c] + String.fromCharCode(a)
-                        Codigo2[c] = `${Codigo2[c]}\"`
-                        Codigo2[c] = Codigo2[c] + "+"
+                for(a=0;a<(Number(Numero_Entradas));a++){
+
+                    if(Binario[[l,a]] == "F"){
+                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)+'"'
+                        Expressao_Max[c] = Expressao_Max[c] + "+"
                     }else{
-                        Codigo2[c] = Codigo2[c] + String.fromCharCode(a)
-                        Codigo2[c] = Codigo2[c] + "+"
+                        Expressao_Max[c] = Expressao_Max[c] + N_Letra(a)
+                        Expressao_Max[c] = Expressao_Max[c] + "+"
                     }
                 }
-                Codigo2[c] = Codigo2[c].slice(0,-1)
-                Codigo2[c] = Codigo2[c] + "."
-
-                cont_Max++
+                Expressao_Max[c] = Expressao_Max[c].slice(0,-1)
+                Expressao_Max[c] = Expressao_Max[c] + "."
             }
+            
         }
+        Expressao_Min[c] = Expressao_Min[c].slice(0,-1)
+        Expressao_Max[c] = Expressao_Max[c].slice(0,-1)
 
-        Codigo[c] = Codigo[c].slice(0,-1)
-        Codigo2[c] = Codigo2[c].slice(0,-1)
+        Expressao_Min[c] = "("+Expressao_Min[c]+")"
+        Expressao_Max[c] = "("+Expressao_Max[c]+")"
 
-        console.log("Min:" + cont_Min + " --- " + "Max:" +cont_Max)
+        Expressao_Min[c] = Expressao_Min[c].replace(/\+/g,"\)\+\(")
+        Expressao_Max[c] = Expressao_Max[c].replace(/\./g,"\)\.\(")
 
-        if(cont_Max > cont_Min){
-            Codigo_final[c] = Codigo[c]
-            if(Codigo_final[c] == ""){
-                Codigo_final[c] = "apenas F"
+        // declara a menor expressão 
+        if(Expressao_Max[c].length > Expressao_Min[c].length){
+            Expressao_Final[c] = Expressao_Min[c]
+            if(Expressao_Final[c] == "()"){
+                Expressao_Final[c] = "0"
             }
-
         }else{
-            Codigo_final[c] = Codigo2[c]
-            if(Codigo_final[c] == ""){
-                Codigo_final[c] = "apenas V"
+            Expressao_Final[c] = Expressao_Max[c]
+            if(Expressao_Final[c] == "()"){
+                Expressao_Final[c] = "1"
             }
-
         }
-        //console.log("Solução Max "+Number(c+1)+" "+ Codigo[c])
-        //console.log("Solução Min "+Number(c+1)+" "+ Codigo2[c])
-        console.log("Solução "+Number(c+1)+" "+ Codigo_final[c])
-
     }
-    
-    
-    let r1 = Simplificar(Codigo[0])
-    console.log("- - - - - - - - - - - - - -")
-    let r2 = Simplificar(Codigo2[0])
-    console.log("- - - - - - - - - - - - - -")
-    
 
     let solu = []
     let div_solu = document.getElementById("solu")
 
-    for(a=0;a<Codigo_final.length;a++){
+    for(a=0;a<Expressao_Final.length;a++){
         solu[a] = document.createElement("p")
-        solu[a].innerText = `S${a+1} = ${Simplificar(Codigo_final[a])}`
+        solu[a].innerText = `S${a+1} = ${Simplificar(Expressao_Final[a])}`
         div_solu.appendChild(solu[a])
     }
     
@@ -235,21 +212,19 @@ function Calculo(){
     hr[hr.length-1] = document.createElement("hr")
     div_solu.appendChild(hr[hr.length-1])
 
-    console.log(`Min:${r1} | Max:${r2}`)
-    console.log("------------")
 }
 
-function N_Letra(valor){ // test sem limite
+function N_Letra(valor=0,base=26,caracter_inicial=65){ // test sem limite
     if(valor < 0){
         return "_"
     }else{
-        if(valor < 26){
-            //console.log(String.fromCharCode(valor+65))
-            return String.fromCharCode(valor+65)
+        if(valor < base){
+            //console.log(String.fromCharCode(valor+caracter_inicial))
+            return String.fromCharCode(valor+caracter_inicial)
 
         }else {
-            let resul = N_Letra(valor%26)
-            resul = N_Letra((valor/26-1)) + resul
+            let resul = N_Letra(valor%base)
+            resul = N_Letra((valor/base-1)) + resul
 
             //console.log(resul)
             return resul
