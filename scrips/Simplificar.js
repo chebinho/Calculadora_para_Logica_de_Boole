@@ -10,7 +10,7 @@ function Simplificar(Resumido=``){
 
     // fazer uma regex para organizar as letras
     // descobrir como fazer uma regex reconhecer um termo oposto
-    // adicionar parenteses extras caso haja uma multiplicação que altere a ordem
+    // adicionar parenteses extras caso haja uma multiplicação que altere a ordem (conferir se o erro persiste)
 
     //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
 
@@ -58,17 +58,17 @@ function Simplificar(Resumido=``){
     // situa_A_A_ponto: A".X.S.A = 0 | A.X.S.A" = 0 ! 0
 
     const reescrever_1 = /(\(((([A-Z]"?)(\+|\.))*)?([A-Z])"(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\2\6\7\))|(\(((([A-Z]"?)(\+|\.))*)?([A-Z])(((\+|\.)([A-Z]"?))*)?\)(\+|\.)\(\13\17"\18\))/g
-    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18) <------------ possivel problama do ponto
+    // (A".B".C")+(A.B".C") = ((A+A").B".C") | (A.B".C")+(A".B".C") = ((A+A").B".C") ! ($2$13($6$11$6$17"$22$17)$7$18)
 
-    //reescrever_2 = A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) <-------- possivel problama do ponto
-    //reescrever_3 = (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) <-------- possivel problama do ponto
+    //reescrever_2 = A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) 
+    //reescrever_3 = (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) 
 
     const distri_AB = /(([A-Z]"?)(\+|\.)([A-Z]"?\3)*\(([A-Z]"?(\.|\+))*\2((\+|\.)([A-Z]"?))*\))|(([A-Z])(\+|\.)([A-Z]"?\12)*\(([A-Z]"?(\.|\+))*\11"((\+|\.)([A-Z]"?))*\))|(([A-Z])"(\+|\.)([A-Z]"?\21)*\(([A-Z]"?(\.|\+))*\20((\+|\.)([A-Z]"?))*\))/g
     //Z"+(A.Z") = Z" | Z.(A+Z.S.R) = Z | X+(X".Y) = X+Y | A".(S.A) = A".S ! (/?/)
     const distri_BA = /((\(([A-Z]"?(\+|\.))*([A-Z]"?)((\.|\+)([A-Z]"?))*\))(\.|\+)(([A-Z]\9)*)?\5(?!"))|((\(([A-Z]"?(\+|\.))*([A-Z])((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\20)*)?(\16"))|((\(([A-Z]"?(\+|\.))*([A-Z])"((\.|\+)([A-Z]"?))*\))(\+|\.)(([A-Z]\32)*)?\28)/g
     //(A.Z")+Z" = Z"+(A.Z") | (A+Z.S.R).Z = Z.(A+Z.S.R) | (X".Y)+X = X+(X".Y) | (S.A).A" = A".(S.A) ! $2$13($6$11$6$17"$22$17)$7$18
 
-    const distri = /((\((([A-Z]"?\.)*)?([A-Z]"?)((\.[A-Z]"?)*)?\))\+(\(([A-Z]"?|\+|\.)+\)\+)*(\((([A-Z]"?\.)*)?\5((\.[A-Z]"?)*)?\)))|((\((([A-Z]"?\+)*)?([A-Z]"?)((\+[A-Z]"?)*)?\))\.(\(([A-Z]"?|\+|\.)+\)\.)*(\((([A-Z]"?\+)*)?\19((\+[A-Z]"?)*)?\)))/g
+    const distri = /((\(([A-Z]"?\+)*([A-Z]"?)(\+[A-Z]"?)*\)\.\(([A-Z]"?\+)*(\4)(\+[A-Z]"?)*\))|(\(([A-Z]"?\.)*([A-Z]"?)(\.[A-Z]"?)*\)\+\(([A-Z]"?\.)*(\11)(\.[A-Z]"?)*\)))|((([A-Z]"?\+)*([A-Z]"?)(\+[A-Z]"?)*\.([A-Z]"?\+)*(\19)(\+[A-Z]"?)*)|(([A-Z]"?\.)*([A-Z]"?)(\.[A-Z]"?)*\+([A-Z]"?\.)*(\26)(\.[A-Z]"?)*))/g
     // (A.D")+(A.C)+(B.D")+(B.C) = (A+B).(D"+C)
 
     const morgan = /\(([A-Z]"?|\+|\.|\(|\))+\)"/g
@@ -189,9 +189,11 @@ function Simplificar(Resumido=``){
             Resumido = Resumido.replace(situa_A_A_ponto_2,"0")
         
         }else if(Resumido.match(reescrever_1) != null){
+            console.log("reescrever_1")
             Resumido = Resumido.replace(reescrever_1,'($2$13($6$11$6$17"$22$17)$7$18)')
 
         }else if(Resumido.match(reescrever_2) != null){
+            console.log("reescrever_2")
             let test_ponto = Resumido.replace(reescrever_2,'\(\/\?\/\)')
 
             if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
@@ -201,6 +203,7 @@ function Simplificar(Resumido=``){
             }
 
         }else if(Resumido.match(reescrever_3) != null){
+            console.log("reescrever_3")
             let test_ponto = Resumido.replace(reescrever_2,'\(\/\?\/\)')
 
             if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
@@ -210,6 +213,7 @@ function Simplificar(Resumido=``){
             }
 
         }else if(Resumido.match(distri_BA) != null){
+            console.log("distri_BA")
             let test_ponto = Resumido.replace(distri_AB,'\(\/\?\/\)')
             if(test_ponto.match(/(\.\(\/\?\/\))|(\(\/\?\/\)\.)/g) != null){
                 Resumido = Resumido.replace(distri_BA,"($5$9$10$2$23$20$21$13$28$32$33$25)")
@@ -218,6 +222,7 @@ function Simplificar(Resumido=``){
             }
 
         }else if(Resumido.match(distri_AB) != null){
+            console.log("distri_AB")
             let test_ponto = Resumido.replace(distri_AB,'\(\/\?\/\)')
             let a = Resumido.match(distri_AB)
 
@@ -286,6 +291,7 @@ function Simplificar(Resumido=``){
             }
 
         }else if(Resumido.match(distri) != null){
+            console.log("distri")
             let test_ponto = Resumido.replace(distri,'\(\/\?\/\)')
 
             let a = Resumido.match(distri)
