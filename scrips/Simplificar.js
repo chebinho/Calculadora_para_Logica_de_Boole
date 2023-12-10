@@ -14,13 +14,8 @@ function Simplificar(Resumido=``){
 
     //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
 
-    const excecao_1 = /(?<=[ ]|^|\)\+|\)\.)([A-Z]"?(\+[A-Z]"?)+)\.((([A-Z]"?(\+[A-Z]"?)+)(\.))*)?([A-Z]"?(\+[A-Z]"?)+)(?=[ ]|$|\+\(|\.\()/g
-    // A+D".A+C.B+D".B+C = (A+D").A+C.B+D".(B+C) ! ($1).$3($8)
-    const excecao_2 = /(?<=\)\.)([A-Z]"?(\+[A-Z]"?)+)(?=\.\()/g
-    // (A+D").B+D".(B+C) = (A+D").(B+D").(B+C) ! ($1)
-
-    const excecao_3 = /((\+)(([A-Z]"?)(\.([A-Z]"?))+))|((([A-Z]"?)(\.([A-Z]"?))+)(\+))/g
-    // A+C+X.C = A+C+(X.C) | C+X.C.D = C+(X.C.D) | A+X.C = (A+X).C | C.T+A = C.(T+A) | A+C.D+X = A+(C.D)+X ! $2($3$8)$12
+    const regra_ponto = /(?<=\+|\s)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s)/g
+    // A+C.B = A+(C.B) | A+C+X.C = A+C+(X.C) | A+C.X.C = A+(C.X.C) | A+C.X.C.D = A+(C.X.C.D) ! ($1)
 
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
     // (A.E.D+Q).1 = A ! $2
@@ -131,12 +126,8 @@ function Simplificar(Resumido=``){
             // (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) ! $2$4$13$15($5$6$9$11$16$17$20$22)
         }
 
-        if(Resumido.match(excecao_1) != null){
-            Resumido = Resumido.replace(excecao_1,"($1).$3($8)")
-        }else if(Resumido.match(excecao_2) != null){
-            Resumido = Resumido.replace(excecao_2,"($1)")
-        }else if(Resumido.match(excecao_3) != null){
-            Resumido = Resumido.replace(excecao_3,"$2($3$8)$12")
+        if(Resumido.match(regra_ponto) != null){
+            Resumido = Resumido.replace(regra_ponto,"($1)")
 
         }else if(Resumido.match(tira_parentes) != null){
             Resumido = Resumido.replace(tira_parentes,"$1")
@@ -162,12 +153,7 @@ function Simplificar(Resumido=``){
             
         }else if(Resumido.match(junta_AA) != null){
             Resumido = Resumido.replace(junta_AA,`$1`)
-
-        //}else if(Resumido.match(situa_grupo_A_mais_Ai) != null){
-        //    Resumido = Resumido.replace(situa_grupo_A_mais_Ai,"1")    
-        //}else if(Resumido.match(situa_grupo_A_ponto_Ai) != null){
-        //    Resumido = Resumido.replace(situa_grupo_A_ponto_Ai,"0")
-            
+    
         }else if(Resumido.match(situa_R_0) != null){
             Resumido = Resumido.replace(situa_R_0,"0")
         }else if(Resumido.match(situa_R_1) != null){
