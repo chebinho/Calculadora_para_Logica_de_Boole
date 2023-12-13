@@ -2,3 +2,8 @@ table,td,tr{
     border: 1px black solid;
     text-align: center;
 }
+
+#A{
+    width: 99%;
+    height: 50px;
+}

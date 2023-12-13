@@ -26,8 +26,7 @@ function Simplificar(Resumido=``){
 
     const tira_parentes = /\((([A-Z]"?)|(1|0))?\)(?!")/g
     // (A) = A
-    const tira_rep_parentes = /\(\(((([A-Z]"?)|\.|\+|(\(.+\)))+)\)\)/g
-    // ((A+Z)) = (A+Z)
+    // tira_rep_parentes
     const tira_sinal_parent = /((\+|\.)\(([A-Z]"?(\2[A-Z]"?)+)\)\2)|((\+|\.)\(([A-Z]"?(\6[A-Z]"?)+)(?!\6)\))|((?<!\.)\(([A-Z]"?((\+)[A-Z]"?)+)\)\12)|((?<!\+)\(([A-Z]"?((\.)[A-Z]"?)+)\)\16)/g
     // (A".B").(A+B) = A".B".(A+B) | (A+B).(A".B") = (A+B).A".B" | .(A".B".T). = .A".B".T. ! $2$3$2$6$7$10$12$14$16
 
@@ -72,13 +71,13 @@ function Simplificar(Resumido=``){
     // A".B"+A+B ou A.B+A"+B" ou (A".B")+(A+B) ! 1
     // A"+B".A.B ou A.B.A"+B" ou (A".B").(A+B) ! 0
 
+    /*
     const termo_rep_1 = /(\(([A-Z]"?\+)*([A-Z]"?)(\+[A-Z]"?)*\)\.(\(([A-Z]"?\+)*([A-Z]"?)(\+[A-Z]"?)*\)\.)+\(([A-Z]"?\+)*(\3|\7)\+(\3|\7)(\+[A-Z]"?)*\))/g
-
     const termo_rep_2 = /(\(([A-Z]"?\.)*([A-Z]"?)(\.[A-Z]"?)*\)\+(\(([A-Z]"?\.)*([A-Z]"?)(\.[A-Z]"?)*\)\+)+\(([A-Z]"?\.)*(\3|\7)\.(\3|\7)(\.[A-Z]"?)*\))/g
-
     const termo_rep_3 = /(\(([A-Z]"?\+)*([A-Z]"?)\+([A-Z]"?)(\+[A-Z])*\)\.(\((([A-Z]"?\+)*[A-Z]"?)\)\.)*\(([A-Z]"?\+)*(\3|\4)(\+[A-Z]"?)*\)\.(\((([A-Z]"?\+)*[A-Z]"?)\)\.)*\(([A-Z]"?\+)*(\3|\4)(\+[A-Z]"?)*\))/g
-
     const termo_rep_4 = /(\(([A-Z]"?\.)*([A-Z]"?)\.([A-Z]"?)(\.[A-Z])*\)\+(\((([A-Z]"?\.)*[A-Z]"?)\)\+)*\(([A-Z]"?\.)*(\3|\4)(\.[A-Z]"?)*\)\+(\((([A-Z]"?\.)*[A-Z]"?)\)\+)*\(([A-Z]"?\.)*(\3|\4)(\.[A-Z]"?)*\))/g
+    //(A+B).(D+C).(B+C+D) = (A+B).(D+C) | (A+B).(A"+C).(B+E+C).(E+A) = (A+B).(A"+C).(E+A)
+    */
 
     console.log(Resumido)
 
@@ -97,8 +96,8 @@ function Simplificar(Resumido=``){
             atualizar = Quantos_Entre(Resumido)
 
             let Tudo_Entre_Paren = Cria_TEP(Resumido)
-            // (\\(([A-Z]"?|\\+|\\.!!!)+\\)) + |(\\(([A-Z]"?|\\+|\\.!!!)+\\))
-            // (\(([A-Z]"?|\+|\.!!!)+\)) + |(\(([A-Z]"?|\+|\.!!!)+\))
+            // (\\(([A-Z]"?|\\+|\\.!!!)+\\)) + | (\\(([A-Z]"?|\\+|\\.!!!)+\\))
+            // (\(([A-Z]"?|\+|\.!!!)+\)) + | (\(([A-Z]"?|\+|\.!!!)+\))
 
             var tudo_mais_1 = RegExp(`(${Tudo_Entre_Paren}"?\\+1(?!\\.))|((?<!\\.)1\\+${Tudo_Entre_Paren}"?)`,"g")
             // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
@@ -113,8 +112,10 @@ function Simplificar(Resumido=``){
             var tudo_ponto_0 = RegExp(`((${Tudo_Entre_Paren})"?\\.0)|(0\\.(${Tudo_Entre_Paren})"?)`,"g")
             // (A.E.D+Q).0 ou 0.(A.E.D+Q) = 0 
 
+            var tira_rep_parentes = RegExp(`\\(\\(((([A-Z]"?)|\\.|\\+|${Tudo_Entre_Paren})+)\\)\\)`,"g")
+            // ((A+Z)) = (A+Z)
             var tira_ulti_parentes = RegExp(`(?<=\\s|^)\\(((([A-Z]"?)|\\+|\\.|${Tudo_Entre_Paren})*)\\)(?=\\s|$)`,"g")
-            //(A.C) = A.C
+            // (A.C) = A.C
 
             var junta_AA = RegExp(`(([A-Z]"?|\\.|\\+|${Tudo_Entre_Paren})+)(\\+|\\.)\\1(?!")`,"g")
             // A+Z.A+Z = A+Z ou (A+(Z.E)).(A+(Z.E)) = (A+(Z.E)) ! $1 <-------------
@@ -138,12 +139,16 @@ function Simplificar(Resumido=``){
             Resumido = Resumido.replace(regra_ponto,"($1)")
 
         }else if(Resumido.match(tira_parentes) != null){
+            console.log("tira_parentes")
             Resumido = Resumido.replace(tira_parentes,"$1")
         }else if(Resumido.match(tira_rep_parentes) != null){
+            console.log("tira_rep_parentes")
             Resumido = Resumido.replace(tira_rep_parentes,"($1)")
         }else if(Resumido.match(tira_ulti_parentes) != null){
+            console.log("tira_ulti_parentes")
             Resumido = Resumido.replace(tira_ulti_parentes,"$1")
         }else if(Resumido.match(tira_sinal_parent) != null){
+            console.log("tira_sinal_parent")
             Resumido = Resumido.replace(tira_sinal_parent,"$2$3$2$6$7$10$12$14$16")
 
         }else if(Resumido.match(tudo_mais_1) != null){
@@ -160,26 +165,37 @@ function Simplificar(Resumido=``){
             Resumido = Resumido.replace(tudo_ponto_0,"0")
             
         }else if(Resumido.match(junta_AA) != null){
+            console.log("junta_AA")
             Resumido = Resumido.replace(junta_AA,`$1`)
     
         }else if(Resumido.match(situa_R_0) != null){
+            console.log("situa_R_0")
             Resumido = Resumido.replace(situa_R_0,"0")
         }else if(Resumido.match(situa_R_1) != null){
+            console.log("situa_R_1")
             Resumido = Resumido.replace(situa_R_1,"1")
         }else if(Resumido.match(situa_R_A) != null){
+            console.log("situa_R_A")
             Resumido = Resumido.replace(situa_R_A,"$2$6$8$12")
         }else if(Resumido.match(situa_R_AA) != null){
+            console.log("situa_R_AA")
             Resumido = Resumido.replace(situa_R_AA,"$2")
             
         }else if(Resumido.match(situa_A_A) != null){
+            console.log("situa_A_A")
             Resumido = Resumido.replace(situa_A_A,"$1")
+
         }else if(Resumido.match(situa_A_A_mais_1) != null){
+            console.log("situa_A_A_mais_1")
             Resumido = Resumido.replace(situa_A_A_mais_1,"1")
         }else if(Resumido.match(situa_A_A_mais_2) != null){
+            console.log("situa_A_A_mais_2")
             Resumido = Resumido.replace(situa_A_A_mais_2,"1")
         }else if(Resumido.match(situa_A_A_ponto_1) != null){
+            console.log("situa_A_A_ponto_1")
             Resumido = Resumido.replace(situa_A_A_ponto_1,"0")
         }else if(Resumido.match(situa_A_A_ponto_2) != null){
+            console.log("situa_A_A_ponto_2")
             Resumido = Resumido.replace(situa_A_A_ponto_2,"0")
         
         }else if(Resumido.match(reescrever_1) != null){
@@ -378,6 +394,7 @@ function Simplificar(Resumido=``){
     }
 
     console.log(comtador+" passos")
+    console.log(" - - - - - - - - - - ")
     return Resumido
 
     // outras funções 
