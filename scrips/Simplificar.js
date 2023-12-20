@@ -133,6 +133,8 @@ function Simplificar(Resumido=``){
             // A.(D"+C)+B.(D"+C) = (A+B).(D"+C) | ((A.(D"+C))+(B.(D"+C))) = ((A+B).(D"+C)) ! ($3$7$10$12$15$19$22$24)$4$5$16$17
             var reescrever_3 = RegExp(`(${Tudo_Entre_Paren}(\\.|\\+)([A-Z]"?))(\\.|\\+)((\\2\\${2+(atualizar*2)}([A-Z]"?))|(\\(\\2\\${2+(atualizar*2)}([A-Z]"?))\\))|(\\(${Tudo_Entre_Paren}(\\.|\\+)([A-Z]"?)\\))(\\.|\\+)((\\${11+(atualizar*2)}\\${11+(atualizar*4)}([A-Z]"?))|(\\(\\${11+(atualizar*2)}\\${11+(atualizar*4)}([A-Z]"?))\\))`,"g")
             // (D"+C).A+(D"+C).B  = (D"+C).(A+B) | (((D"+C).A)+((D"+C).B)) = ((D"+C).(A+B)) ! $2$4$13$15($5$6$9$11$16$17$20$22)
+
+            // (A+(C.D)).(B+(C.D)) <---------- problema no reescrever
         }
 
         if(Resumido.match(regra_ponto) != null){
