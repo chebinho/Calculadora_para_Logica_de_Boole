@@ -33,12 +33,30 @@ function Redus_parent(Valor){
                 grupo_l1 = grupo_l1.match(/[A-Z]"?/g)
                 grupo_l2 = grupo_l2.match(/[A-Z]"?/g)
 
+                let Resul = ""
+
+                for(l1=0;l1<grupo_l1.length;l1++){
+                    for(l2=0;l2<grupo_l2.length;l2++){
+                        Resul = Resul+ "(" + grupo_l1[l1]+sinal_meio+grupo_l2[l2]+ ")"
+                        if(sinal_g2[l2] != undefined){
+                            Resul = Resul+sinal_g2[l2]
+                        }
+                    }
+                    if(sinal_g1[l1] != undefined){
+                        Resul = Resul+sinal_g1[l1]
+                    }
+                }
+                if(grupo_resto != ""){
+                   Resul = "("+Resul+")"+grupo_resto
+                }
+
                 console.log(grupo_l1)
                 console.log(sinal_g1)
                 console.log(sinal_meio)
                 console.log(grupo_l2)
                 console.log(sinal_g2)
                 console.log(grupo_resto)
+                console.log("---> "+Resul)
 
                 Valor = Valor.replace(/\(\/\?\/\)/,a[l])
             }
