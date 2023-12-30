@@ -14,7 +14,7 @@ function Simplificar(Resumido=``){
 
     //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
 
-    const regra_ponto = /(?<=\+|\s)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s)/g
+    const regra_ponto = /(?<=\+|\s|^)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s|$)/g
     // A+C.B = A+(C.B) | A+C+X.C = A+C+(X.C) | A+C.X.C = A+(C.X.C) | A+C.X.C.D = A+(C.X.C.D) ! ($1)
 
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1

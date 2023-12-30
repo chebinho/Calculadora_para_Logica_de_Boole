@@ -13,6 +13,8 @@ function Redus_parent(Valor){
     let c = 0
     while(c != 1){
         if(Valor.match(paren_paren) != null){
+            // (A+B.R).(C+D) | A.(C+D)+(B.(C+D)).(R.(C+D)) | A.C+A.D+(B.C+B.D).(R.C+R.D)
+            // A.C+A.D+B.C+B.D.R.C+R.D
 
             let a = Valor.match(paren_paren)
             Valor = Valor.replace(paren_paren,'(/?/)')
@@ -37,7 +39,7 @@ function Redus_parent(Valor){
 
                 for(l1=0;l1<grupo_l1.length;l1++){
                     for(l2=0;l2<grupo_l2.length;l2++){
-                        Resul = Resul+ "(" + grupo_l1[l1]+sinal_meio+grupo_l2[l2]+ ")"
+                        Resul = Resul + grupo_l1[l1]+sinal_meio+grupo_l2[l2]
                         if(sinal_g2[l2] != undefined){
                             Resul = Resul+sinal_g2[l2]
                         }
@@ -58,10 +60,9 @@ function Redus_parent(Valor){
                 console.log(grupo_resto)
                 console.log("---> "+Resul)
 
-                Valor = Valor.replace(/\(\/\?\/\)/,a[l])
+                Valor = Valor.replace(/\(\/\?\/\)/,Resul)
             }
 
-            c++
         }else if(Valor.match(A_paren) != null){
 
             c++
