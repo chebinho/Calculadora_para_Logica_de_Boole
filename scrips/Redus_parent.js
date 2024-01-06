@@ -77,34 +77,3 @@ function Redus_parent(Valor){
     console.log(" - - - - - - - - - ")
     return Valor
 }
-
-/*
-                let letra = a[l].match(/([A-Z]"?)/g)
-                let sinais = a[l].match(paren_paren).toString()
-                sinais = sinais.replace(/([A-Z]"?)/g,"")
-
-                
-
-                let sinal_meio = sinais.match(/\)(\+|\.)\(/g)
-                for(t=0;t<sinal_meio.length;t++){
-                    sinal_meio[t] = sinal_meio[t].replace(/\(|\)/g,"")
-                }
-
-                sinais = sinais.match(/\(((\+|\.)+)\)/g)
-                for(t=0;t<sinais.length;t++){
-                    sinais[t] = sinais[t].replace(/\(|\)/g,"")
-                }
-
-                let grupo_l1 = sinais[0].match(/(\+|\.)/g)
-                let grupo_l2 = sinais[1].match(/(\+|\.)/g)
-
-                
-                console.log(letra)
-                console.log(sinal_meio)
-                console.log(sinais)
-                console.log("//////////")
-                console.log(grupo_l1)
-                console.log(grupo_l2)
-
-
-*/
