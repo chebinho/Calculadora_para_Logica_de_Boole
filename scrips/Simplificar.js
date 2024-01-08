@@ -14,8 +14,8 @@ function Simplificar(Resumido=``){
 
     //regex para achar os elemntos da função organizar /([A-Z]"?)(\.[A-Z]"?)+|([A-Z]"?)(\+[A-Z]"?)+/g
 
-    const regra_ponto = /((?<=\+|\s|^|\()(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s|$))|((?<=\+|\s|^)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s|$|\)))/g
-    // A+C.B = A+(C.B) | A+C+X.C = A+C+(X.C) | A+C.X.C = A+(C.X.C) | A+C.X.C.D = A+(C.X.C.D) ! ($1$4)
+    const regra_ponto = /((?<=\+|\()(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s))|((?<=\+)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\s|\)))|((?<=\+|\s|\()(([A-Z]"?\.)+[A-Z]"?)(?=\+))|((?<=\+|\s)(([A-Z]"?\.)+[A-Z]"?)(?=\+|\)))/g
+    // A+C.B = A+(C.B) | A+C+X.C = A+C+(X.C) | A+C.X.C = A+(C.X.C) | A+C.X.C.D = A+(C.X.C.D) ! ($1$4$7$10)
 
     // (A.E.D+Q)+1 ou 1+(A.E.D+Q) = 1 ! 1
     // (A.E.D+Q).1 = A ! $2
@@ -106,9 +106,9 @@ function Simplificar(Resumido=``){
 
     while(c != 0){
 
-        if(comtador == 99999){ // trava de segurança
+        if(comtador == 999){ // trava de segurança
             c = c-1
-            console.log("maximo de 100.000 execuções")
+            console.log("maximo de 1.000 execuções")
         }
 
         if(atualizar != Quantos_Entre(Resumido)){
@@ -152,7 +152,7 @@ function Simplificar(Resumido=``){
         }
 
         if(Resumido.match(regra_ponto) != null){
-            Resumido = Resumido.replace(regra_ponto,"($1$4)")
+            Resumido = Resumido.replace(regra_ponto,"($1$4$7$10)")
 
         }else if(Resumido.match(tira_parentes) != null){
             console.log("tira_parentes")
